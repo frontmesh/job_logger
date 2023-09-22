@@ -64,14 +64,12 @@ dependencies {
     implementation(libs.opengraphparser)
     implementation(libs.jetlime.compose)
 
-//    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
+
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.toolingpreview)
-//    implementation("androidx.compose.material3:material3")
-//    implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.foundation)
 //    implementation(libs.androidx.compose.material.iconsCore)
