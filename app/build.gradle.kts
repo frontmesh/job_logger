@@ -2,8 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-    id("com.google.dagger.hilt.android") version "2.47" apply false
-
+    id("com.google.devtools.ksp")
+//    id("com.google.dagger.hilt.android") version "2.48" apply false
 }
 
 android {
@@ -32,6 +32,7 @@ android {
             )
         }
     }
+
     compileOptions {
 //        sourceCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_17
@@ -55,6 +56,12 @@ android {
     }
 }
 
+kapt {
+    javacOptions {
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
@@ -63,6 +70,8 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.opengraphparser)
     implementation(libs.jetlime.compose)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
@@ -75,9 +84,16 @@ dependencies {
 //    implementation(libs.androidx.compose.material.iconsCore)
 //    implementation(libs.androidx.compose.material.iconsExtended)
 
+    // Database
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
     // DI
     implementation(libs.google.hilt.android)
-    kapt(libs.google.hilt.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.javapoet)
+    annotationProcessor(libs.hilt.compiler)
 
 
     testImplementation("junit:junit:4.13.2")
