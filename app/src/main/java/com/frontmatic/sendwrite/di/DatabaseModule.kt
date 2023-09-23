@@ -2,7 +2,7 @@ package com.frontmatic.sendwrite.di
 
 import android.content.Context
 import androidx.room.Room
-import com.frontmatic.sendwrite.local.LocalDataSource
+import com.frontmatic.sendwrite.local.source.LocalDataSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.source.impl.LocalDataSourceImpl
 import dagger.Module
