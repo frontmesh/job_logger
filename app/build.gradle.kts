@@ -8,12 +8,12 @@ plugins {
 
 android {
     namespace = "com.frontmatic.sendwrite"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.frontmatic.sendwrite"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -67,22 +67,29 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.coil.compose)
+    implementation(libs.coil.svg)
     implementation(libs.datastore.preferences)
     implementation(libs.opengraphparser)
     implementation(libs.jetlime.compose)
     implementation(libs.appcompat)
     implementation(libs.material)
 
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
+    implementation(platform(libs.androidx.compose.bom))
 
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.toolingpreview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.size)
     implementation(libs.androidx.compose.foundation)
+//    implementation("androidx.compose.material3:material3-window-size-class")
 //    implementation(libs.androidx.compose.material.iconsCore)
 //    implementation(libs.androidx.compose.material.iconsExtended)
+
+    // Navigation - Compose Destinations
+    implementation(libs.destinations.core)
+    implementation(libs.destinations.animations.core)
+    ksp(libs.destinations.ksp)
 
     // Database
     implementation(libs.androidx.room.runtime)
@@ -94,7 +101,6 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.javapoet)
     annotationProcessor(libs.hilt.compiler)
-
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

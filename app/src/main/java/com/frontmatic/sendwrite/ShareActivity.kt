@@ -1,28 +1,30 @@
 package com.frontmatic.sendwrite
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import com.frontmatic.sendwrite.ui.screen.job.AddJobScreen
+import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.kedia.ogparser.OpenGraphCacheProvider
 import com.kedia.ogparser.OpenGraphCallback
 import com.kedia.ogparser.OpenGraphParser
 import com.kedia.ogparser.OpenGraphResult
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class ShareActivity : ComponentActivity(), OpenGraphCallback {
-    private val LINKS_TO_TEST = mutableListOf(
-        "https://www.linkedin.com/jobs/view/3268254896/",
-        "https://www.linkedin.com/posts/madhusmita-padhy_machinelearning-datascience-activity-6886390508722163712-yhQ0",
-        "https://www.youtube.com/watch?v=n3zsoX7bRlc",
-        "https://twitter.com/levelsio/status/1481942293108359168",
-        "https://stackoverflow.com/questions/44515769/conda-is-not-recognized-as-internal-or-external-command",
-        "https://github.com/Priyansh-Kedia/OpenGraphParser",
-        "https://chat.whatsapp.com/DdWAKRkt2VfAmd4OS47y7P",
-        "https://www.reddit.com/r/MachineLearning/comments/s3mjqf/deep_learning_interviews_hundreds_of_fully_solved/?utm_medium=android_app&utm_source=share",
-        "https://instagram.com/fcbarcelona?utm_medium=copy_link",
-        "https://www.facebook.com/groups/777946865955982/permalink/1385110621906267/",
-    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        initIntent()
+    }
 
     private val openGraphParser by lazy {
         OpenGraphParser(
@@ -33,24 +35,28 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
     }
 
     override fun onPostResponse(openGraphResult: OpenGraphResult) {
-        Log.d("TAG!!!!", "response $openGraphResult")
-        Log.d("openGraphResult",openGraphResult.toString())
-        if (LINKS_TO_TEST.isNotEmpty()) {
-            openGraphParser.parse(LINKS_TO_TEST.first())
-            LINKS_TO_TEST.removeFirstOrNull()
+        initCompose(openGraphResult)
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    private fun initCompose(job: OpenGraphResult = OpenGraphResult()) {
+        setContent {
+            val windowSize = calculateWindowSizeClass(this).widthSizeClass
+            val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
+
+            SendWriteTheme {
+                AddJobScreen(
+                    intentJob = job,
+                )
+            }
         }
     }
 
     override fun onError(error: String) {
         Log.e("ERROR TAG!!!!", "$error")
-//        tview.text = error
-        if (LINKS_TO_TEST.isNotEmpty()) {
-            openGraphParser.parse(LINKS_TO_TEST.first())
-            LINKS_TO_TEST.removeFirstOrNull()
-        }
     }
 
-    private fun handleIntent(intent: Intent) {
+    private fun initIntent() {
         if (Intent.ACTION_SEND == intent.action && intent.type != null) {
             if ("text/plain" == intent.type) {
                 val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
@@ -58,17 +64,26 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
                     Log.d("ShareActivity", "sharedText: $sharedText")
                     // Handle the share d text (LinkedIn job posting)
                     // Here, you can parse and process the shared content as needed.
+                    val url = extractUrl(sharedText)
+                    Log.d("ShareActivity", "url: $url")
+                    if (url != null) {
+                        openGraphParser.parse(url)
+                    }
                 }
             }
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private fun extractUrl(input: String): String? {
+        val pattern: Pattern = Pattern.compile("https?://\\S+")
+        val matcher: Matcher = pattern.matcher(input)
 
-        openGraphParser.parse(LINKS_TO_TEST.first())
-        LINKS_TO_TEST.removeFirstOrNull()
-
-        handleIntent(intent)
+        return if (matcher.find()) {
+            matcher.group(0) // The first match is the URL
+        } else {
+            null // No URL found in the input string
+        }
     }
+
+
 }
