@@ -7,9 +7,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "jobs")
 data class Job(
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
-    val name: String,
+    val id: Long? = null,
+    val title: String,
     val description: String,
     val url: String,
     val imageUrl: String,
+    val applied: Boolean,
 )

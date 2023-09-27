@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.frontmatic.sendwrite.local.source.LocalDataSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.source.impl.LocalDataSourceImpl
+import com.frontmatic.sendwrite.util.DB_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ object DatabaseModule {
     ) = Room.databaseBuilder(
         context,
         SendWriteDatabase::class.java,
-        "sendwrite_database"
+        DB_NAME
     ).build()
 
     @Provides

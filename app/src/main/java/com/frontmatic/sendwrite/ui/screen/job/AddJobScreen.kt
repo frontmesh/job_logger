@@ -43,12 +43,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.decode.SvgDecoder
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.util.DebugLogger
 import com.frontmatic.sendwrite.R
+import com.frontmatic.sendwrite.local.mapper.toJob
 import com.frontmatic.sendwrite.ui.components.OptionData
 import com.frontmatic.sendwrite.ui.components.OptionRow
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
@@ -62,10 +64,12 @@ import kotlinx.coroutines.Dispatchers
 )
 @Composable
 fun AddJobScreen(
+    modifier: Modifier = Modifier,
     intentJob: OpenGraphResult?,
-    modifier: Modifier = Modifier
+    model: AddJobScreenViewModel = hiltViewModel(),
 ) {
     var job by remember { mutableStateOf(intentJob) }
+    var applied by remember { mutableStateOf(false) }
 
     val topBarTitle = job?.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
@@ -107,7 +111,9 @@ fun AddJobScreen(
                 Button(
                     modifier = Modifier
                         .padding(end = 12.dp),
-                    onClick = { /*TODO*/ }
+                    onClick = {
+                        job?.let { model.saveJob(it.toJob(applied)) }
+                    }
                 ) {
                     Row(
 
@@ -129,7 +135,7 @@ fun AddJobScreen(
                 }
             }
         }
-    ) {
+    ) { it ->
         Surface(modifier = modifier.padding(it)) {
             Column(modifier = modifier
                 .padding(PAGE_PADDING)
@@ -148,9 +154,8 @@ fun AddJobScreen(
                         "Applied",
                         "applied",
                         false
-                    ),
-                    onToggle = { /*TODO*/ }
-                )
+                    )
+                ) { value -> applied = value }
             }
 
         }

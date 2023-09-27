@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp")
-//    id("com.google.dagger.hilt.android") version "2.48" apply false
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.size)
     implementation(libs.androidx.compose.foundation)
+
 //    implementation("androidx.compose.material3:material3-window-size-class")
 //    implementation(libs.androidx.compose.material.iconsCore)
 //    implementation(libs.androidx.compose.material.iconsExtended)
@@ -99,7 +100,9 @@ dependencies {
     // DI
     implementation(libs.google.hilt.android)
     kapt(libs.hilt.compiler)
-    implementation(libs.javapoet)
+    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation(libs.androidx.hilt.navigation.compose)
+//    implementation(libs.javapoet)
     annotationProcessor(libs.hilt.compiler)
 
     testImplementation("junit:junit:4.13.2")

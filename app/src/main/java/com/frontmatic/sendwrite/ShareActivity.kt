@@ -15,10 +15,12 @@ import com.kedia.ogparser.OpenGraphCacheProvider
 import com.kedia.ogparser.OpenGraphCallback
 import com.kedia.ogparser.OpenGraphParser
 import com.kedia.ogparser.OpenGraphResult
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@AndroidEntryPoint
 class ShareActivity : ComponentActivity(), OpenGraphCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {

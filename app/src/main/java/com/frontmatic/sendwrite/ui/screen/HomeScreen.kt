@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
@@ -42,7 +43,9 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
     start = true
 )
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    model: HomeScreenViewModel = hiltViewModel()
+) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         item {
             Row(
