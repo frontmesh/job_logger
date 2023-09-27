@@ -1,7 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +28,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -69,6 +71,8 @@ fun AddJobScreen(
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
     } ?: stringResource(R.string.add_a_job)
 
+    val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -85,10 +89,16 @@ fun AddJobScreen(
         bottomBar = {
             Row(
                 modifier = Modifier
-                    .border(
-                        width = 1.dp,
-                        color = Color.LightGray,
-                    )
+                    .drawBehind {
+                        val borderSize = 1.dp.toPx()
+
+                        drawLine(
+                            color = primaryContainerColor,
+                            start = Offset(0f, 0f),
+                            end = Offset(size.width, 0f),
+                            strokeWidth = borderSize
+                        )
+                    }
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.Start,
@@ -104,12 +114,6 @@ fun AddJobScreen(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-//                        Icon(
-//                            modifier = Modifier
-//                                .size(24.dp),
-//                            imageVector = Icons.Filled.Add,
-//                            contentDescription = "add a job",
-//                        )
                         Text(
                             text = "Save",
                             fontWeight = FontWeight.Bold,
@@ -139,7 +143,14 @@ fun AddJobScreen(
                     starPainterResource = Icons.Outlined.Star
                 )
 
-                OptionRow(setting = OptionData("Applied", "applied", false), onToggle = { /*TODO*/ })
+                OptionRow(
+                    setting = OptionData(
+                        "Applied",
+                        "applied",
+                        false
+                    ),
+                    onToggle = { /*TODO*/ }
+                )
             }
 
         }
@@ -159,7 +170,7 @@ fun JobCard(
     Row(
         modifier = Modifier
             .background(
-                color = Color.LightGray,
+                color = MaterialTheme.colorScheme.primaryContainer,
                 shape = RoundedCornerShape(5)
             )
             .padding(16.dp),
@@ -235,6 +246,18 @@ fun CoilAsyncImage(
 @Preview
 @Composable
 fun AddJobScreenPreview() {
+    AddJobScreen(
+        intentJob = OpenGraphResult(
+            title = "Docklab hiring Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands | LinkedIn",
+            image = "https://nl.linkedin.com/jobs/view/tech-lead-hydrotwin-at-docklab-3689393398",
+            description = "Posted 2 weeks ago. Docklab is looking for a Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands. Apply…See this and similar jobs on LinkedIn.",
+        )
+    )
+}
+
+@Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun AddJobScreenDarkPreview() {
     AddJobScreen(
         intentJob = OpenGraphResult(
             title = "Docklab hiring Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands | LinkedIn",
