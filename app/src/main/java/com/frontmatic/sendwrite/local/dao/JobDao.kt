@@ -14,8 +14,8 @@ interface JobDao {
     fun getAll(): Flow<List<Job>>
 
     @Query("SELECT * FROM jobs WHERE id = :id")
-    fun getById(id: String): Flow<Job>
+    fun getById(id: Long): Flow<Job>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(job: Job)
+    fun insert(job: Job): Long
 }

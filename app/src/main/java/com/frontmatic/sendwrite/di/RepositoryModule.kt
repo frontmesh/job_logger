@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.di
 
 import com.frontmatic.sendwrite.local.GetAllJobsUseCase
+import com.frontmatic.sendwrite.local.GetJobByIdUseCase
 import com.frontmatic.sendwrite.local.Repository
 import com.frontmatic.sendwrite.local.SaveJobUseCase
 import com.frontmatic.sendwrite.local.UseCases
@@ -18,7 +19,8 @@ object RepositoryModule {
     fun providesUseCases(repository: Repository): UseCases {
         return UseCases(
             saveJobUseCase = SaveJobUseCase(repository),
-            getAllJobs = GetAllJobsUseCase(repository)
+            getAllJobs = GetAllJobsUseCase(repository),
+            getJobById = GetJobByIdUseCase(repository),
         )
     }
 }

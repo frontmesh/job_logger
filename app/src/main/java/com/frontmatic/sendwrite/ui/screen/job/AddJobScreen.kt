@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,7 @@ import coil.decode.SvgDecoder
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.util.DebugLogger
+import com.frontmatic.sendwrite.MainActivity
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.local.mapper.toJob
 import com.frontmatic.sendwrite.ui.components.OptionData
@@ -66,7 +68,7 @@ import kotlinx.coroutines.Dispatchers
 fun AddJobScreen(
     modifier: Modifier = Modifier,
     intentJob: OpenGraphResult?,
-    model: AddJobScreenViewModel = hiltViewModel(),
+    model: AddJobViewModel = hiltViewModel(),
 ) {
     var job by remember { mutableStateOf(intentJob) }
     var applied by remember { mutableStateOf(false) }
@@ -108,11 +110,13 @@ fun AddJobScreen(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val context = LocalContext.current
                 Button(
                     modifier = Modifier
                         .padding(end = 12.dp),
                     onClick = {
                         job?.let { model.saveJob(it.toJob(applied)) }
+                        context.startActivity(Intent(context, MainActivity::class.java))
                     }
                 ) {
                     Row(

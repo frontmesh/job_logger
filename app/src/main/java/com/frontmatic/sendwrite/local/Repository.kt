@@ -2,13 +2,18 @@ package com.frontmatic.sendwrite.local
 
 import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.source.LocalDataSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class Repository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) {
-    suspend fun getAllJobs() {
-        localDataSource.getAllJobs()
+    fun getAllJobs(): Flow<List<Job>> {
+        return localDataSource.getAllJobs()
+    }
+
+    fun getJobById(id: Long): Flow<Job> {
+        return localDataSource.getJobById(id)
     }
 
     suspend fun saveJob(job: Job) {

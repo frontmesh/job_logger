@@ -7,15 +7,19 @@ import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
     private val jobDao = database.jobDao()
-    override suspend fun getAllJobs(): Flow<List<Job>> {
+    override fun getAllJobs(): Flow<List<Job>> {
         return jobDao.getAll()
     }
 
-    override suspend fun saveJob(job: Job) {
-        jobDao.insert(job)
+    override fun getJobById(id: Long): Flow<Job> {
+        return jobDao.getById(id)
     }
 
-    override suspend fun deleteJob(job: Job) {
+    override suspend fun saveJob(job: Job): Long {
+        return jobDao.insert(job)
+    }
+
+    override suspend fun deleteJob(job: Job): Long {
         TODO("Not yet implemented")
     }
 
