@@ -11,6 +11,10 @@ class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
         return jobDao.getAll()
     }
 
+    override fun getAllArchivedJobs(): Flow<List<Job>> {
+        return jobDao.getAllArchived()
+    }
+
     override fun getJobById(id: Long): Flow<Job> {
         return jobDao.getById(id)
     }
@@ -19,8 +23,8 @@ class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
         return jobDao.insert(job)
     }
 
-    override suspend fun deleteJob(job: Job): Long {
-        TODO("Not yet implemented")
+    override suspend fun deleteJob(job: Job): Int {
+        return jobDao.delete(job)
     }
 
     override suspend fun deleteAllJobs() {

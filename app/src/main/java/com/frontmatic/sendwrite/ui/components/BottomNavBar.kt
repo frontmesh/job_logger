@@ -1,8 +1,10 @@
 package com.frontmatic.sendwrite.ui.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
@@ -15,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
+import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.navigation.navigate
@@ -31,10 +34,16 @@ data class NavMenuItem(
 
 val bottomNavItems = listOf(
     NavMenuItem(
-        title = "Jobs",
+        title = "Active",
         iconSelected = Icons.Filled.DateRange,
         icon = Icons.Outlined.DateRange,
         direction = HomeScreenDestination
+    ),
+    NavMenuItem(
+        title = "Archived",
+        iconSelected = Icons.Filled.Archive,
+        icon = Icons.Outlined.Archive,
+        direction = ArchiveScreenDestination
     ),
     NavMenuItem(
         title = "Settings",

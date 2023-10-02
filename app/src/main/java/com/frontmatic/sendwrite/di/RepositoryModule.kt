@@ -1,5 +1,7 @@
 package com.frontmatic.sendwrite.di
 
+import com.frontmatic.sendwrite.local.DeleteJobUseCase
+import com.frontmatic.sendwrite.local.GetAllArchivedJobsUseCase
 import com.frontmatic.sendwrite.local.GetAllJobsUseCase
 import com.frontmatic.sendwrite.local.GetJobByIdUseCase
 import com.frontmatic.sendwrite.local.Repository
@@ -21,6 +23,8 @@ object RepositoryModule {
             saveJobUseCase = SaveJobUseCase(repository),
             getAllJobs = GetAllJobsUseCase(repository),
             getJobById = GetJobByIdUseCase(repository),
+            deleteJob = DeleteJobUseCase(repository),
+            getAllArchivedJobs = GetAllArchivedJobsUseCase(repository)
         )
     }
 }

@@ -13,7 +13,9 @@ import androidx.navigation.NavController
 import com.frontmatic.sendwrite.ui.screen.appCurrentDestinationAsState
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
+import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.startAppDestination
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ramcosta.composedestinations.spec.Route
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -23,6 +25,7 @@ fun RootScaffold(
     navController : NavController,
     topBar: @Composable (Destination, NavBackStackEntry?) -> Unit,
     bottomBar: @Composable (Destination) -> Unit,
+    floatingActionButton: @Composable (Destination, NavBackStackEntry?) -> Unit ,
     content: @Composable (PaddingValues) -> Unit
 ) {
     val navBackStackEntry = navController.currentBackStackEntry
@@ -32,6 +35,7 @@ fun RootScaffold(
     Scaffold(
         topBar = { topBar(destination, navBackStackEntry) },
         bottomBar = { bottomBar(destination) },
+        floatingActionButton = { floatingActionButton(destination, navBackStackEntry) },
     )
     {
         Surface(modifier = Modifier
@@ -47,4 +51,11 @@ val Destination.shouldShowScaffoldElements get() =
     when (this) {
         is HomeScreenDestination -> true
         else -> true
+    }
+
+val Destination.shouldShowFloatingActionButton get() =
+    when (this) {
+        is HomeScreenDestination -> true
+        is JobDetailsScreenDestination -> true
+        else -> false
     }

@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.frontmatic.sendwrite.ui.components.ActionButton
 import com.frontmatic.sendwrite.ui.components.BottomNavBar
 import com.frontmatic.sendwrite.ui.components.RootScaffold
 import com.frontmatic.sendwrite.ui.components.TopBar
+import com.frontmatic.sendwrite.ui.components.shouldShowFloatingActionButton
 import com.frontmatic.sendwrite.ui.components.shouldShowScaffoldElements
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
@@ -38,7 +40,11 @@ class MainActivity : ComponentActivity() {
                     startRoute = startRoute,
                     topBar = { destination, navBackStackEntry ->
                         if (destination.shouldShowScaffoldElements) {
-                            TopBar(destination = destination, navBackStackEntry = navBackStackEntry)
+                            TopBar(
+                                destination = destination,
+                                navBackStackEntry = navBackStackEntry,
+                                navController = navController
+                            )
                         }
                     },
                     bottomBar = { destination ->
@@ -46,7 +52,11 @@ class MainActivity : ComponentActivity() {
                             BottomNavBar(navController = navController)
                         }
                     },
-
+                    floatingActionButton = { destination, navBackStackEntry ->
+                        if (destination.shouldShowFloatingActionButton) {
+                            ActionButton(destination = destination, navBackStackEntry = navBackStackEntry)
+                        }
+                    }
                     ) {
                     Surface(
                         modifier = Modifier.fillMaxSize(),

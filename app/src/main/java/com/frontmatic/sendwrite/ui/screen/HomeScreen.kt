@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.WorkOff
 import androidx.compose.material.icons.rounded.List
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -37,6 +38,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
+import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
@@ -57,8 +60,9 @@ fun HomeScreen(
     model: HomeScreenViewModel = hiltViewModel()
 ) {
     val jobs = model.jobs.collectAsState(initial = emptyList()).value
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-        item {
+
+    Column {
+        Column {
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -72,7 +76,6 @@ fun HomeScreen(
                     taskCount = "0",
                     title = "Due Today",
                     icon = Icons.Filled.DateRange,
-//                    iconColor = MaterialTheme.colorScheme.primary,
                     onClick = { /*TODO*/ },
                 )
                 JobCell(
@@ -84,34 +87,49 @@ fun HomeScreen(
                     onClick = { /*TODO*/ },
                 )
             }
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    text = "All Jobs",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+                )
+            }
         }
 
-        item {
-            Text(
-                text = "All Jobs",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
+        if (jobs.isEmpty()) {
+            EmptyContent(
+                icon = Icons.Filled.WorkOff,
+                messsage = "No Jobs Found. Log your job application on a button below or share a link to this app."
             )
         }
 
-        items(
-            items = jobs,
-            key = { item -> item.id.toString() }
-        ) {
-            ListCell(
-                shape = RoundedCornerShape(size = MediumRadius) ,
-                name = it.title,
-                totalTask = "12",
-                color = MaterialTheme.colorScheme.primary,
-                onClick = {
-                    navigator.navigate(JobDetailsScreenDestination(it.id!!))
+        Column {
+            LazyColumn() {
+                items(
+                    items = jobs,
+                    key = { item -> item.id.toString() }
+                ) {
+                    ListCell(
+                        shape = RoundedCornerShape(size = MediumRadius),
+                        name = it.title,
+                        imageUrl = it.imageUrl,
+                        totalTask = it.relativeAppliedTime,
+                        color = MaterialTheme.colorScheme.primary,
+                        onClick = {
+                            navigator.navigate(JobDetailsScreenDestination(it.id!!))
+                        }
+                    )
                 }
-            ) {
-//                Text(text = it.title)
             }
-
         }
     }
+
 }
 
 
@@ -133,9 +151,7 @@ private fun JobCell(
         color = MaterialTheme.colorScheme.primaryContainer
 
     ) {
-        Column(
-//            modifier = Modifier.padding(all = 16.dp)
-        ) {
+        Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -209,9 +225,8 @@ private fun ListCell(
     name: String,
     totalTask: String,
     color: Color,
-    shouldShowDivider: Boolean = true,
+    imageUrl: String = "",
     onClick: () -> Unit,
-    onSwipeToDelete: () -> Unit,
 ) {
         // A simple box to draw the growing circle, which emanates from behind the icon
         Box(
@@ -240,11 +255,11 @@ private fun ListCell(
                                 .background(shape = CircleShape, color = color),
                             contentAlignment = Alignment.Center
                         ) {
-                            Icon(
-                                imageVector = Icons.Rounded.List,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(20.dp)
+
+                            CoilAsyncImage(
+                                imageUrl = imageUrl,
+                                imageShape = RoundedCornerShape(MediumRadius),
+                                imageSize = 42.dp
                             )
                         }
                         Spacer(Modifier.size(8.dp))

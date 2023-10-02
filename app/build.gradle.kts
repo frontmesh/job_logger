@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -20,6 +21,13 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        // The schemas directory contains a schema file for each version of the Room database.
+        // This is required to enable Room auto migrations.
+        // See https://developer.android.com/reference/kotlin/androidx/room/AutoMigration.
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
         }
     }
 
@@ -84,8 +92,8 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
 
 //    implementation("androidx.compose.material3:material3-window-size-class")
-//    implementation(libs.androidx.compose.material.iconsCore)
-//    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs.androidx.compose.material.iconsCore)
+    implementation(libs.androidx.compose.material.iconsExtended)
 
     // Navigation - Compose Destinations
     implementation(libs.destinations.core)

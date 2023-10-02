@@ -12,6 +12,10 @@ class Repository @Inject constructor(
         return localDataSource.getAllJobs()
     }
 
+    fun getAllArchivedJobs(): Flow<List<Job>> {
+        return localDataSource.getAllArchivedJobs()
+    }
+
     fun getJobById(id: Long): Flow<Job> {
         return localDataSource.getJobById(id)
     }

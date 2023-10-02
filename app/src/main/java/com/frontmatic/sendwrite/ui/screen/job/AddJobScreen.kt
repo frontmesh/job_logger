@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
+import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
@@ -28,37 +29,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
-import coil.decode.SvgDecoder
-import coil.imageLoader
-import coil.request.ImageRequest
-import coil.util.DebugLogger
 import com.frontmatic.sendwrite.MainActivity
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.local.mapper.toJob
+import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
 import com.frontmatic.sendwrite.ui.components.OptionData
 import com.frontmatic.sendwrite.ui.components.OptionRow
+import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.kedia.ogparser.OpenGraphResult
 import com.ramcosta.composedestinations.annotation.Destination
-import kotlinx.coroutines.Dispatchers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Destination(
@@ -110,13 +102,14 @@ fun AddJobScreen(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                val context = LocalContext.current
+                val context = LocalContext.current as Activity
                 Button(
                     modifier = Modifier
                         .padding(end = 12.dp),
                     onClick = {
                         job?.let { model.saveJob(it.toJob(applied)) }
                         context.startActivity(Intent(context, MainActivity::class.java))
+                        context.finish()
                     }
                 ) {
                     Row(
@@ -188,7 +181,7 @@ fun JobCard(
 
         CoilAsyncImage(
             imageUrl = imageUrl,
-            imageShape = RoundedCornerShape(5),
+            imageShape = RoundedCornerShape(MediumRadius),
             imageSize = 42.dp
         )
 
@@ -223,34 +216,6 @@ fun JobCard(
     }
 }
 
-
-@Composable
-fun CoilAsyncImage(
-    imageUrl: String = "https://www.mindinventory.com/blog/wp-content/uploads/2018/05/android-jetpack.jpg",
-    imageShape: Shape,
-    imageSize: Dp
-) {
-    val imageLoader = LocalContext.current.imageLoader.newBuilder()
-        .logger(DebugLogger())
-        .build()
-
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageUrl)
-//            .data(ByteBuffer.wrap(imageUrl.toByteArray()))
-            .decoderFactory(SvgDecoder.Factory())
-            .decoderDispatcher(Dispatchers.IO)
-            .crossfade(true)
-            .build(),
-        placeholder = painterResource(R.drawable.ic_launcher_background),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        imageLoader = imageLoader,
-        modifier = Modifier
-            .clip(shape = imageShape)
-            .size(imageSize)
-    )
-}
 
 @Preview
 @Composable
