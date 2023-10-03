@@ -3,7 +3,7 @@ package com.frontmatic.sendwrite.ui.screen.job
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.frontmatic.sendwrite.local.UseCases
+import com.frontmatic.sendwrite.local.source.LocalDataSource
 import com.frontmatic.sendwrite.ui.screen.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -15,16 +15,16 @@ import javax.inject.Inject
 @HiltViewModel
 class JobDetailsViewModel @Inject() constructor(
     savedStateHandle: SavedStateHandle,
-    private val useCases: UseCases
+    private val localDataSource: LocalDataSource
 ): ViewModel() {
 
     private val navArgs: JobDetailsScreenNavArgs = savedStateHandle.navArgs()
-    val job = useCases.getJobById(navArgs.id)
+    val job = localDataSource.getJobById(navArgs.id)
 
     fun deleteJob() {
         CoroutineScope(Dispatchers.IO).launch {
             job.collect {
-                useCases.deleteJob(it)
+                localDataSource.deleteJob(it)
             }
         }
     }
