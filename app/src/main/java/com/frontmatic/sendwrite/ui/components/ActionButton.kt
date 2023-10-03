@@ -3,6 +3,9 @@ package com.frontmatic.sendwrite.ui.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.EventAvailable
+import androidx.compose.material.icons.outlined.EventBusy
+import androidx.compose.material.icons.outlined.EventNote
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavBackStackEntry
+import com.frontmatic.sendwrite.ui.components.multifab.FabIcon
+import com.frontmatic.sendwrite.ui.components.multifab.FabOption
+import com.frontmatic.sendwrite.ui.components.multifab.MultiFabItem
+import com.frontmatic.sendwrite.ui.components.multifab.MultiFloatingActionButton
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
@@ -35,17 +42,46 @@ fun ActionButton(
             }
         }
         is JobDetailsScreenDestination -> {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { /*TODO*/ }
-            ) {
-                Icon(
-                    modifier = Modifier,
+            MultiFloatingActionButton(
+                fabIcon = FabIcon(
                     imageVector = Icons.Outlined.Event,
-                    tint = Color.White,
-                    contentDescription = null
-                )
-            }
+                    iconRotate = 25f,
+                ),
+                fabOption = FabOption(
+                    iconTint = Color.White,
+                    showLabels = true
+                ),
+                items = listOf(
+                    MultiFabItem(
+                        id = 1,
+                        label = "Add an event",
+                        icon = Icons.Outlined.EventAvailable
+                    ),
+                    MultiFabItem(
+                        id = 2,
+                        icon = Icons.Outlined.EventBusy,
+                        label = "Remove last event"
+                    )
+                ),
+                onFabItemClicked = { item ->
+                    if (item.id == 1) {
+                    } else {
+                    }
+                }
+            )
+
+
+//            FloatingActionButton(
+//                containerColor = MaterialTheme.colorScheme.primary,
+//                onClick = { /*TODO*/ }
+//            ) {
+//                Icon(
+//                    modifier = Modifier,
+//                    imageVector = Icons.Outlined.Event,
+//                    tint = Color.White,
+//                    contentDescription = null
+//                )
+//            }
         }
         else -> {}
     }

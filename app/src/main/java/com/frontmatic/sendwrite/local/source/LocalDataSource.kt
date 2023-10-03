@@ -11,6 +11,9 @@ interface LocalDataSource {
 
     fun getJobById(id: Long): Flow<Job>
     suspend fun saveJob(job: Job): Long
+
+    suspend fun archiveJob(job: Job): Int
+
     suspend fun deleteJob(job: Job): Int
     suspend fun deleteAllJobs()
 }

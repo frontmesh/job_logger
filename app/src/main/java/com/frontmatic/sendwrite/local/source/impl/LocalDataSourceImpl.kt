@@ -28,6 +28,12 @@ class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
         return jobDao.insert(job)
     }
 
+    override suspend fun archiveJob(job: Job): Int {
+        return jobDao.update(
+            job.copy(archived = true)
+        )
+    }
+
     override suspend fun deleteJob(job: Job): Int {
         return jobDao.delete(job)
     }
