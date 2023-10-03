@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JobEventDao {
-
     @Query("SELECT * FROM job_events")
     fun getAll(): Flow<List<JobEvent>>
 }

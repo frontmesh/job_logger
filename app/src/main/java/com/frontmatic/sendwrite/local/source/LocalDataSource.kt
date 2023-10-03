@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
     fun getAllJobs(): Flow<List<Job>>
+    fun getAllJobsSortedByTitle(): Flow<List<Job>>
 
     fun getAllArchivedJobs(): Flow<List<Job>>
 

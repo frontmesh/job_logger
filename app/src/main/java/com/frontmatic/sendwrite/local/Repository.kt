@@ -8,8 +8,13 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) {
+
     fun getAllJobs(): Flow<List<Job>> {
         return localDataSource.getAllJobs()
+    }
+
+    fun getAllJobsSortedByTitle(): Flow<List<Job>> {
+        return localDataSource.getAllJobsSortedByTitle()
     }
 
     fun getAllArchivedJobs(): Flow<List<Job>> {

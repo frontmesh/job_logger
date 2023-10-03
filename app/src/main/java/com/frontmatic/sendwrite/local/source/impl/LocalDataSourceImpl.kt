@@ -7,7 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
     private val jobDao = database.jobDao()
+
     override fun getAllJobs(): Flow<List<Job>> {
+        return jobDao.getAllSortedByApplied()
+    }
+
+    override fun getAllJobsSortedByTitle(): Flow<List<Job>> {
         return jobDao.getAll()
     }
 

@@ -16,6 +16,12 @@ class GetAllJobsUseCase(
     operator fun invoke() = repository.getAllJobs()
 }
 
+class GetAllJobsSortedByTitleUseCase(
+    private val repository: Repository
+) {
+    operator fun invoke() = repository.getAllJobsSortedByTitle()
+}
+
 class GetAllArchivedJobsUseCase(
     private val repository: Repository
 ) {
@@ -40,6 +46,7 @@ data class UseCases(
     val saveJobUseCase: SaveJobUseCase,
     val deleteJob : DeleteJobUseCase,
     val getAllJobs: GetAllJobsUseCase,
+    val getAllJobsSortedByTitle: GetAllJobsSortedByTitleUseCase,
     val getAllArchivedJobs: GetAllArchivedJobsUseCase,
     val getJobById: GetJobByIdUseCase,
 )

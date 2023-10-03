@@ -11,9 +11,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface JobDao {
-
-    @Query("SELECT * FROM jobs")
+    @Query("SELECT * FROM jobs ORDER BY title DESC")
     fun getAll(): Flow<List<Job>>
+
+    @Query("SELECT * FROM jobs ORDER BY applied DESC")
+    fun getAllSortedByApplied(): Flow<List<Job>>
 
     @Query("SELECT * FROM jobs WHERE id = :id")
     fun getById(id: Long): Flow<Job>

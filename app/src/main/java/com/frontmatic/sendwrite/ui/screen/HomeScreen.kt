@@ -27,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,9 +58,10 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    model: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
-    val jobs = model.jobs.collectAsState(initial = emptyList()).value
+    val jobs by viewModel.jobs.collectAsState(null)
+//    val areJobsEmpty by viewModel.areJobsEmpty.collectAsState(null)
 
     Column {
         Column {
@@ -102,29 +104,31 @@ fun HomeScreen(
             }
         }
 
-        if (jobs.isEmpty()) {
+        if (jobs != null && jobs!!.isEmpty()) {
             EmptyContent(
                 icon = Icons.Filled.WorkOff,
                 messsage = "No Jobs Found. Log your job application on a button below or share a link to this app."
             )
         }
+        if (jobs != null && jobs!!.isNotEmpty()){
 
-        Column {
-            LazyColumn() {
-                items(
-                    items = jobs,
-                    key = { item -> item.id.toString() }
-                ) {
-                    ListCell(
-                        shape = RoundedCornerShape(size = MediumRadius),
-                        name = it.title,
-                        imageUrl = it.imageUrl,
-                        totalTask = it.relativeAppliedTime,
-                        color = MaterialTheme.colorScheme.primary,
-                        onClick = {
-                            navigator.navigate(JobDetailsScreenDestination(it.id!!))
-                        }
-                    )
+            Column {
+                LazyColumn() {
+                    items(
+                        items = jobs!!,
+                        key = { item -> item.id.toString() }
+                    ) {
+                        ListCell(
+                            shape = RoundedCornerShape(size = MediumRadius),
+                            name = it.title,
+                            imageUrl = it.imageUrl,
+                            totalTask = it.relativeAppliedTime,
+                            color = MaterialTheme.colorScheme.primary,
+                            onClick = {
+                                navigator.navigate(JobDetailsScreenDestination(it.id!!))
+                            }
+                        )
+                    }
                 }
             }
         }
