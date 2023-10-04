@@ -2,9 +2,9 @@ package com.frontmatic.sendwrite.di
 
 import android.content.Context
 import androidx.room.Room
-import com.frontmatic.sendwrite.local.source.LocalDataSource
+import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
-import com.frontmatic.sendwrite.local.source.impl.LocalDataSourceImpl
+import com.frontmatic.sendwrite.local.source.impl.JobLocalDataSourceImpl
 import com.frontmatic.sendwrite.util.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -30,7 +30,7 @@ object DatabaseModule {
     @Singleton
     fun providesLocalDataSource(
         database: SendWriteDatabase
-    ) : LocalDataSource {
-        return LocalDataSourceImpl(database)
+    ) : JobLocalDataSource {
+        return JobLocalDataSourceImpl(database)
     }
 }

@@ -1,11 +1,11 @@
 package com.frontmatic.sendwrite.local.source.impl
 
-import com.frontmatic.sendwrite.local.source.LocalDataSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.model.Job
+import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import kotlinx.coroutines.flow.Flow
 
-class LocalDataSourceImpl(database: SendWriteDatabase): LocalDataSource {
+class JobLocalDataSourceImpl(database: SendWriteDatabase): JobLocalDataSource {
     private val jobDao = database.jobDao()
 
     override fun getAllJobs(): Flow<List<Job>> {

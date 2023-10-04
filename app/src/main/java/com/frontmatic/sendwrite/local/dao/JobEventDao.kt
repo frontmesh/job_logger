@@ -1,6 +1,8 @@
 package com.frontmatic.sendwrite.local.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.frontmatic.sendwrite.local.model.JobEvent
 import kotlinx.coroutines.flow.Flow
@@ -9,4 +11,20 @@ import kotlinx.coroutines.flow.Flow
 interface JobEventDao {
     @Query("SELECT * FROM job_events")
     fun getAll(): Flow<List<JobEvent>>
+
+    @Query("SELECT * FROM job_events WHERE id = :id")
+    fun getById(id: Long): Flow<JobEvent>
+
+    @Query("SELECT * FROM job_events WHERE jobId = :jobId")
+    fun getByJobId(jobId: Long): Flow<List<JobEvent>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(jobEvent: JobEvent): Long
+
+    @Query("DELETE FROM job_events WHERE id = :id")
+    fun deleteById(id: Long): Int
+
+    @Query("DELETE FROM job_events WHERE jobId = :jobId")
+    fun deleteByJobId(jobId: Long): Int
+
 }

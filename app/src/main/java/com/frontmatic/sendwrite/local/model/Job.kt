@@ -28,7 +28,12 @@ data class Job(
 
     val relativeAppliedTime: String
         get() = applied?.let {
-            DateUtils.getRelativeTimeSpanString(it.time, System.currentTimeMillis(), 0L, DateUtils.FORMAT_ABBREV_ALL).toString()
+            DateUtils.getRelativeTimeSpanString(
+                it.time,
+                System.currentTimeMillis(),
+                0L,
+                DateUtils.FORMAT_ABBREV_ALL
+            ).toString()
         } ?: "Not applied yet"
 
 }

@@ -1,6 +1,5 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
-import android.text.format.DateUtils
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -97,7 +96,12 @@ fun JobDetailsScreen(
                 .padding(all = PAGE_PADDING)
                 .fillMaxWidth(),
         ) {
-            Text(text = "Job Timeline", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+            Text(
+                text = "Job Timeline",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
         }
         JetLimeView(
             jetLimeItemsModel = timelineModel,

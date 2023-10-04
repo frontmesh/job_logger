@@ -3,7 +3,7 @@ package com.frontmatic.sendwrite.ui.screen.job
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.frontmatic.sendwrite.local.source.LocalDataSource
+import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.frontmatic.sendwrite.ui.screen.navArgs
 import com.pushpal.jetlime.data.JetLimeItemsModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,12 +22,12 @@ import javax.inject.Inject
 @HiltViewModel
 class JobDetailsViewModel @Inject() constructor(
     savedStateHandle: SavedStateHandle,
-    private val localDataSource: LocalDataSource
+    private val jobLocalDataSource: JobLocalDataSource
 ): ViewModel() {
 
     private val navArgs: JobDetailsScreenNavArgs = savedStateHandle.navArgs()
 
-    val job = localDataSource.getJobById(navArgs.id).stateIn(viewModelScope,  SharingStarted.Lazily, null)
+    val job = jobLocalDataSource.getJobById(navArgs.id).stateIn(viewModelScope,  SharingStarted.Lazily, null)
 
     val jobTimeLine = MutableStateFlow(
         JetLimeItemsModel(
@@ -40,7 +40,7 @@ class JobDetailsViewModel @Inject() constructor(
         CoroutineScope(Dispatchers.IO).launch {
             job.collect {
                 if (it != null) {
-                    localDataSource.deleteJob(it)
+                    jobLocalDataSource.deleteJob(it)
                 }
             }
         }
@@ -50,7 +50,7 @@ class JobDetailsViewModel @Inject() constructor(
         CoroutineScope(Dispatchers.IO).launch {
             job.collect {
                 if (it != null) {
-                    localDataSource.archiveJob(it)
+                    jobLocalDataSource.archiveJob(it)
                 }
             }
         }

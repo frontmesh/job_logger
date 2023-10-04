@@ -14,7 +14,7 @@ interface JobDao {
     @Query("SELECT * FROM jobs ORDER BY title DESC")
     fun getAll(): Flow<List<Job>>
 
-    @Query("SELECT * FROM jobs ORDER BY applied DESC")
+    @Query("SELECT * FROM jobs ORDER BY applied ASC")
     fun getAllSortedByApplied(): Flow<List<Job>>
 
     @Query("SELECT * FROM jobs WHERE id = :id")

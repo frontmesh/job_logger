@@ -3,7 +3,7 @@ package com.frontmatic.sendwrite.ui.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontmatic.sendwrite.local.model.Job
-import com.frontmatic.sendwrite.local.source.LocalDataSource
+import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,7 +19,7 @@ enum class JobSortType {
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    localDataSource: LocalDataSource
+    localDataSource: JobLocalDataSource
 ): ViewModel() {
 
     private val _jobSortType = MutableStateFlow(JobSortType.APPLIED)

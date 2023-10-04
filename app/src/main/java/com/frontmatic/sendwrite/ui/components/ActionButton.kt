@@ -2,6 +2,7 @@ package com.frontmatic.sendwrite.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material.icons.outlined.EventBusy
@@ -61,7 +62,14 @@ fun ActionButton(
                         id = 2,
                         icon = Icons.Outlined.EventBusy,
                         label = "Remove last event"
+                    ),
+                    MultiFabItem(
+                        id = 3,
+                        icon = Icons.Outlined.Archive,
+                        label = "Close job application"
                     )
+
+
                 ),
                 onFabItemClicked = { item ->
                     if (item.id == 1) {
