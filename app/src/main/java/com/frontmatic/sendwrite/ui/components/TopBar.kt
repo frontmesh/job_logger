@@ -36,6 +36,7 @@ import androidx.navigation.NavHostController
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,10 +91,10 @@ fun TopBar(
 fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
     return when (this) {
         JobDetailsScreenDestination -> {
-            val job = navBackStackEntry?.let {
-                hiltViewModel<JobDetailsViewModel>(navBackStackEntry).job.collectAsState(null).value
+            val state = navBackStackEntry?.let {
+                hiltViewModel<JobDetailsViewModel>(navBackStackEntry).state.collectAsState(null).value
             }
-            job?.title ?: "Job Details"
+            state?.job?.title ?: "Job Details"
         }
         else -> "Job Logger"
     }
@@ -103,13 +104,15 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
 fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navController: NavHostController) {
     when (this) {
         JobDetailsScreenDestination -> {
-            val jobModel = navBackStackEntry?.let {
+            val jobDetailsViewModel = navBackStackEntry?.let {
                 hiltViewModel<JobDetailsViewModel>(navBackStackEntry)
             }
 
-            val job = jobModel?.job?.collectAsState(null)?.value
+            val state = jobDetailsViewModel?.state?.collectAsState(JobDetailState())
 
             var dropDowMenuExpanded by remember { mutableStateOf(false) }
+
+            val context = LocalContext.current
 
             IconButton(onClick = {
                 dropDowMenuExpanded = !dropDowMenuExpanded
@@ -120,7 +123,6 @@ fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navControll
                 )
             }
 
-            val context = LocalContext.current
             DropdownMenu(
                 expanded = dropDowMenuExpanded,
                 onDismissRequest = { dropDowMenuExpanded = false }
@@ -159,7 +161,7 @@ fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navControll
                         )
                     }
                 }, onClick = {
-                    jobModel?.deleteJob()
+                    jobDetailsViewModel?.deleteJob()
                     navController.popBackStack()
                     Toast.makeText(
                         context,

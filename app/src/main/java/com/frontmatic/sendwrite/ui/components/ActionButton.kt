@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.frontmatic.sendwrite.ui.components.multifab.FabIcon
 import com.frontmatic.sendwrite.ui.components.multifab.FabOption
@@ -21,6 +22,7 @@ import com.frontmatic.sendwrite.ui.components.multifab.MultiFloatingActionButton
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 
 @Composable
 fun ActionButton(
@@ -43,6 +45,10 @@ fun ActionButton(
             }
         }
         is JobDetailsScreenDestination -> {
+            val jobDetailsViewModel = navBackStackEntry?.let {
+                hiltViewModel<JobDetailsViewModel>(navBackStackEntry)
+            }
+
             MultiFloatingActionButton(
                 fabIcon = FabIcon(
                     imageVector = Icons.Outlined.Event,
@@ -73,6 +79,7 @@ fun ActionButton(
                 ),
                 onFabItemClicked = { item ->
                     if (item.id == 1) {
+                        jobDetailsViewModel?.toggleAddNewEventDialog(true)
                     } else {
                     }
                 }

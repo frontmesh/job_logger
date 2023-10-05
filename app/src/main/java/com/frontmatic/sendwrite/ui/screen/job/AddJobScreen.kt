@@ -60,7 +60,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun AddJobScreen(
     modifier: Modifier = Modifier,
     intentJob: OpenGraphResult?,
-    model: AddJobViewModel = hiltViewModel(),
+    viewModel: AddJobViewModel = hiltViewModel(),
 ) {
     var job by remember { mutableStateOf(intentJob) }
     var applied by remember { mutableStateOf(false) }
@@ -107,7 +107,12 @@ fun AddJobScreen(
                     modifier = Modifier
                         .padding(end = 12.dp),
                     onClick = {
-                        job?.let { model.saveJob(it.toJob(applied)) }
+                        val savedJobId = viewModel.saveJob(job?.toJob() )
+
+//                        if (savedJobId != 0L && applied) {
+//                            viewModel.saveJobEventApplied(savedJobId)
+//                        }
+
                         context.startActivity(Intent(context, MainActivity::class.java))
                         context.finish()
                     }
@@ -124,7 +129,10 @@ fun AddJobScreen(
                     }
                 }
 
-                OutlinedButton(onClick = { /*TODO*/ }) {
+                OutlinedButton(onClick = {
+                    context.startActivity(Intent(context, MainActivity::class.java))
+                    context.finish()
+                }) {
                     Text(
                         text = "Cancel",
                         fontWeight = FontWeight.Bold,

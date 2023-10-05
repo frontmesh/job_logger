@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.pushpal.jetlime.data.JetLimeItemsModel
@@ -47,7 +48,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun JobDetailsScreen(
     viewModel: JobDetailsViewModel = hiltViewModel()
 ) {
-    val job by viewModel.job.collectAsState(null)
+    val state by viewModel.state.collectAsState(JobDetailState())
+
+    val job = state.job
 
     val timelineModel = remember {
         JetLimeItemsModel(
@@ -55,29 +58,42 @@ fun JobDetailsScreen(
         )
     }
 
-    if (job?.applied != null) {
-        timelineModel.addItem(
-            JetLimeItemsModel.JetLimeItem(
-                title = "Applied on ${job!!.appliedDate}",
-                description = job!!.relativeAppliedTime,
-                jetLimeItemConfig = JetLimeItemConfig(
-                    titleColor = MaterialTheme.colorScheme.primary,
-                    descriptionColor = MaterialTheme.colorScheme.onSurface,
-                )
-            )
-        )
-
-        timelineModel.addItem(
-            JetLimeItemsModel.JetLimeItem(
-                title = "Waiting for application response...",
-                jetLimeItemConfig = JetLimeItemConfig(
-                    iconAnimation = IconAnimation(),
-                    titleColor = MaterialTheme.colorScheme.primary,
-                    descriptionColor = MaterialTheme.colorScheme.onSurface,
-                )
-            )
+    if (state.showAddNewEventDialog) {
+        AddEventAlertDialog(
+            modifier = Modifier
+                .padding(all = PAGE_PADDING)
+                .fillMaxWidth(),
+            state = state,
+            onDismissed = {
+                viewModel.toggleAddNewEventDialog(false)
+            }
         )
     }
+
+
+//    if (job?.applied != null) {
+//        timelineModel.addItem(
+//            JetLimeItemsModel.JetLimeItem(
+//                title = "Applied on ${job!!.appliedDate}",
+//                description = job!!.relativeAppliedTime,
+//                jetLimeItemConfig = JetLimeItemConfig(
+//                    titleColor = MaterialTheme.colorScheme.primary,
+//                    descriptionColor = MaterialTheme.colorScheme.onSurface,
+//                )
+//            )
+//        )
+//
+//        timelineModel.addItem(
+//            JetLimeItemsModel.JetLimeItem(
+//                title = "Waiting for application response...",
+//                jetLimeItemConfig = JetLimeItemConfig(
+//                    iconAnimation = IconAnimation(),
+//                    titleColor = MaterialTheme.colorScheme.primary,
+//                    descriptionColor = MaterialTheme.colorScheme.onSurface,
+//                )
+//            )
+//        )
+//    }
 
     Column(
     ) {
@@ -91,26 +107,28 @@ fun JobDetailsScreen(
             modifier = Modifier.padding(PAGE_PADDING)
         )
 
-        Row (
-            modifier = Modifier
-                .padding(all = PAGE_PADDING)
-                .fillMaxWidth(),
-        ) {
-            Text(
-                text = "Job Timeline",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
+        if (state.job?.events?.isNotEmpty() == true) {
+            Row(
+                modifier = Modifier
+                    .padding(all = PAGE_PADDING)
+                    .fillMaxWidth(),
+            ) {
+                Text(
+                    text = "Job Timeline",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            JetLimeView(
+                jetLimeItemsModel = timelineModel,
+                jetLimeViewConfig = JetLimeViewConfig(
+                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                    lineType = LineType.Solid,
+                    lineColor = MaterialTheme.colorScheme.primary,
+                ),
             )
         }
-        JetLimeView(
-            jetLimeItemsModel = timelineModel,
-            jetLimeViewConfig = JetLimeViewConfig(
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                lineType = LineType.Solid,
-                lineColor = MaterialTheme.colorScheme.primary,
-            ),
-        )
 
     }
 }

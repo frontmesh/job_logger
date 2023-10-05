@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
 import com.frontmatic.sendwrite.local.converters.DateConverter
+import com.frontmatic.sendwrite.local.converters.EnumConverter
 import com.frontmatic.sendwrite.local.dao.JobDao
 import com.frontmatic.sendwrite.local.dao.JobEventDao
 import com.frontmatic.sendwrite.local.model.Job
@@ -17,12 +18,15 @@ import java.util.Date
         Job::class,
         JobEvent::class,
     ],
-    autoMigrations = [
-        AutoMigration (from = 1, to = 2)
-    ],
+//    autoMigrations = [
+//        AutoMigration (from = 1, to = 2)
+//    ],
     version = 1
 )
-@TypeConverters(DateConverter::class)
+@TypeConverters(
+    DateConverter::class,
+    EnumConverter::class
+)
 abstract class SendWriteDatabase: RoomDatabase() {
     abstract fun jobDao(): JobDao
     abstract fun jobEventDao(): JobEventDao

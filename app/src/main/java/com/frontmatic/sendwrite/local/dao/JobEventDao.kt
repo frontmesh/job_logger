@@ -15,7 +15,7 @@ interface JobEventDao {
     @Query("SELECT * FROM job_events WHERE id = :id")
     fun getById(id: Long): Flow<JobEvent>
 
-    @Query("SELECT * FROM job_events WHERE jobId = :jobId")
+    @Query("SELECT * FROM job_events WHERE job_id = :jobId")
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -24,7 +24,7 @@ interface JobEventDao {
     @Query("DELETE FROM job_events WHERE id = :id")
     fun deleteById(id: Long): Int
 
-    @Query("DELETE FROM job_events WHERE jobId = :jobId")
+    @Query("DELETE FROM job_events WHERE job_id = :jobId")
     fun deleteByJobId(jobId: Long): Int
 
 }

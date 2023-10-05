@@ -122,7 +122,7 @@ fun HomeScreen(
                             shape = RoundedCornerShape(size = MediumRadius),
                             name = it.title,
                             imageUrl = it.imageUrl,
-                            totalTask = it.relativeAppliedTime,
+//                            totalTask = it.relativeAppliedTime,
                             color = MaterialTheme.colorScheme.primary,
                             onClick = {
                                 navigator.navigate(JobDetailsScreenDestination(it.id!!))
@@ -227,7 +227,7 @@ private fun JobCell(
 private fun ListCell(
     shape: Shape,
     name: String,
-    totalTask: String,
+    totalTask: String? = null,
     color: Color,
     imageUrl: String = "",
     onClick: () -> Unit,
@@ -277,11 +277,13 @@ private fun ListCell(
                         )
                         Spacer(Modifier.size(8.dp))
 
-                        Text(
-                            text = totalTask,
-                            style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaDisabled)
-                        )
+                        if (totalTask != null) {
+                            Text(
+                                text = totalTask,
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaDisabled)
+                            )
+                        }
                     }
 
                     Row {

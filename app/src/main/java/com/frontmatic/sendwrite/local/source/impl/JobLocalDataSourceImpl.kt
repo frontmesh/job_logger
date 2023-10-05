@@ -2,11 +2,15 @@ package com.frontmatic.sendwrite.local.source.impl
 
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.model.Job
+import com.frontmatic.sendwrite.local.model.JobAndEvents
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import kotlinx.coroutines.flow.Flow
 
 class JobLocalDataSourceImpl(database: SendWriteDatabase): JobLocalDataSource {
     private val jobDao = database.jobDao()
+    override fun getByIdWithEvents(id: Long): Flow<JobAndEvents> {
+        return jobDao.getJobAndEvents(id)
+    }
 
     override fun getAllJobs(): Flow<List<Job>> {
         return jobDao.getAllSortedByApplied()
@@ -20,7 +24,7 @@ class JobLocalDataSourceImpl(database: SendWriteDatabase): JobLocalDataSource {
         return jobDao.getAllArchived()
     }
 
-    override fun getJobById(id: Long): Flow<Job> {
+    override fun getById(id: Long): Flow<Job> {
         return jobDao.getById(id)
     }
 
