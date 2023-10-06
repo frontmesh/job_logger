@@ -61,7 +61,6 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val jobs by viewModel.jobs.collectAsState(null)
-//    val areJobsEmpty by viewModel.areJobsEmpty.collectAsState(null)
 
     Column {
         Column {
