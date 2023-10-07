@@ -13,4 +13,13 @@ data class JobDetailState(
     var newEventType: JobEventType? = null,
     val job: JobAndEvents? = null,
     val showAddNewEventDialog: Boolean = false,
+
+    val snackBarState : SnackBarState = SnackBarState(""),
+)
+
+data class SnackBarState(
+    val message: String,
+    val showSnackbar: Boolean = false,
+    val actionLabel: String? = null,
+    val action: (() -> Unit)? = null,
 )

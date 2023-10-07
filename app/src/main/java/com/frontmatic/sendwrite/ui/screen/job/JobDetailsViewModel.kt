@@ -26,6 +26,8 @@ import kotlinx.coroutines.launch
 import java.sql.Date
 import javax.inject.Inject
 
+
+
 @HiltViewModel
 class JobDetailsViewModel @Inject() constructor(
     savedStateHandle: SavedStateHandle,
@@ -34,17 +36,13 @@ class JobDetailsViewModel @Inject() constructor(
 ): ViewModel() {
 
     private val navArgs: JobDetailsScreenNavArgs = savedStateHandle.navArgs()
-
     private val _job = jobLocalDataSource.getByIdWithEvents(navArgs.id).stateIn(viewModelScope,  SharingStarted.Lazily, null)
-
     private val _state = MutableStateFlow(JobDetailState())
-
     val state = combine(_state, _job,) { state, job ->
          state.copy(
             job = job,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), JobDetailState())
-
     val jobTimeLine = MutableStateFlow(
         JetLimeItemsModel(
             list = mutableListOf()
@@ -80,6 +78,12 @@ class JobDetailsViewModel @Inject() constructor(
 
                 viewModelScope.launch(Dispatchers.IO) {
                     jobEventLocalDataSource.saveJobEvent(newEvent)
+                    _state.value = _state.value.copy(
+                        snackBarState = SnackBarState(
+                            message = "${newEvent.name} added",
+                            showSnackbar = true,
+                        )
+                    )
                 }
             }
         }

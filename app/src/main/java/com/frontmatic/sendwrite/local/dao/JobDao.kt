@@ -16,7 +16,7 @@ interface JobDao {
     @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title DESC")
     fun getAll(): Flow<List<Job>>
 
-    @Query("SELECT * FROM jobs ORDER BY title ASC")
+    @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title ASC")
     fun getAllSortedByApplied(): Flow<List<Job>>
 
     @Transaction

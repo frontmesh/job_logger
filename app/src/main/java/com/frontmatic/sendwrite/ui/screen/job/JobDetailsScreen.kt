@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
@@ -15,13 +16,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.EditCalendar
+import androidx.compose.material.icons.filled.EditNote
+import androidx.compose.material.icons.rounded.AppRegistration
+import androidx.compose.material.icons.rounded.Approval
+import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Event
+import androidx.compose.material.icons.rounded.EventNote
+import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Link
+import androidx.compose.material.icons.rounded.MeetingRoom
+import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -30,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,13 +52,16 @@ import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.util.LocalSnackbar
 import com.pushpal.jetlime.data.JetLimeItemsModel
 import com.pushpal.jetlime.data.config.IconAnimation
+import com.pushpal.jetlime.data.config.IconType
 import com.pushpal.jetlime.data.config.JetLimeItemConfig
 import com.pushpal.jetlime.data.config.JetLimeViewConfig
 import com.pushpal.jetlime.data.config.LineType
 import com.pushpal.jetlime.ui.JetLimeView
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalAnimationApi::class)
@@ -57,10 +73,17 @@ fun JobDetailsScreen(
     viewModel: JobDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState(JobDetailState())
-
+    val snack = LocalSnackbar.current
     val job = state.job
-
     val colorScheme = MaterialTheme.colorScheme
+
+    LaunchedEffect(state.snackBarState) {
+        if (state.snackBarState.showSnackbar) {
+            snack.showSnackbar(
+                message = state.snackBarState!!.message,
+            )
+        }
+    }
 
     val timelineModel by remember {
         derivedStateOf {
@@ -70,22 +93,52 @@ fun JobDetailsScreen(
                 when(it.type) {
                     JobEventType.APPLIED ->
                         jetItemList.add(
-                            JetLimeItemsModel.JetLimeItem(
+                            createJetLimeItem(
                                 title = "Applied on ${it.formatDate}",
                                 description = it.dateToRelativeTime,
-                                jetLimeItemConfig = JetLimeItemConfig(
-                                    titleColor = colorScheme.primary,
-                                    descriptionColor = colorScheme.onSurface,
-                                    iconAnimation = if (state.job?.events?.size == 1) IconAnimation() else null,
-                                )
+                                icon = Icons.Rounded.EditNote,
+                                colorScheme = colorScheme,
+                                iconAnimation = if (state.job?.events?.size == 1) IconAnimation() else null,
                             )
                         )
                     JobEventType.INTERVIEW -> {
                         jetItemList.add(
+                            createJetLimeItem(
+                                title = "Interview on ${it.formatDate}",
+                                description = (it.name + " - " + it.description) ?: "",
+                                icon = Icons.Rounded.Groups,
+                                colorScheme = colorScheme,
+                                iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
+                            )
+                        )
+                    }
+                    JobEventType.ASSIGNMENT -> jetItemList.add(
+                        createJetLimeItem(
+                            title = "Assignment on ${it.formatDate}",
+                            description = (it.name + " - " + it.description) ?: "",
+                            icon = Icons.Rounded.EditNote,
+                            colorScheme = colorScheme,
+                            iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
+                        )
+                    )
+                    JobEventType.OFFER -> jetItemList.add(
+                        createJetLimeItem(
+                            title = "Offer on ${it.formatDate}",
+                            description = (it.name + " - " + it.description) ?: "",
+                            icon = Icons.Rounded.Approval,
+                            colorScheme = colorScheme,
+                            iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
+                        )
+                    )
+                    JobEventType.OTHER -> {
+                        jetItemList.add(
                             JetLimeItemsModel.JetLimeItem(
                                 title = it?.name ?: "",
-                                description = "Interview on ${it.formatDate} - ${it.description}",
+                                description = "${it.description}",
                                 jetLimeItemConfig = JetLimeItemConfig(
+                                    iconType = IconType.Custom(
+                                        iconImage = Icons.Rounded.Notes,
+                                    ),
                                     titleColor = colorScheme.primary,
                                     descriptionColor = colorScheme.onSurface,
                                     iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
@@ -93,9 +146,6 @@ fun JobDetailsScreen(
                             )
                         )
                     }
-                    JobEventType.ASSIGNMENT -> TODO()
-                    JobEventType.OFFER -> TODO()
-                    JobEventType.OTHER -> TODO()
                 }
             }
 
@@ -145,8 +195,13 @@ fun JobDetailsScreen(
                 jetLimeItemsModel = timelineModel,
                 jetLimeViewConfig = JetLimeViewConfig(
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    lineType = LineType.Solid,
                     lineColor = MaterialTheme.colorScheme.primary,
+                    showIcons = true,
+                    lineType = LineType.Solid,
+                    lineThickness = 16F,
+                    iconBorderThickness = 1.dp,
+                    iconSize = 22.dp,
+                    iconShape = CircleShape,
                 ),
             )
         } else if (state.job?.events?.isNullOrEmpty() == true) {
@@ -157,6 +212,28 @@ fun JobDetailsScreen(
         }
 
     }
+}
+
+
+fun createJetLimeItem(
+    title: String, description:String,
+    icon: ImageVector,
+    colorScheme: ColorScheme,
+    iconAnimation:
+    IconAnimation? = null
+): JetLimeItemsModel.JetLimeItem {
+    return JetLimeItemsModel.JetLimeItem(
+        title = title,
+        description = description,
+        jetLimeItemConfig = JetLimeItemConfig(
+            iconType = IconType.Custom(
+                iconImage = icon,
+            ),
+            titleColor = colorScheme.primary,
+            descriptionColor = colorScheme.onSurface,
+            iconAnimation = iconAnimation,
+        )
+    )
 }
 
 @Composable

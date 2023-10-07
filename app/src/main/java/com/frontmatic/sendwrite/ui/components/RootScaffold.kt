@@ -3,7 +3,6 @@ package com.frontmatic.sendwrite.ui.components
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -15,10 +14,8 @@ import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.startAppDestination
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ramcosta.composedestinations.spec.Route
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RootScaffold(
     startRoute: Route,
@@ -26,16 +23,24 @@ fun RootScaffold(
     topBar: @Composable (Destination, NavBackStackEntry?) -> Unit,
     bottomBar: @Composable (Destination) -> Unit,
     floatingActionButton: @Composable (Destination, NavBackStackEntry?) -> Unit ,
+    snackbarHost: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     val navBackStackEntry = navController.currentBackStackEntry
     val destination = navController.appCurrentDestinationAsState().value
         ?: startRoute.startAppDestination
 
+
     Scaffold(
         topBar = { topBar(destination, navBackStackEntry) },
         bottomBar = { bottomBar(destination) },
-        floatingActionButton = { floatingActionButton(destination, navBackStackEntry) },
+        floatingActionButton = {
+            floatingActionButton(
+                destination,
+                navBackStackEntry,
+            )
+       },
+        snackbarHost = snackbarHost,
     )
     {
         Surface(modifier = Modifier

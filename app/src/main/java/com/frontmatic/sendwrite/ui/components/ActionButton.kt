@@ -10,7 +10,9 @@ import androidx.compose.material.icons.outlined.EventNote
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,18 +25,26 @@ import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ActionButton(
     destination: Destination,
-    navBackStackEntry: NavBackStackEntry?
+    navBackStackEntry: NavBackStackEntry?,
+    snackbarHostState: SnackbarHostState
 ) {
+    val scope = rememberCoroutineScope()
 
     when (destination) {
         is HomeScreenDestination -> {
             FloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
-                onClick = { /*TODO*/ }
+                onClick = {
+                    scope.launch {
+                        snackbarHostState
+                            .showSnackbar("This should open a new job application")
+                    }
+                }
             ) {
                 Icon(
                     modifier = Modifier,
