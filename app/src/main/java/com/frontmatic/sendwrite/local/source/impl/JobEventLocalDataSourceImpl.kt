@@ -14,4 +14,12 @@ class JobEventLocalDataSourceImpl(database: SendWriteDatabase): JobEventLocalDat
     override suspend fun saveJobEvent(jobEvent: JobEvent): Long {
         return jobEventDao.insert(jobEvent)
     }
+
+    override fun deleteById(id: Long): Int {
+        return jobEventDao.deleteById(id)
+    }
+
+    override fun removeLastEvent(jobId: Long): Int {
+        return jobEventDao.removeLastEvent(jobId)
+    }
 }

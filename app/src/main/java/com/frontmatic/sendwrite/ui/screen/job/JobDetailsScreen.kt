@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,9 +28,11 @@ import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.rounded.MeetingRoom
 import androidx.compose.material.icons.rounded.Notes
+import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
+import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.LocalSnackbar
@@ -76,12 +80,15 @@ fun JobDetailsScreen(
     val snack = LocalSnackbar.current
     val job = state.job
     val colorScheme = MaterialTheme.colorScheme
+    val jetLimeListState = rememberLazyListState()
 
     LaunchedEffect(state.snackBarState) {
         if (state.snackBarState.showSnackbar) {
             snack.showSnackbar(
                 message = state.snackBarState!!.message,
             )
+
+            viewModel.resetSnackBar()
         }
     }
 
@@ -148,9 +155,14 @@ fun JobDetailsScreen(
                     }
                 }
             }
-
             JetLimeItemsModel(jetItemList)
         }
+    }
+
+
+    LaunchedEffect(timelineModel.items.size) {
+        delay(1)
+        jetLimeListState.scrollToItem(timelineModel.items.size)
     }
 
     if (state.showAddNewEventDialog) {
@@ -163,6 +175,32 @@ fun JobDetailsScreen(
             onDismissed = {
                 viewModel.toggleAddNewEventDialog(false)
             }
+        )
+    }
+
+    if (state.showRemoveEventDialog) {
+        MessageAlertDialog(
+            message = "Are you sure you want to remove the last event?",
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.removeLastEvent()
+                    },
+                ) {
+                    Text("Remove")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { viewModel.toggleRemoveLastEventDialog(false) },
+                ) {
+                    Text("Cancel")
+                }
+            },
+            onDismissRequest = {
+                viewModel.toggleRemoveLastEventDialog(false)
+            },
+
         )
     }
 
@@ -193,6 +231,7 @@ fun JobDetailsScreen(
             }
             JetLimeView(
                 jetLimeItemsModel = timelineModel,
+                listState = jetLimeListState,
                 jetLimeViewConfig = JetLimeViewConfig(
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     lineColor = MaterialTheme.colorScheme.primary,

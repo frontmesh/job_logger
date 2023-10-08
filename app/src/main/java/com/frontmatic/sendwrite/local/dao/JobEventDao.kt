@@ -27,4 +27,7 @@ interface JobEventDao {
     @Query("DELETE FROM job_events WHERE job_id = :jobId")
     fun deleteByJobId(jobId: Long): Int
 
+    @Query("DELETE FROM job_events WHERE job_id = :jobId AND id = (SELECT MAX(id) FROM job_events WHERE job_id = :jobId)")
+    fun removeLastEvent(jobId: Long): Int
+
 }

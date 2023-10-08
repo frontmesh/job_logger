@@ -88,10 +88,12 @@ fun ActionButton(
 
                 ),
                 onFabItemClicked = { item ->
-                    if (item.id == 1) {
-                        jobDetailsViewModel?.toggleAddNewEventDialog(true)
-                    } else {
+                    when(item.id) {
+                        1 -> jobDetailsViewModel?.toggleAddNewEventDialog(true)
+                        2 -> jobDetailsViewModel?.toggleRemoveLastEventDialog(true)
+                        3 -> jobDetailsViewModel?.toggleCloseJobApplicationDialog(true)
                     }
+
                 }
             )
 

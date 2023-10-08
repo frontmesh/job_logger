@@ -51,6 +51,9 @@ data class JobEvent(
                 DateUtils.FORMAT_ABBREV_ALL
             ).toString()
         } ?: ""
+
+    val typeToString: String
+        get() = type.name.lowercase().replaceFirstChar { it.uppercase() }
 }
 
 

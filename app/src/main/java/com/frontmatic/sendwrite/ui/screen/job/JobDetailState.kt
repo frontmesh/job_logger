@@ -11,8 +11,12 @@ data class JobDetailState(
     var newEventDescription: String? = null,
     var newEventDate: Long? = null,
     var newEventType: JobEventType? = null,
+
     val job: JobAndEvents? = null,
+
     val showAddNewEventDialog: Boolean = false,
+    val showRemoveEventDialog: Boolean = false,
+    val showCloseJobApplicationDialog: Boolean = false,
 
     val snackBarState : SnackBarState = SnackBarState(""),
 )

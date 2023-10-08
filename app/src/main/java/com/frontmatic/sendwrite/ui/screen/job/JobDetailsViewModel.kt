@@ -52,7 +52,14 @@ class JobDetailsViewModel @Inject() constructor(
 
     fun onAddEventAlertAction(action: AddEventAlertAction): Unit {
         when(action) {
-            AddEventAlertAction.CancelEvent -> TODO()
+            AddEventAlertAction.CancelEvent -> {
+                _state.value = _state.value.copy(
+                    newEventTitle = null,
+                    newEventDescription = null,
+                    newEventDate = null,
+                    newEventType = null
+                )
+            }
             is AddEventAlertAction.setNewEventDate -> {
                 _state.value = _state.value.copy(newEventDate = action.date)
             }
@@ -80,14 +87,34 @@ class JobDetailsViewModel @Inject() constructor(
                     jobEventLocalDataSource.saveJobEvent(newEvent)
                     _state.value = _state.value.copy(
                         snackBarState = SnackBarState(
-                            message = "${newEvent.name} added",
+                            message = "${newEvent.typeToString} event added",
                             showSnackbar = true,
                         )
                     )
                 }
             }
         }
+    }
 
+    fun removeLastEvent() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val lastEvent = _job.value?.events?.lastOrNull()
+            val lastEventId = lastEvent?.id
+
+            // remove last event
+            if (lastEventId != null) {
+                jobEventLocalDataSource.deleteById(lastEventId)
+            }
+
+            _state.value = _state.value.copy(
+                snackBarState = SnackBarState(
+                    message = "${lastEvent?.name} event removed",
+                    showSnackbar = true,
+                )
+            )
+
+            toggleRemoveLastEventDialog(false)
+        }
     }
 
     fun deleteJob() {
@@ -109,13 +136,29 @@ class JobDetailsViewModel @Inject() constructor(
     fun toggleAddNewEventDialog(value: Boolean) {
         _state.value = _state.value.copy(showAddNewEventDialog = value)
     }
+
+    fun toggleRemoveLastEventDialog(value: Boolean) {
+        _state.value = _state.value.copy(showRemoveEventDialog = value)
+    }
+
+    fun toggleCloseJobApplicationDialog(value: Boolean) {
+        _state.value = _state.value.copy(showCloseJobApplicationDialog = value)
+    }
+
+    fun resetSnackBar() {
+        _state.value = _state.value.copy(
+            snackBarState = SnackBarState(
+                message = "",
+                showSnackbar = false,
+            )
+        )
+    }
 }
 
 sealed class AddEventAlertAction {
     data class setNewEventDate(val date: Long?): AddEventAlertAction()
     data class setNewEventTitle(val title: String?): AddEventAlertAction()
     data class setNewEventDescription(val description: String?): AddEventAlertAction()
-
     data class setNewEventType(val type: JobEventType?): AddEventAlertAction()
     object CancelEvent: AddEventAlertAction()
     object SaveEvent : AddEventAlertAction()
