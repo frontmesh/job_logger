@@ -41,6 +41,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
 import com.frontmatic.sendwrite.ui.components.EmptyContent
+import com.frontmatic.sendwrite.ui.components.domain.JobListContent
+import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
@@ -89,48 +91,17 @@ fun HomeScreen(
                 )
             }
 
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    text = "All Jobs",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
-                )
-            }
+            JobListTitle(title = "All Jobs")
         }
 
-        if (jobs != null && jobs!!.isEmpty()) {
-            EmptyContent(
-                icon = Icons.Filled.WorkOff,
-                messsage = "No Jobs Found. Log your job application on a button below or share a link to this app."
-            )
-        }
-        if (jobs != null && jobs!!.isNotEmpty()){
-
-            Column {
-                LazyColumn() {
-                    items(
-                        items = jobs!!,
-                        key = { item -> item.id.toString() }
-                    ) {
-                        ListCell(
-                            shape = RoundedCornerShape(size = MediumRadius),
-                            name = it.title,
-                            imageUrl = it.imageUrl,
-//                            totalTask = it.relativeAppliedTime,
-                            color = MaterialTheme.colorScheme.primary,
-                            onClick = {
-                                navigator.navigate(JobDetailsScreenDestination(it.id!!))
-                            }
-                        )
-                    }
-                }
-            }
-        }
+        JobListContent(
+            jobs = jobs,
+            onItemClick = { item ->
+                navigator.navigate(JobDetailsScreenDestination(item.id!!))
+            },
+            emptyContentMessage = "No Jobs Found. Log your job application on a button below or share a link to this app.",
+            emptyContentIcon = Icons.Filled.WorkOff,
+        )
     }
 
 }
@@ -221,81 +192,3 @@ private fun JobCell(
         }
     }
 }
-
-@Composable
-private fun ListCell(
-    shape: Shape,
-    name: String,
-    totalTask: String? = null,
-    color: Color,
-    imageUrl: String = "",
-    onClick: () -> Unit,
-) {
-        // A simple box to draw the growing circle, which emanates from behind the icon
-        Box(
-            Modifier
-                .padding(vertical = 6.dp)
-        ) {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = PAGE_PADDING)
-                    .clip(shape)
-                    .clickable(onClick = onClick),
-                shape = shape,
-                color = MaterialTheme.colorScheme.primaryContainer
-
-            ) {
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.padding(all = 16.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(28.dp)
-                                .background(shape = CircleShape, color = color),
-                            contentAlignment = Alignment.Center
-                        ) {
-
-                            CoilAsyncImage(
-                                imageUrl = imageUrl,
-                                imageShape = RoundedCornerShape(MediumRadius),
-                                imageSize = 42.dp
-                            )
-                        }
-                        Spacer(Modifier.size(8.dp))
-                        Text(
-                            text = name,
-                            style = MaterialTheme.typography.titleSmall,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.weight(1f),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(Modifier.size(8.dp))
-
-                        if (totalTask != null) {
-                            Text(
-                                text = totalTask,
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaDisabled)
-                            )
-                        }
-                    }
-
-                    Row {
-                        Spacer(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(color = MaterialTheme.colorScheme.secondary.copy(alpha = AlphaDisabled))
-                        )
-                        Divider(color = MaterialTheme.colorScheme.primary)
-                    }
-                }
-
-            }
-        }
-    }

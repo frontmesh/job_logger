@@ -89,7 +89,11 @@ class JobDetailsViewModel @Inject() constructor(
                         snackBarState = SnackBarState(
                             message = "${newEvent.typeToString} event added",
                             showSnackbar = true,
-                        )
+                        ),
+                        newEventTitle = null,
+                        newEventDescription = null,
+                        newEventDate = null,
+                        newEventType = null,
                     )
                 }
             }

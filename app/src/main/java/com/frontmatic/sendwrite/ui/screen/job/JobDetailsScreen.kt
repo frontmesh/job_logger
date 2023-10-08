@@ -101,7 +101,7 @@ fun JobDetailsScreen(
                     JobEventType.APPLIED ->
                         jetItemList.add(
                             createJetLimeItem(
-                                title = "Applied on ${it.formatDate}",
+                                title = formatEventTitle(it.type, it.formatDate, it.name),
                                 description = it.dateToRelativeTime,
                                 icon = Icons.Rounded.EditNote,
                                 colorScheme = colorScheme,
@@ -111,7 +111,7 @@ fun JobDetailsScreen(
                     JobEventType.INTERVIEW -> {
                         jetItemList.add(
                             createJetLimeItem(
-                                title = "Interview on ${it.formatDate}",
+                                title = formatEventTitle(it.type, it.formatDate, it.name),
                                 description = (it.name + " - " + it.description) ?: "",
                                 icon = Icons.Rounded.Groups,
                                 colorScheme = colorScheme,
@@ -121,7 +121,7 @@ fun JobDetailsScreen(
                     }
                     JobEventType.ASSIGNMENT -> jetItemList.add(
                         createJetLimeItem(
-                            title = "Assignment on ${it.formatDate}",
+                            title = formatEventTitle(it.type, it.formatDate, it.name),
                             description = (it.name + " - " + it.description) ?: "",
                             icon = Icons.Rounded.EditNote,
                             colorScheme = colorScheme,
@@ -130,7 +130,7 @@ fun JobDetailsScreen(
                     )
                     JobEventType.OFFER -> jetItemList.add(
                         createJetLimeItem(
-                            title = "Offer on ${it.formatDate}",
+                            title = formatEventTitle(it.type, it.formatDate, it.name),
                             description = (it.name + " - " + it.description) ?: "",
                             icon = Icons.Rounded.Approval,
                             colorScheme = colorScheme,
@@ -140,7 +140,7 @@ fun JobDetailsScreen(
                     JobEventType.OTHER -> {
                         jetItemList.add(
                             JetLimeItemsModel.JetLimeItem(
-                                title = it?.name ?: "",
+                                title = formatEventTitle(it.type, it.formatDate, it.name),
                                 description = "${it.description}",
                                 jetLimeItemConfig = JetLimeItemConfig(
                                     iconType = IconType.Custom(
@@ -250,6 +250,16 @@ fun JobDetailsScreen(
             )
         }
 
+    }
+}
+
+fun formatEventTitle(eventType: JobEventType, date: String?, title: String?): String {
+    return when(eventType) {
+        JobEventType.APPLIED -> "Applied on $date"
+        JobEventType.INTERVIEW -> if (date != null) "Interview on $date" else "Interview - $title"
+        JobEventType.ASSIGNMENT -> if (date != null) "Assignment on $date" else "Assignment - $title"
+        JobEventType.OFFER -> if (date != null) "Offer on $date" else "Offer - $title"
+        JobEventType.OTHER -> "Other = $title"
     }
 }
 

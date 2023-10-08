@@ -139,7 +139,7 @@ fun AddEventAlertDialog(
         onDismissRequest = { onDismissed() },
         confirmButton = {
             val isEnabled = (!state.newEventTitle.isNullOrEmpty()
-                    && !state.newEventDescription.isNullOrEmpty()
+//                    && !state.newEventDescription.isNullOrEmpty()
                     && state.newEventType != JobEventType.APPLIED) ||
                     (state.newEventType == JobEventType.APPLIED && state.newEventDate != null)
 
