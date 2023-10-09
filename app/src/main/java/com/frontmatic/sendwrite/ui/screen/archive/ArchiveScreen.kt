@@ -19,7 +19,10 @@ fun ArchiveScreen(
     val jobs by viewModel.archivedJobs.collectAsState()
 
     Column {
-        JobListTitle(title = "Archived Jobs")
+        JobListTitle(
+            title = "Archived Jobs",
+            description = "You have ${jobs?.size ?: 0} archived jobs",
+        )
 
         JobListContent(
             jobs = jobs,

@@ -85,13 +85,16 @@ fun HomeScreen(
                     modifier = Modifier
                         .weight(1f),
                     taskCount = "0",
-                    title = "Due Tomorrow",
+                    title = "Due This Week",
                     icon = Icons.Filled.DateRange,
                     onClick = { /*TODO*/ },
                 )
             }
 
-            JobListTitle(title = "All Jobs")
+            JobListTitle(
+                title = "All Jobs",
+                description = "You have ${jobs?.size ?: 0} saved jobs",
+            )
         }
 
         JobListContent(

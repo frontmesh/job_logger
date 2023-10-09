@@ -11,7 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun JobListTitle(title: String) {
+fun JobListTitle(
+    title: String,
+    description: String? = null,
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
@@ -23,6 +26,14 @@ fun JobListTitle(title: String) {
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
+
+        if (description != null) {
+            Text(
+                text = description,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(end = 16.dp, bottom = 8.dp)
+            )
+        }
     }
 }
 

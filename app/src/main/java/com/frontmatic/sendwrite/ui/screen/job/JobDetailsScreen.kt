@@ -52,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
+import com.frontmatic.sendwrite.ui.screen.NavGraphs
+import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
@@ -65,6 +67,9 @@ import com.pushpal.jetlime.data.config.JetLimeViewConfig
 import com.pushpal.jetlime.data.config.LineType
 import com.pushpal.jetlime.ui.JetLimeView
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.navigate
+import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -74,7 +79,8 @@ import kotlinx.coroutines.delay
 )
 @Composable
 fun JobDetailsScreen(
-    viewModel: JobDetailsViewModel = hiltViewModel()
+    viewModel: JobDetailsViewModel = hiltViewModel(),
+    navigator: DestinationsNavigator
 ) {
     val state by viewModel.state.collectAsState(JobDetailState())
     val snack = LocalSnackbar.current
@@ -200,7 +206,37 @@ fun JobDetailsScreen(
             onDismissRequest = {
                 viewModel.toggleRemoveLastEventDialog(false)
             },
+        )
+    }
 
+    if (state.showCloseJobApplicationDialog) {
+        MessageAlertDialog(
+            message = "Are you sure you want to close this job application?",
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.archiveJob()
+                        navigator.navigate(ArchiveScreenDestination()) {
+                            popUpTo(NavGraphs.root) {
+                                saveState = false
+                            }
+                            restoreState = false
+                        }
+                    },
+                ) {
+                    Text("Close")
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { viewModel.toggleCloseJobApplicationDialog(false) },
+                ) {
+                    Text("Cancel")
+                }
+            },
+            onDismissRequest = {
+                viewModel.toggleCloseJobApplicationDialog(false)
+            },
         )
     }
 

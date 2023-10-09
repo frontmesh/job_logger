@@ -17,9 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavController
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
+import com.frontmatic.sendwrite.ui.screen.appCurrentDestinationAsState
 import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
+import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.startAppDestination
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
@@ -34,13 +37,13 @@ data class NavMenuItem(
 
 val bottomNavItems = listOf(
     NavMenuItem(
-        title = "Active",
+        title = "Active Jobs",
         iconSelected = Icons.Filled.DateRange,
         icon = Icons.Outlined.DateRange,
         direction = HomeScreenDestination
     ),
     NavMenuItem(
-        title = "Archived",
+        title = "Archived Jobs",
         iconSelected = Icons.Filled.Archive,
         icon = Icons.Outlined.Archive,
         direction = ArchiveScreenDestination
@@ -60,12 +63,16 @@ fun BottomNavBar(
 
     NavigationBar() {
         bottomNavItems.forEach { item ->
-            val isCurrentDestOnBackStack = navController.isRouteOnBackStack(item.direction)
-            val icon = if (isCurrentDestOnBackStack) item.iconSelected else item.icon
+            val currentDestination: Destination? = navController.appCurrentDestinationAsState().value
+                ?: NavGraphs.root.startAppDestination
+
+            val isSelected = currentDestination == item.direction
+
+            val icon = if (isSelected) item.iconSelected else item.icon
             NavigationBarItem(
                 icon = { Icon(icon, contentDescription = item.title) },
                 label = { Text(item.title) },
-                selected = isCurrentDestOnBackStack,
+                selected = isSelected,
                 onClick = {
                     navController.navigate(item.direction) {
                         popUpTo(NavGraphs.root) {

@@ -122,18 +122,21 @@ class JobDetailsViewModel @Inject() constructor(
     }
 
     fun deleteJob() {
-        CoroutineScope(Dispatchers.IO).launch {
-            _job.collect() {
-                jobLocalDataSource.deleteJob(it!!.toJob())
-            }
+        viewModelScope.launch(Dispatchers.IO) {
+            jobLocalDataSource.deleteJob(_job.value!!.toJob())
         }
     }
 
-    fun archiveJob(job: Job) {
-        CoroutineScope(Dispatchers.IO).launch {
-            _job.collect() {
-                jobLocalDataSource.archiveJob(it!!.toJob())
-            }
+    fun archiveJob() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val jobToArchive = _job.value ?: return@launch
+            jobLocalDataSource.archiveJob(jobToArchive.toJob())
+            _state.value = _state.value.copy(
+                snackBarState = SnackBarState(
+                    message = "${jobToArchive.title} archived",
+                    showSnackbar = true,
+                )
+            )
         }
     }
 
