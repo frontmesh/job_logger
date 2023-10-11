@@ -3,9 +3,11 @@ package com.frontmatic.sendwrite.ui.components
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Archive
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -38,8 +40,8 @@ data class NavMenuItem(
 val bottomNavItems = listOf(
     NavMenuItem(
         title = "Active Jobs",
-        iconSelected = Icons.Filled.DateRange,
-        icon = Icons.Outlined.DateRange,
+        iconSelected = Icons.Filled.EventAvailable,
+        icon = Icons.Outlined.EventAvailable,
         direction = HomeScreenDestination
     ),
     NavMenuItem(

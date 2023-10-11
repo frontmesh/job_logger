@@ -60,9 +60,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun HomeScreen(
     navigator: DestinationsNavigator,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
-    val jobs by viewModel.jobs.collectAsState(null)
+    val jobs by homeScreenViewModel.jobs.collectAsState(null)
+
+    val todayEvents by homeScreenViewModel.todayEvents.collectAsState(emptyList())
 
     Column {
         Column {
@@ -76,7 +78,7 @@ fun HomeScreen(
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 16.dp),
-                    taskCount = "0",
+                    taskCount = todayEvents?.size.toString(),
                     title = "Due Today",
                     icon = Icons.Filled.DateRange,
                     onClick = { /*TODO*/ },
@@ -102,7 +104,7 @@ fun HomeScreen(
             onItemClick = { item ->
                 navigator.navigate(JobDetailsScreenDestination(item.id!!))
             },
-            emptyContentMessage = "No Jobs Found. Log your job application on a button below or share a link to this app.",
+            emptyContentMessage = "No Active Jobs Found. \r\n \r\n Log your job application on a button below or share a link to this app.",
             emptyContentIcon = Icons.Filled.WorkOff,
         )
     }

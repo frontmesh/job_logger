@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.frontmatic.sendwrite.local.model.JobEvent
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface JobEventDao {
@@ -17,6 +18,13 @@ interface JobEventDao {
 
     @Query("SELECT * FROM job_events WHERE job_id = :jobId")
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
+
+    @Query("SELECT * FROM job_events WHERE date = :targetDate")
+    fun getTodayEvents(targetDate: Long): Flow<List<JobEvent>>
+
+
+    @Query("SELECT * FROM job_events WHERE date(date) < date('now', '+7 day') AND type != 'APPLIED'")
+    fun getEventsWhereDueDateIsThisWeek(): Flow<List<JobEvent>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(jobEvent: JobEvent): Long

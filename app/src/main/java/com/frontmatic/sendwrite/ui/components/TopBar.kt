@@ -130,26 +130,6 @@ fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navControll
                 DropdownMenuItem(text = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
-                            imageVector = Icons.Outlined.Archive,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = "Archive",
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 6.dp)
-                        )
-                    }
-                }, onClick = {
-                    Toast.makeText(
-                        context,
-                        "Archive Clicked",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                })
-                DropdownMenuItem(text = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary
@@ -161,13 +141,7 @@ fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navControll
                         )
                     }
                 }, onClick = {
-                    jobDetailsViewModel?.deleteJob()
-                    navController.popBackStack()
-                    Toast.makeText(
-                        context,
-                        "Delete Clicked",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    jobDetailsViewModel?.toggleDeleteJobApplicationDialog(true)
                 })
 
             }

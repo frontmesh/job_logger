@@ -40,12 +40,13 @@ fun JobListContent(
     jobs: List<Job>?,
     onItemClick: (Job) -> Unit,
     emptyContentMessage: String,
-    emptyContentIcon: ImageVector
+    emptyContentIcon: ImageVector,
+    listCellBackground: Color = MaterialTheme.colorScheme.primaryContainer,
 ) {
     if (jobs != null && jobs!!.isEmpty()) {
         EmptyContent(
             icon = emptyContentIcon,
-            messsage = emptyContentMessage
+            message = emptyContentMessage
         )
     }
     if (jobs != null && jobs!!.isNotEmpty()){
@@ -62,6 +63,7 @@ fun JobListContent(
                         imageUrl = it.imageUrl,
 //                      totalTask = it.relativeAppliedTime,
                         color = MaterialTheme.colorScheme.primary,
+                        listCellBackground = listCellBackground,
                         onClick = {
                             onItemClick(it)
                         }
@@ -78,6 +80,7 @@ private fun ListCell(
     name: String,
     totalTask: String? = null,
     color: Color,
+    listCellBackground: Color,
     imageUrl: String = "",
     onClick: () -> Unit,
 ) {
@@ -93,7 +96,7 @@ private fun ListCell(
                 .clip(shape)
                 .clickable(onClick = onClick),
             shape = shape,
-            color = MaterialTheme.colorScheme.primaryContainer
+            color = listCellBackground
 
         ) {
             Column {

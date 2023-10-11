@@ -1,7 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
@@ -17,16 +16,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.EditCalendar
-import androidx.compose.material.icons.filled.EditNote
-import androidx.compose.material.icons.rounded.AppRegistration
 import androidx.compose.material.icons.rounded.Approval
 import androidx.compose.material.icons.rounded.EditNote
-import androidx.compose.material.icons.rounded.Event
-import androidx.compose.material.icons.rounded.EventNote
+import androidx.compose.material.icons.rounded.EventBusy
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Link
-import androidx.compose.material.icons.rounded.MeetingRoom
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
@@ -68,7 +62,6 @@ import com.pushpal.jetlime.data.config.LineType
 import com.pushpal.jetlime.ui.JetLimeView
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
 import kotlinx.coroutines.delay
 
@@ -79,9 +72,10 @@ import kotlinx.coroutines.delay
 )
 @Composable
 fun JobDetailsScreen(
+    navigator: DestinationsNavigator,
     viewModel: JobDetailsViewModel = hiltViewModel(),
-    navigator: DestinationsNavigator
 ) {
+
     val state by viewModel.state.collectAsState(JobDetailState())
     val snack = LocalSnackbar.current
     val job = state.job
@@ -101,65 +95,27 @@ fun JobDetailsScreen(
     val timelineModel by remember {
         derivedStateOf {
             val jetItemList: MutableList<JetLimeItemsModel.JetLimeItem> = mutableStateListOf()
-
             state.job?.events?.forEachIndexed { index, it ->
-                when(it.type) {
-                    JobEventType.APPLIED ->
-                        jetItemList.add(
-                            createJetLimeItem(
-                                title = formatEventTitle(it.type, it.formatDate, it.name),
-                                description = it.dateToRelativeTime,
-                                icon = Icons.Rounded.EditNote,
-                                colorScheme = colorScheme,
-                                iconAnimation = if (state.job?.events?.size == 1) IconAnimation() else null,
-                            )
-                        )
-                    JobEventType.INTERVIEW -> {
-                        jetItemList.add(
-                            createJetLimeItem(
-                                title = formatEventTitle(it.type, it.formatDate, it.name),
-                                description = (it.name + " - " + it.description) ?: "",
-                                icon = Icons.Rounded.Groups,
-                                colorScheme = colorScheme,
-                                iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
-                            )
-                        )
-                    }
-                    JobEventType.ASSIGNMENT -> jetItemList.add(
-                        createJetLimeItem(
-                            title = formatEventTitle(it.type, it.formatDate, it.name),
-                            description = (it.name + " - " + it.description) ?: "",
-                            icon = Icons.Rounded.EditNote,
-                            colorScheme = colorScheme,
-                            iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
-                        )
-                    )
-                    JobEventType.OFFER -> jetItemList.add(
-                        createJetLimeItem(
-                            title = formatEventTitle(it.type, it.formatDate, it.name),
-                            description = (it.name + " - " + it.description) ?: "",
-                            icon = Icons.Rounded.Approval,
-                            colorScheme = colorScheme,
-                            iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
-                        )
-                    )
-                    JobEventType.OTHER -> {
-                        jetItemList.add(
-                            JetLimeItemsModel.JetLimeItem(
-                                title = formatEventTitle(it.type, it.formatDate, it.name),
-                                description = "${it.description}",
-                                jetLimeItemConfig = JetLimeItemConfig(
-                                    iconType = IconType.Custom(
-                                        iconImage = Icons.Rounded.Notes,
-                                    ),
-                                    titleColor = colorScheme.primary,
-                                    descriptionColor = colorScheme.onSurface,
-                                    iconAnimation = if (state.job?.events?.size?.minus(1)  == index) IconAnimation() else null,
-                                )
-                            )
-                        )
-                    }
+                val mappings = when (it.type) {
+                    JobEventType.APPLIED -> Pair(Icons.Rounded.EditNote, it.dateToRelativeTime)
+                    JobEventType.INTERVIEW -> Pair(Icons.Rounded.Groups, "${it.name} - ${it.description ?: ""}")
+                    JobEventType.ASSIGNMENT -> Pair(Icons.Rounded.EditNote, "${it.name} - ${it.description ?: ""}")
+                    JobEventType.OFFER -> Pair(Icons.Rounded.Approval, "${it.name} - ${it.description ?: ""}")
+                    JobEventType.OTHER -> Pair(Icons.Rounded.Notes, "${it.description}")
                 }
+
+                val (icon, description) = mappings
+
+                jetItemList.add(
+                    createJetLimeItem(
+                        title = formatEventTitle(it.typeToString, it.formatDate, it.name),
+                        description = description,
+                        icon = icon,
+                        colorScheme = colorScheme,
+                        iconAnimation = if (state.job?.events?.size?.minus(1) == index) IconAnimation() else null,
+                    )
+                )
+
             }
             JetLimeItemsModel(jetItemList)
         }
@@ -193,20 +149,46 @@ fun JobDetailsScreen(
                         viewModel.removeLastEvent()
                     },
                 ) {
-                    Text("Remove")
+                    Text(text = "Remove")
                 }
             },
             dismissButton = {
-                OutlinedButton(
-                    onClick = { viewModel.toggleRemoveLastEventDialog(false) },
+                Box(
                 ) {
-                    Text("Cancel")
+                    OutlinedButton(
+                        onClick = { viewModel.toggleRemoveLastEventDialog(false) },
+                    ) {
+                        Text("Cancel",)
+                    }
                 }
             },
             onDismissRequest = {
                 viewModel.toggleRemoveLastEventDialog(false)
             },
         )
+    }
+
+    if (state.showDeleteJobApplicationDialog) {
+        MessageAlertDialog(
+            message = "Are you sure you want to delete your job application?",
+            confirmButton = { Button(
+                onClick = {
+                    viewModel?.deleteJob()
+                    navigator.popBackStack()
+                },
+            ) {
+                Text("Remove")
+            }},
+            dismissButton = {
+                OutlinedButton(
+                    onClick = { viewModel.toggleDeleteJobApplicationDialog(false)  }
+                ) {
+                    Text("Cancel")
+                }
+            },
+            onDismissRequest = { viewModel.toggleDeleteJobApplicationDialog(false) },
+        )
+
     }
 
     if (state.showCloseJobApplicationDialog) {
@@ -281,22 +263,22 @@ fun JobDetailsScreen(
             )
         } else if (state.job?.events?.isNullOrEmpty() == true) {
             EmptyContent(
-                icon = Icons.Rounded.Event,
-                messsage = "Log your job application progress on a button below"
+                icon = Icons.Rounded.EventBusy,
+                message = "This job application doesn't have any events logged. \n" +
+                        " \n" +
+                        if (state.job?.archived != true) {
+                            "Log your job application progress on a button below."
+                        } else {
+                            "This job application is closed."
+                       },
             )
         }
 
     }
 }
 
-fun formatEventTitle(eventType: JobEventType, date: String?, title: String?): String {
-    return when(eventType) {
-        JobEventType.APPLIED -> "Applied on $date"
-        JobEventType.INTERVIEW -> if (date != null) "Interview on $date" else "Interview - $title"
-        JobEventType.ASSIGNMENT -> if (date != null) "Assignment on $date" else "Assignment - $title"
-        JobEventType.OFFER -> if (date != null) "Offer on $date" else "Offer - $title"
-        JobEventType.OTHER -> "Other = $title"
-    }
+fun formatEventTitle(eventType: String, date: String?, title: String?): String {
+    return  if (date != null) "$eventType on $date" else "$eventType - $title"
 }
 
 

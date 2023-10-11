@@ -17,6 +17,7 @@ data class JobDetailState(
     val showAddNewEventDialog: Boolean = false,
     val showRemoveEventDialog: Boolean = false,
     val showCloseJobApplicationDialog: Boolean = false,
+    val showDeleteJobApplicationDialog: Boolean = false,
 
     val snackBarState : SnackBarState = SnackBarState(""),
 )

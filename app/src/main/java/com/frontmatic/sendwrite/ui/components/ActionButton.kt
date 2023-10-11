@@ -12,6 +12,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +26,7 @@ import com.frontmatic.sendwrite.ui.components.multifab.MultiFloatingActionButton
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 import kotlinx.coroutines.launch
 
@@ -59,6 +62,14 @@ fun ActionButton(
                 hiltViewModel<JobDetailsViewModel>(navBackStackEntry)
             }
 
+            val state by jobDetailsViewModel?.state!!.collectAsState(JobDetailState())
+            val job = state.job
+
+            if (job != null) {
+                if (job.archived) return
+            }
+
+
             MultiFloatingActionButton(
                 fabIcon = FabIcon(
                     imageVector = Icons.Outlined.Event,
@@ -66,6 +77,7 @@ fun ActionButton(
                 ),
                 fabOption = FabOption(
                     iconTint = Color.White,
+                    backgroundTint = MaterialTheme.colorScheme.tertiary,
                     showLabels = true
                 ),
                 items = listOf(
@@ -96,19 +108,6 @@ fun ActionButton(
 
                 }
             )
-
-
-//            FloatingActionButton(
-//                containerColor = MaterialTheme.colorScheme.primary,
-//                onClick = { /*TODO*/ }
-//            ) {
-//                Icon(
-//                    modifier = Modifier,
-//                    imageVector = Icons.Outlined.Event,
-//                    tint = Color.White,
-//                    contentDescription = null
-//                )
-//            }
         }
         else -> {}
     }

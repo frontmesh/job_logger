@@ -123,7 +123,14 @@ class JobDetailsViewModel @Inject() constructor(
 
     fun deleteJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            jobLocalDataSource.deleteJob(_job.value!!.toJob())
+            val jobToDelete = _job.value ?: return@launch
+            jobLocalDataSource.deleteJob(jobToDelete.toJob())
+            _state.value = _state.value.copy(
+                snackBarState = SnackBarState(
+                    message = "${jobToDelete.title} deleted",
+                    showSnackbar = true,
+                )
+            )
         }
     }
 
@@ -150,6 +157,10 @@ class JobDetailsViewModel @Inject() constructor(
 
     fun toggleCloseJobApplicationDialog(value: Boolean) {
         _state.value = _state.value.copy(showCloseJobApplicationDialog = value)
+    }
+
+    fun toggleDeleteJobApplicationDialog(value: Boolean) {
+        _state.value = _state.value.copy(showDeleteJobApplicationDialog = value)
     }
 
     fun resetSnackBar() {
