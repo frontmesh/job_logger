@@ -52,23 +52,37 @@ import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.kedia.ogparser.OpenGraphResult
 import com.ramcosta.composedestinations.annotation.Destination
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Destination(
     route = "add-job",
 )
 @Composable
 fun AddJobScreen(
-    modifier: Modifier = Modifier,
     intentJob: OpenGraphResult?,
     viewModel: AddJobViewModel = hiltViewModel(),
 ) {
-    var job by remember { mutableStateOf(intentJob) }
-    var applied by remember { mutableStateOf(false) }
-
+    val job by remember { mutableStateOf(intentJob) }
     val topBarTitle = job?.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
     } ?: stringResource(R.string.add_a_job)
 
+    AddJobContent(
+        job = job,
+        topBarTitle = topBarTitle,
+        onJobSave = {
+            viewModel.saveJob(job?.toJob())
+        }
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddJobContent(
+    modifier: Modifier = Modifier,
+    job: OpenGraphResult?,
+    topBarTitle: String,
+    onJobSave : () -> Unit,
+) {
+    var applied by remember { mutableStateOf(false) }
     val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
 
     Scaffold(
@@ -76,7 +90,7 @@ fun AddJobScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = topBarTitle!!,
+                        text = topBarTitle,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(8.dp)
@@ -89,7 +103,6 @@ fun AddJobScreen(
                 modifier = Modifier
                     .drawBehind {
                         val borderSize = 1.dp.toPx()
-
                         drawLine(
                             color = primaryContainerColor,
                             start = Offset(0f, 0f),
@@ -99,36 +112,10 @@ fun AddJobScreen(
                     }
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalArrangement = Arrangement.Start,
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 val context = LocalContext.current as Activity
-                Button(
-                    modifier = Modifier
-                        .padding(end = 12.dp),
-                    onClick = {
-                        val savedJobId = viewModel.saveJob(job?.toJob() )
-
-//                        if (savedJobId != 0L && applied) {
-//                            viewModel.saveJobEventApplied(savedJobId)
-//                        }
-
-                        context.startActivity(Intent(context, MainActivity::class.java))
-                        context.finish()
-                    }
-                ) {
-                    Row(
-
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Save",
-                            fontWeight = FontWeight.Bold,
-                        )
-                    }
-                }
-
                 OutlinedButton(onClick = {
                     context.startActivity(Intent(context, MainActivity::class.java))
                     context.finish()
@@ -138,9 +125,30 @@ fun AddJobScreen(
                         fontWeight = FontWeight.Bold,
                     )
                 }
+
+                Button(
+                    modifier = Modifier
+                        .padding(end = 12.dp),
+                    onClick = {
+                        onJobSave()
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                        context.finish()
+                    }
+                ) {
+                    Row(
+
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Save",
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                }
             }
         }
-    ) { it ->
+    ) {
         Surface(modifier = modifier.padding(it)) {
             Column(modifier = modifier
                 .padding(PAGE_PADDING)
@@ -208,7 +216,7 @@ fun JobCard(
                 text = description,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
-                    .padding(start = 16.dp,),
+                    .padding(start = 16.dp),
                 fontSize = 14.sp
             )
 
@@ -227,25 +235,29 @@ fun JobCard(
 
 @Preview
 @Composable
-fun AddJobScreenPreview() {
-    AddJobScreen(
-        intentJob = OpenGraphResult(
+fun AddJobContentPreview() {
+    AddJobContent(
+        job = OpenGraphResult(
             title = "Docklab hiring Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands | LinkedIn",
             image = "https://nl.linkedin.com/jobs/view/tech-lead-hydrotwin-at-docklab-3689393398",
             description = "Posted 2 weeks ago. Docklab is looking for a Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands. Apply…See this and similar jobs on LinkedIn.",
-        )
+        ),
+        onJobSave = {},
+        topBarTitle = "Add a job"
     )
 }
 
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun AddJobScreenDarkPreview() {
-    AddJobScreen(
-        intentJob = OpenGraphResult(
+fun AddJobContentDarkPreview() {
+    AddJobContent(
+        job = OpenGraphResult(
             title = "Docklab hiring Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands | LinkedIn",
             image = "https://nl.linkedin.com/jobs/view/tech-lead-hydrotwin-at-docklab-3689393398",
             description = "Posted 2 weeks ago. Docklab is looking for a Tech Lead - HydroTwin in Rotterdam, South Holland, Netherlands. Apply…See this and similar jobs on LinkedIn.",
-        )
+        ),
+        onJobSave = {},
+        topBarTitle = "Add a job"
     )
 }
 

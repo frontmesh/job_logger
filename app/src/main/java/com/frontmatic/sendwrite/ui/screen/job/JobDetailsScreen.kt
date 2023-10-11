@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Approval
 import androidx.compose.material.icons.rounded.EditNote
+import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.EventBusy
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Link
@@ -263,7 +264,7 @@ fun JobDetailsScreen(
             )
         } else if (state.job?.events?.isNullOrEmpty() == true) {
             EmptyContent(
-                icon = Icons.Rounded.EventBusy,
+                icon = Icons.Rounded.Event,
                 message = "This job application doesn't have any events logged. \n" +
                         " \n" +
                         if (state.job?.archived != true) {
@@ -280,7 +281,6 @@ fun JobDetailsScreen(
 fun formatEventTitle(eventType: String, date: String?, title: String?): String {
     return  if (date != null) "$eventType on $date" else "$eventType - $title"
 }
-
 
 fun createJetLimeItem(
     title: String, description:String,
