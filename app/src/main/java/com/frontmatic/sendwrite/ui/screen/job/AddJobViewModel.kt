@@ -18,33 +18,27 @@ class AddJobViewModel @Inject constructor(
     private val jobDataSource: JobLocalDataSource,
     private val jobEventLocalDataSource: JobEventLocalDataSource
 ): ViewModel() {
-    fun saveJob(job: Job?) {
+    fun saveJob(job: Job?, date: Long? = null) {
         if (job == null) {
             return
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            jobDataSource.saveJob(job)
+            val jobId = jobDataSource.saveJob(job)
+
+            if (date != null) {
+                val jobEvent = JobEvent(
+                    type = JobEventType.APPLIED,
+                    date = Date(date),
+                    name = "Job Application",
+                    description = "Applied for job",
+                    jobId = jobId,
+                    url = null,
+                )
+
+                jobEventLocalDataSource.saveJobEvent(jobEvent)
+            }
         }
     }
-
-    fun saveJobEventApplied(
-        jobId: Long,
-    ) {
-        val jobEvent = JobEvent(
-            jobId = jobId,
-            type = JobEventType.APPLIED,
-            date = Date(),
-            name = "Job Application",
-            description = "Applied for job",
-            url = null,
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
-            jobEventLocalDataSource.saveJobEvent(jobEvent)
-        }
-
-    }
-
 
 }

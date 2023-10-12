@@ -3,6 +3,8 @@ package com.frontmatic.sendwrite.ui.screen.job
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,12 +56,15 @@ import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.kedia.ogparser.OpenGraphResult
 import com.ramcosta.composedestinations.annotation.Destination
+import java.time.Instant
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Destination(
     route = "add-job",
 )
 @Composable
-fun AddJobScreen(
+fun AddJobIntentScreen(
     intentJob: OpenGraphResult?,
     viewModel: AddJobViewModel = hiltViewModel(),
 ) {
@@ -64,22 +72,26 @@ fun AddJobScreen(
     val topBarTitle = job?.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
     } ?: stringResource(R.string.add_a_job)
+    val datePickerState = rememberDatePickerState()
 
     AddJobContent(
         job = job,
         topBarTitle = topBarTitle,
         onJobSave = {
-            viewModel.saveJob(job?.toJob())
-        }
+            viewModel.saveJob(job?.toJob(), datePickerState.selectedDateMillis)
+        },
+        datePickerState = datePickerState
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddJobContent(
     modifier: Modifier = Modifier,
     job: OpenGraphResult?,
     topBarTitle: String,
+    datePickerState: DatePickerState = rememberDatePickerState(),
     onJobSave : () -> Unit,
 ) {
     var applied by remember { mutableStateOf(false) }
@@ -129,6 +141,7 @@ fun AddJobContent(
                 Button(
                     modifier = Modifier
                         .padding(end = 12.dp),
+                    enabled = applied && datePickerState.selectedDateMillis != null || !applied,
                     onClick = {
                         onJobSave()
                         context.startActivity(Intent(context, MainActivity::class.java))
@@ -153,7 +166,6 @@ fun AddJobContent(
             Column(modifier = modifier
                 .padding(PAGE_PADDING)
             ) {
-
                 JobCard(
                     title = job?.title ?: "",
                     description = job?.description ?: "",
@@ -169,6 +181,31 @@ fun AddJobContent(
                         false
                     )
                 ) { value -> applied = value }
+
+                if (applied) {
+                    DatePicker(
+                        state = datePickerState,
+                        showModeToggle = false,
+                        modifier = Modifier.padding(0.dp),
+                        dateValidator = { timestamp ->
+                            // Disable all the days after today
+                            timestamp < Instant.now().toEpochMilli()
+                        },
+                        title = {
+                            Text(
+                                text = "Pick a date you have applied to this job",
+                                modifier = Modifier.padding(24.dp),
+                            )
+                        },
+//                        headline = {
+//                            Text(
+//                                modifier = Modifier.padding(8.dp),
+//                                text = datePickerState.displayMode.toString(),
+//                                fontSize = 14.sp,
+//                            )
+//                        },
+                    )
+                }
             }
 
         }
@@ -233,6 +270,8 @@ fun JobCard(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun AddJobContentPreview() {
@@ -247,6 +286,8 @@ fun AddJobContentPreview() {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(uiMode = UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun AddJobContentDarkPreview() {

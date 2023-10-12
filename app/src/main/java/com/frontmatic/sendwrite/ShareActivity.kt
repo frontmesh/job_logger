@@ -9,7 +9,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import com.frontmatic.sendwrite.ui.screen.job.AddJobScreen
+import com.frontmatic.sendwrite.ui.screen.job.AddJobIntentScreen
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.kedia.ogparser.OpenGraphCacheProvider
 import com.kedia.ogparser.OpenGraphCallback
@@ -47,7 +47,7 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
             val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
 
             SendWriteTheme {
-                AddJobScreen(
+                AddJobIntentScreen(
                     intentJob = job,
                 )
             }
