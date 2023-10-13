@@ -19,8 +19,9 @@ interface JobEventDao {
     @Query("SELECT * FROM job_events WHERE job_id = :jobId")
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
 
-    @Query("SELECT * FROM job_events WHERE date = :targetDate")
-    fun getTodayEvents(targetDate: Long): Flow<List<JobEvent>>
+    // query date between start and end
+    @Query("SELECT * FROM job_events WHERE date BETWEEN :start AND :end ORDER BY date ASC")
+    fun getTodayEvents(start: Long, end: Long): Flow<List<JobEvent>>
 
 
     @Query("SELECT * FROM job_events WHERE date(date) < date('now', '+7 day') AND type != 'APPLIED'")

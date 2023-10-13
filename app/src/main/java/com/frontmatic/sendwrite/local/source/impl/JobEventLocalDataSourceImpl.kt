@@ -12,8 +12,10 @@ class JobEventLocalDataSourceImpl(database: SendWriteDatabase): JobEventLocalDat
         return jobEventDao.getByJobId(jobId)
     }
 
-    override fun getTodayEvents(date: Long): Flow<List<JobEvent>> {
-        return jobEventDao.getTodayEvents(date)
+    override fun getTodayEvents(): Flow<List<JobEvent>> {
+        val startOfToday = Date().time
+        val endOfToday = startOfToday + 86400000
+        return jobEventDao.getTodayEvents(startOfToday, endOfToday)
     }
 
     override suspend fun saveJobEvent(jobEvent: JobEvent): Long {

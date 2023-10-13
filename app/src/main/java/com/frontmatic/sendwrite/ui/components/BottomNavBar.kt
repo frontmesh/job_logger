@@ -78,7 +78,7 @@ fun BottomNavBar(
                 onClick = {
                     navController.navigate(item.direction) {
                         popUpTo(NavGraphs.root) {
-                            saveState = true
+                            saveState = false
                         }
                         launchSingleTop = true
                         restoreState = true

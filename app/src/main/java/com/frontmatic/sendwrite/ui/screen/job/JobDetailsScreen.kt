@@ -309,8 +309,8 @@ fun JobDetailsCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     val shape = RoundedCornerShape(size = MediumRadius)
+
     Surface(
         modifier = modifier
             .clip(shape)

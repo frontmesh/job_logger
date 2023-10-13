@@ -61,7 +61,7 @@ fun JobListContent(
                         shape = RoundedCornerShape(size = MediumRadius),
                         name = it.title,
                         imageUrl = it.imageUrl,
-//                      totalTask = it.relativeAppliedTime,
+//                        trailingText = it..size,
                         color = MaterialTheme.colorScheme.primary,
                         listCellBackground = listCellBackground,
                         onClick = {
@@ -78,7 +78,7 @@ fun JobListContent(
 private fun ListCell(
     shape: Shape,
     name: String,
-    totalTask: String? = null,
+    trailingText: String? = null,
     color: Color,
     listCellBackground: Color,
     imageUrl: String = "",
@@ -129,9 +129,9 @@ private fun ListCell(
                     )
                     Spacer(Modifier.size(8.dp))
 
-                    if (totalTask != null) {
+                    if (trailingText != null) {
                         Text(
-                            text = totalTask,
+                            text = trailingText,
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaDisabled)
                         )

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
-import java.util.Date
 import javax.inject.Inject
 
 enum class JobSortType {
@@ -35,5 +34,5 @@ class HomeScreenViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val todayEvents = jobEventLocalDataSource
-        .getTodayEvents(Date().time).stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+        .getTodayEvents().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }

@@ -77,7 +77,9 @@ class JobDetailsViewModel @Inject() constructor(
                 val newEvent = JobEvent(
                     jobId = job.id,
                     type = _state.value.newEventType ?: JobEventType.APPLIED,
-                    date = _state.value.newEventDate?.let { Date(it) },
+                    date = _state.value.newEventDate?.let {
+                        Date(it)
+                    },
                     name = _state.value.newEventTitle ?: "",
                     description = _state.value.newEventDescription ?: "",
                     url = null,

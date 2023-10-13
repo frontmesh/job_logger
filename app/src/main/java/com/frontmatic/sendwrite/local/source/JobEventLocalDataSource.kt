@@ -2,13 +2,12 @@ package com.frontmatic.sendwrite.local.source
 
 import com.frontmatic.sendwrite.local.model.JobEvent
 import kotlinx.coroutines.flow.Flow
-import java.util.Date
 
 interface JobEventLocalDataSource {
 
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
 
-    fun getTodayEvents(today: Long): Flow<List<JobEvent>>
+    fun getTodayEvents(): Flow<List<JobEvent>>
 
     suspend fun saveJobEvent(jobEvent: JobEvent): Long
 

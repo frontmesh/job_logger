@@ -8,6 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 @Entity(
     tableName = "job_events",
@@ -38,7 +39,15 @@ data class JobEvent(
 
     val formatDate: String?
         get() = date?.let {
-            val sdf = SimpleDateFormat("dd-MM-yyyy")
+            val pattern = when (type) {
+                JobEventType.APPLIED -> "dd-MM-yyyy"
+                JobEventType.INTERVIEW -> "dd-MM-yyyy HH:mm"
+                JobEventType.ASSIGNMENT -> "dd-MM-yyyy HH:mm"
+                JobEventType.OFFER -> "dd-MM-yyyy"
+                JobEventType.OTHER -> "dd-MM-yyyy"
+            }
+
+            val sdf = SimpleDateFormat(pattern, Locale.getDefault())
             sdf.format(it)
         }
 

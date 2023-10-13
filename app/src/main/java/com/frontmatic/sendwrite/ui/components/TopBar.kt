@@ -35,6 +35,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
+import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
@@ -66,7 +67,8 @@ fun TopBar(
 
         navigationIcon = {
             when (destination) {
-                JobDetailsScreenDestination -> {
+                JobDetailsScreenDestination,
+                EventListScreenDestination -> {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
@@ -108,11 +110,10 @@ fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navControll
                 hiltViewModel<JobDetailsViewModel>(navBackStackEntry)
             }
 
-            val state = jobDetailsViewModel?.state?.collectAsState(JobDetailState())
+//            val state = jobDetailsViewModel?.state?.collectAsState(JobDetailState())
+//            val context = LocalContext.current
 
             var dropDowMenuExpanded by remember { mutableStateOf(false) }
-
-            val context = LocalContext.current
 
             IconButton(onClick = {
                 dropDowMenuExpanded = !dropDowMenuExpanded
