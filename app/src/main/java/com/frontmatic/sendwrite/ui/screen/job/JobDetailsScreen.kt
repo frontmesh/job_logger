@@ -53,6 +53,7 @@ import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.util.JobEventUtility.getIconAndDataForJobEventType
 import com.frontmatic.sendwrite.util.LocalSnackbar
 import com.pushpal.jetlime.data.JetLimeItemsModel
 import com.pushpal.jetlime.data.config.IconAnimation
@@ -97,15 +98,8 @@ fun JobDetailsScreen(
         derivedStateOf {
             val jetItemList: MutableList<JetLimeItemsModel.JetLimeItem> = mutableStateListOf()
             state.job?.events?.forEachIndexed { index, it ->
-                val mappings = when (it.type) {
-                    JobEventType.APPLIED -> Pair(Icons.Rounded.EditNote, it.dateToRelativeTime)
-                    JobEventType.INTERVIEW -> Pair(Icons.Rounded.Groups, "${it.name} - ${it.description ?: ""}")
-                    JobEventType.ASSIGNMENT -> Pair(Icons.Rounded.EditNote, "${it.name} - ${it.description ?: ""}")
-                    JobEventType.OFFER -> Pair(Icons.Rounded.Approval, "${it.name} - ${it.description ?: ""}")
-                    JobEventType.OTHER -> Pair(Icons.Rounded.Notes, "${it.description}")
-                }
-
-                val (icon, description) = mappings
+                val (icon, description) = getIconAndDataForJobEventType(it)
+                val isLast = state.job?.events?.size?.minus(1) == index
 
                 jetItemList.add(
                     createJetLimeItem(
@@ -113,7 +107,7 @@ fun JobDetailsScreen(
                         description = description,
                         icon = icon,
                         colorScheme = colorScheme,
-                        iconAnimation = if (state.job?.events?.size?.minus(1) == index) IconAnimation() else null,
+                        isLast = isLast
                     )
                 )
 
@@ -286,8 +280,7 @@ fun createJetLimeItem(
     title: String, description:String,
     icon: ImageVector,
     colorScheme: ColorScheme,
-    iconAnimation:
-    IconAnimation? = null
+    isLast : Boolean = false
 ): JetLimeItemsModel.JetLimeItem {
     return JetLimeItemsModel.JetLimeItem(
         title = title,
@@ -296,9 +289,12 @@ fun createJetLimeItem(
             iconType = IconType.Custom(
                 iconImage = icon,
             ),
+            iconColor = if (isLast) colorScheme.tertiary else colorScheme.primary,
+            iconBackgroundColor = if (isLast) colorScheme.tertiaryContainer
+             else colorScheme.primaryContainer,
             titleColor = colorScheme.primary,
             descriptionColor = colorScheme.onSurface,
-            iconAnimation = iconAnimation,
+            iconAnimation = if (isLast) IconAnimation() else null,
         )
     )
 }

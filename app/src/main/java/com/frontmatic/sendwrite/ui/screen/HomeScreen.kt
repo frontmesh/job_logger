@@ -39,6 +39,7 @@ import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestinati
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
+import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -63,7 +64,7 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(PAGE_PADDING)
             ) {
                 JobCell(
                     modifier = Modifier
@@ -99,6 +100,7 @@ fun HomeScreen(
             },
             emptyContentMessage = "No Active Jobs Found. \r\n \r\n Log your job application on a button below or share a link to this app.",
             emptyContentIcon = Icons.Filled.WorkOff,
+            listCellBackground = MaterialTheme.colorScheme.primaryContainer
         )
     }
 

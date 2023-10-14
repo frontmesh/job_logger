@@ -53,12 +53,29 @@ data class JobEvent(
 
     val dateToRelativeTime: String
         get() = date?.let {
-            DateUtils.getRelativeTimeSpanString(
-                it.time,
-                System.currentTimeMillis(),
-                0L,
-                DateUtils.FORMAT_ABBREV_ALL
-            ).toString()
+            val currentMillis = System.currentTimeMillis()
+            val timeDifference = currentMillis - it.time
+
+            val days = timeDifference / DateUtils.DAY_IN_MILLIS
+            val hours = timeDifference / DateUtils.HOUR_IN_MILLIS
+            val minutes = timeDifference / DateUtils.MINUTE_IN_MILLIS
+            val seconds = timeDifference / DateUtils.SECOND_IN_MILLIS
+            val weeks = timeDifference / DateUtils.WEEK_IN_MILLIS
+
+            when {
+                weeks > 1L -> "$weeks weeks ago"
+                weeks == 1L -> "A week ago"
+                days > 1 -> "$days days ago"
+                days == 1L -> "Yesterday"
+                hours > 1 -> "$hours hours ago"
+                hours == 1L -> "An hour ago"
+                minutes > 1 -> "$minutes minutes ago"
+                minutes == 1L -> "A minute ago"
+                seconds > 1 -> "$seconds seconds ago"
+                seconds == 1L -> "A second ago"
+                else -> "Just now"
+            }
+
         } ?: ""
 
     val typeToString: String
