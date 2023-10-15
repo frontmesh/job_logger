@@ -8,6 +8,7 @@ interface JobEventLocalDataSource {
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
 
     fun getTodayEvents(): Flow<List<JobEvent>>
+    fun getWeeklyEvents(): Flow<List<JobEvent>>
 
     suspend fun saveJobEvent(jobEvent: JobEvent): Long
 

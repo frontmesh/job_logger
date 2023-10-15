@@ -35,4 +35,7 @@ class HomeScreenViewModel @Inject constructor(
 
     val todayEvents = jobEventLocalDataSource
         .getTodayEvents().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    val weeklyEvents = jobEventLocalDataSource
+        .getWeeklyEvents().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 }

@@ -36,6 +36,7 @@ import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
@@ -57,6 +58,7 @@ fun HomeScreen(
     val jobs by homeScreenViewModel.jobs.collectAsState(null)
 
     val todayEvents by homeScreenViewModel.todayEvents.collectAsState(emptyList())
+    val weeklyEvents by homeScreenViewModel.weeklyEvents.collectAsState(emptyList())
 
     Column {
         Column {
@@ -70,20 +72,26 @@ fun HomeScreen(
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 16.dp),
-                    taskCount = todayEvents?.size.toString(),
+                    taskCount = todayEvents.size.toString(),
                     title = "Due Today",
                     icon = Icons.Filled.DateRange,
                     onClick = {
-                      navigator.navigate(EventListScreenDestination())
+                      navigator.navigate(EventListScreenDestination(
+                          EventPeriod.TODAY
+                      ))
                     },
                 )
                 JobCell(
                     modifier = Modifier
                         .weight(1f),
-                    taskCount = "0",
+                    taskCount = weeklyEvents.size.toString(),
                     title = "Due This Week",
                     icon = Icons.Filled.DateRange,
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navigator.navigate(EventListScreenDestination(
+                            EventPeriod.WEEK
+                        ))
+                    },
                 )
             }
 

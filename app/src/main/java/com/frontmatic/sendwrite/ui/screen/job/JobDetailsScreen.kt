@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -51,10 +53,12 @@ import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
+import com.frontmatic.sendwrite.ui.theme.JetLimeSurface
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconAndDataForJobEventType
 import com.frontmatic.sendwrite.util.LocalSnackbar
+import com.google.android.material.chip.Chip
 import com.pushpal.jetlime.data.JetLimeItemsModel
 import com.pushpal.jetlime.data.config.IconAnimation
 import com.pushpal.jetlime.data.config.IconType
@@ -242,20 +246,32 @@ fun JobDetailsScreen(
                     modifier = Modifier.weight(1f)
                 )
             }
-            JetLimeView(
-                jetLimeItemsModel = timelineModel,
-                listState = jetLimeListState,
-                jetLimeViewConfig = JetLimeViewConfig(
-                    backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                    lineColor = MaterialTheme.colorScheme.primary,
-                    showIcons = true,
-                    lineType = LineType.Solid,
-                    lineThickness = 16F,
-                    iconBorderThickness = 1.dp,
-                    iconSize = 22.dp,
-                    iconShape = CircleShape,
-                ),
-            )
+
+            JetLimeSurface(
+                color = MaterialTheme.colorScheme.background,
+                shape = RoundedCornerShape(16.dp),
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(PAGE_PADDING)
+            ) {
+                JetLimeView(
+                    jetLimeItemsModel = timelineModel,
+                    listState = jetLimeListState,
+                    jetLimeViewConfig = JetLimeViewConfig(
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                        lineColor = MaterialTheme.colorScheme.primary,
+                        showIcons = true,
+                        lineType = LineType.Solid,
+                        lineThickness = 16F,
+                        lineEndMargin = 30.dp,
+                        lineStartMargin = 35.dp,
+                        itemSpacing = 2.dp,
+                        iconBorderThickness = 1.dp,
+                        iconSize = 22.dp,
+                        iconShape = CircleShape,
+                    ),
+                )
+            }
         } else if (state.job?.events?.isNullOrEmpty() == true) {
             EmptyContent(
                 icon = Icons.Rounded.Event,
@@ -285,10 +301,23 @@ fun createJetLimeItem(
     return JetLimeItemsModel.JetLimeItem(
         title = title,
         description = description,
+        content = {
+            Column(
+                modifier = Modifier
+                    .wrapContentSize()
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start,
+            ) {
+                Text(text = title)
+                Text(text = description)
+            }
+        },
         jetLimeItemConfig = JetLimeItemConfig(
             iconType = IconType.Custom(
                 iconImage = icon,
             ),
+//            itemHeight = 100.dp,
             iconColor = if (isLast) colorScheme.tertiary else colorScheme.primary,
             iconBackgroundColor = if (isLast) colorScheme.tertiaryContainer
              else colorScheme.primaryContainer,

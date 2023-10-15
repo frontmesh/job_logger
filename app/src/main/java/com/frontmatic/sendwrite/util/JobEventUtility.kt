@@ -30,7 +30,10 @@ object JobEventUtility {
                 "$name $description"
             )
 
-            JobEventType.OTHER -> Pair(Icons.Rounded.Notes, jobEvent.description.toString())
+            JobEventType.OTHER -> Pair(
+                Icons.Rounded.Notes,
+                "$name $description"
+            )
         }
     }
 }

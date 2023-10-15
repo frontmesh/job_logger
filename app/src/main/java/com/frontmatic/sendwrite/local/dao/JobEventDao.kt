@@ -19,13 +19,8 @@ interface JobEventDao {
     @Query("SELECT * FROM job_events WHERE job_id = :jobId")
     fun getByJobId(jobId: Long): Flow<List<JobEvent>>
 
-    // query date between start and end
-    @Query("SELECT * FROM job_events WHERE date BETWEEN :start AND :end ORDER BY date ASC")
-    fun getTodayEvents(start: Long, end: Long): Flow<List<JobEvent>>
-
-
-    @Query("SELECT * FROM job_events WHERE date(date) < date('now', '+7 day') AND type != 'APPLIED'")
-    fun getEventsWhereDueDateIsThisWeek(): Flow<List<JobEvent>>
+    @Query("SELECT je.* FROM job_events je INNER JOIN jobs j ON je.job_id = j.id WHERE je.date BETWEEN :start AND :end AND j.archived = 0 ORDER BY je.date ASC")
+    fun getEventRange(start: Long, end: Long): Flow<List<JobEvent>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(jobEvent: JobEvent): Long
