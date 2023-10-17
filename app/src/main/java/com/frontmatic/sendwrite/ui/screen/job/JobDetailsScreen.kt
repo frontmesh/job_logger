@@ -302,12 +302,12 @@ fun createJetLimeItem(
         title = title,
         description = description,
         content = {
-            Column(
+            Box(
                 modifier = Modifier
                     .wrapContentSize()
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start,
+//                verticalArrangement = Arrangement.Center,
+//                horizontalAlignment = Alignment.Start,
             ) {
                 Text(text = title)
                 Text(text = description)

@@ -8,18 +8,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 
 @Composable
 fun JobListTitle(
     title: String,
     description: String? = null,
+    padding: Dp = PAGE_PADDING
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(padding)
     ) {
         Text(
             text = title,
