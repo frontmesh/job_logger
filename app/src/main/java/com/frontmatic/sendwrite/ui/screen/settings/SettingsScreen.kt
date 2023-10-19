@@ -26,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.data.appThemes
 import com.frontmatic.sendwrite.ui.components.FancyIcon
@@ -46,7 +48,11 @@ import com.ramcosta.composedestinations.annotation.Destination
     route = "settings",
 )
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
+    val appTheme: AppTheme by viewModel.appTheme
+        .collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,8 +60,10 @@ fun SettingsScreen() {
     ) {
         JobListTitle(title = "Settings", padding = 0.dp)
         ThemesSection(
-            appTheme = AppTheme.LIGHT,
-            onAppThemeSelected = {}
+            appTheme = appTheme,
+            onAppThemeSelected = {
+                viewModel.updateAppTheme(appTheme = it)
+            }
         )
 
     }

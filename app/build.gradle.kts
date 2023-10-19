@@ -105,6 +105,9 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // Datastore
+    implementation(libs.datastore.preferences)
+
     // DI
     implementation(libs.google.hilt.android)
     kapt(libs.hilt.compiler)

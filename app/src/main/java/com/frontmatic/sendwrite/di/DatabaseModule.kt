@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Room
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
+import com.frontmatic.sendwrite.local.source.DataStoreSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.source.impl.JobLocalDataSourceImpl
 import com.frontmatic.sendwrite.local.source.impl.JobEventLocalDataSourceImpl
+import com.frontmatic.sendwrite.local.source.impl.DataStoreSourceImpl
 import com.frontmatic.sendwrite.util.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -43,4 +45,5 @@ object DatabaseModule {
     ) : JobEventLocalDataSource {
         return JobEventLocalDataSourceImpl(database)
     }
+
 }
