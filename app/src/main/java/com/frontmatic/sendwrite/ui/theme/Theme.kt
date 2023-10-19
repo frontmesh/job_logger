@@ -21,7 +21,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = PurpleGrey80,
     tertiary = Pink80,
     surface = Color.DarkGray,
-    onSurface = Color.DarkGray,
+    onSurface = Color.LightGray,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -76,7 +76,7 @@ fun SendWriteTheme(
 
 @Composable
 fun DarkTheme(
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -96,7 +96,7 @@ fun DarkTheme(
 
 @Composable
 fun LightTheme(
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
