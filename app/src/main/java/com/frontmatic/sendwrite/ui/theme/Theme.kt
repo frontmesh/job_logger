@@ -18,25 +18,10 @@ import androidx.core.view.WindowCompat
 import com.frontmatic.sendwrite.data.AppTheme
 
 
-val LightGreenColorScheme = lightColorScheme(
-    primary = LightGreenPrimary,
-    secondary = LightGreenSecondary,
-    primaryContainer = LightGreenPrimaryContainer,
-    tertiary = LightGreenTertiary,
-    surface = LightGreenSurface,
-    onSurface = Color.DarkGray,
-)
-
-
-val DarkGreenColorScheme = darkColorScheme(
-    primary = DarkGreenPrimary,
-    secondary = DarkGreenSecondary,
-    tertiary = DarkGreenTertiary,
-    surface = Color.DarkGray,
-    onSurface = LightGreenSecondary,
-    primaryContainer = DarkGreenPrimaryContainer,
-)
-
+val LightGreenColorScheme = com.frontmatic.sendwrite.ui.theme.green.LightColors
+val DarkGreenColorScheme = com.frontmatic.sendwrite.ui.theme.green.DarkColors
+val LightBlueColorScheme = com.frontmatic.sendwrite.ui.theme.blue.LightColors
+val DarkBlueColorScheme = com.frontmatic.sendwrite.ui.theme.blue.DarkColors
 
 val DarkPurpleColorScheme = darkColorScheme(
     primary = DarkPurplePrimary,
@@ -66,22 +51,14 @@ val DarkOrangeColorScheme = darkColorScheme(
     primaryContainer = Color.DarkGray,
 )
 
-val DarkBlueColorScheme = darkColorScheme(
-    primary = DarkBluePrimary,
-    secondary = DarkBlueSecondary,
-    tertiary = DarkBlueTertiary,
-    primaryContainer = Color.DarkGray,
-    surface = Color.DarkGray,
-    onSurface = Color.LightGray,
-)
 
 
 val LightPurpleColorScheme = lightColorScheme(
     primary = LightPurplePrimary,
     secondary = LightPurpleSecondary,
     tertiary = LightPurpleTertiary,
-    surface = Color.LightGray,
-    onSurface = Color.DarkGray,
+    surface = LightBlueSurface,
+    onSurface = LightPurplePrimary,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -92,18 +69,6 @@ val LightPurpleColorScheme = lightColorScheme(
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
     */
-)
-
-
-
-
-val LightBlueColorScheme = lightColorScheme(
-    primary = Blue40,
-    secondary = BlueGrey40,
-    primaryContainer = DarkBluePrimary,
-    tertiary = Cyan40,
-    surface = Color.White,
-    onSurface = Color.DarkGray,
 )
 
 
@@ -135,52 +100,13 @@ fun SendWriteTheme(
     }
 
     val view = LocalView.current
+
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
-
-@Composable
-fun DarkTheme(
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            dynamicDarkColorScheme(context)
-        }
-        else -> DarkGreenColorScheme
-    }
-
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
-
-@Composable
-fun LightTheme(
-    dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            dynamicLightColorScheme(context)
-        }
-        else -> LightGreenColorScheme
     }
 
     MaterialTheme(

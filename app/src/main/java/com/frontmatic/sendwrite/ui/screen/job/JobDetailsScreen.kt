@@ -318,8 +318,8 @@ fun createJetLimeItem(
                 iconImage = icon,
             ),
 //            itemHeight = 100.dp,
-            iconColor = if (isLast) colorScheme.tertiary else colorScheme.primary,
-            iconBackgroundColor = if (isLast) colorScheme.tertiaryContainer
+            iconColor = if (isLast) colorScheme.secondary else colorScheme.primary,
+            iconBackgroundColor = if (isLast) colorScheme.secondaryContainer
              else colorScheme.primaryContainer,
             titleColor = colorScheme.primary,
             descriptionColor = colorScheme.onSurface,

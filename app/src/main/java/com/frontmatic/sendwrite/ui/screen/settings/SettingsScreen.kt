@@ -42,8 +42,6 @@ import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.data.appThemes
 import com.frontmatic.sendwrite.ui.components.FancyIcon
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
-import com.frontmatic.sendwrite.ui.theme.DarkTheme
-import com.frontmatic.sendwrite.ui.theme.LightTheme
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.ramcosta.composedestinations.annotation.Destination
@@ -56,7 +54,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val appTheme: AppTheme by viewModel.appTheme
-        .collectAsState()
+        .collectAsState(AppTheme.LIGHT_GREEN)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -174,14 +173,14 @@ private fun ThemeButton(
                 when (appTheme) {
                     AppTheme.SYSTEM -> {
                         Row(modifier = Modifier.fillMaxWidth()) {
-                            LightTheme {
+                            SendWriteTheme(appTheme = AppTheme.LIGHT_GREEN) {
                                 Row(modifier = Modifier
                                     .fillMaxHeight()
                                     .weight(1f)
                                     .background(MaterialTheme.colorScheme.surface)) {
                                 }
                             }
-                            DarkTheme {
+                            SendWriteTheme(appTheme = AppTheme.DARK_GREEN){
                                 Row(modifier = Modifier
                                     .fillMaxHeight()
                                     .weight(1f)
@@ -191,7 +190,10 @@ private fun ThemeButton(
                         }
                     }
                     else -> {
-                        SendWriteTheme(appTheme = appTheme) {
+                        SendWriteTheme(
+                            appTheme = appTheme,
+                            dynamicColor = AppTheme.DYNAMIC == appTheme
+                        ) {
                             Row(modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth()
