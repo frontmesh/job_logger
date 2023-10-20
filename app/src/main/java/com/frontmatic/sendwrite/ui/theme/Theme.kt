@@ -17,45 +17,69 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.frontmatic.sendwrite.data.AppTheme
 
-val DarkGreenColorScheme = darkColorScheme(
-    primary = Green80,
-    secondary = GreenGrey80,
-    tertiary = Lime80,
-    surface = Color.DarkGray,
-    onSurface = Color.LightGray,
-    primaryContainer = Color.DarkGray,
+
+val LightGreenColorScheme = lightColorScheme(
+    primary = LightGreenPrimary,
+    secondary = LightGreenSecondary,
+    primaryContainer = LightGreenPrimaryContainer,
+    tertiary = LightGreenTertiary,
+    surface = LightGreenSurface,
+    onSurface = Color.DarkGray,
 )
+
+
+val DarkGreenColorScheme = darkColorScheme(
+    primary = DarkGreenPrimary,
+    secondary = DarkGreenSecondary,
+    tertiary = DarkGreenTertiary,
+    surface = Color.DarkGray,
+    onSurface = LightGreenSecondary,
+    primaryContainer = DarkGreenPrimaryContainer,
+)
+
 
 val DarkPurpleColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
+    primary = DarkPurplePrimary,
+    secondary = DarkPurpleSecondary,
+    tertiary = DarkPurpleTertiary,
     surface = Color.DarkGray,
     onSurface = Color.LightGray,
 )
 
+
+val LightOrangeColorScheme = lightColorScheme(
+    primary = LightOrangePrimary,
+    secondary = LightOrangeSecondary,
+    primaryContainer = LightOrangePrimaryContainer,
+    tertiary = LightOrangeTertiary,
+    surface = LightOrangePrimaryContainer,
+    onSurface = Color.DarkGray,
+)
+
+
 val DarkOrangeColorScheme = darkColorScheme(
-    primary = Orange80,
-    secondary = OrangeGrey80,
-    tertiary = Coral80,
+    primary = DarkOrangePrimary,
+    secondary = LightOrangeTertiary,
+    tertiary = DarkOrangeTertiary,
     surface = Color.DarkGray,
     onSurface = Color.LightGray,
     primaryContainer = Color.DarkGray,
 )
 
 val DarkBlueColorScheme = darkColorScheme(
-    primary = Blue80,
-    secondary = BlueGrey80,
-    tertiary = Cyan80,
+    primary = DarkBluePrimary,
+    secondary = DarkBlueSecondary,
+    tertiary = DarkBlueTertiary,
+    primaryContainer = Color.DarkGray,
     surface = Color.DarkGray,
     onSurface = Color.LightGray,
 )
 
 
 val LightPurpleColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    primary = LightPurplePrimary,
+    secondary = LightPurpleSecondary,
+    tertiary = LightPurpleTertiary,
     surface = Color.LightGray,
     onSurface = Color.DarkGray,
 
@@ -70,27 +94,13 @@ val LightPurpleColorScheme = lightColorScheme(
     */
 )
 
-val LightGreenColorScheme = lightColorScheme(
-    primary = Green40,
-    secondary = GreenGrey40,
-    primaryContainer = Green80,
-    tertiary = Lime40,
-    surface = Color.White,
-    onSurface = Color.DarkGray,
-)
 
-val LightOrangeColorScheme = lightColorScheme(
-    primary = Orange40,
-    secondary = OrangeGrey40,
-    primaryContainer = Orange80,
-    tertiary = Coral40,
-    surface = Color.White,
-    onSurface = Color.DarkGray,
-)
+
 
 val LightBlueColorScheme = lightColorScheme(
     primary = Blue40,
     secondary = BlueGrey40,
+    primaryContainer = DarkBluePrimary,
     tertiary = Cyan40,
     surface = Color.White,
     onSurface = Color.DarkGray,
@@ -111,10 +121,8 @@ fun SendWriteTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        appTheme == AppTheme.LIGHT ||
         appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
         appTheme == AppTheme.DARK_GREEN ||
-        appTheme == AppTheme.DARK ||
         darkTheme -> DarkGreenColorScheme
         appTheme == AppTheme.LIGHT_ORANGE -> LightOrangeColorScheme
         appTheme == AppTheme.DARK_ORANGE -> DarkOrangeColorScheme

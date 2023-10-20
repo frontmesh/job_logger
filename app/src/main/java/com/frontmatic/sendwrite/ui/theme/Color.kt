@@ -2,35 +2,39 @@ package com.frontmatic.sendwrite.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val DarkPurplePrimary = Color(0xFFD0BCFF)
+val DarkPurpleSecondary = Color(0xFFCCC2DC)
+val DarkPurpleTertiary = Color(0xFFEFB8C8)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val LightPurplePrimary = Color(0xFF6650a4)
+val LightPurpleSecondary = Color(0xFF625b71)
+val LightPurpleTertiary = Color(0xFF7D5260)
 
-val Green80 = Color(0xFFB8E3C6)
-val GreenGrey80 = Color(0xFFC2C2C2)
-val Lime80 = Color(0xFFCCFF91)
+val DarkGreenPrimary = Color(0xFF555843)
+val LightGreenSurface = Color(0xFFFFF2D8)
+val DarkGreenSecondary = Color(0xFFC2C2C2)
+val DarkGreenTertiary = Color(0xFFCCFF91)
 
-val Green40 = Color(0xFF5DBE8A)
-val GreenGrey40 = Color(0xFFC2C2C2)
+val LightGreenPrimary = Color(0xFF113946)
+val LightGreenSecondary = Color(0xFFBCA37F)
 val Lime40 = Color(0xFF6CA52A)
+val LightGreenTertiary = Color(0xFFBCA37F)
+val DarkGreenPrimaryContainer = Color(0xFF555843)
+val LightGreenPrimaryContainer = Color(0xFFF5EEC8)
 
+val DarkOrangePrimary = Color(0xFFED7D31)
+val LightOrangeTertiary = Color(0xFF6C5F5B)
+val DarkOrangeTertiary = Color(0xFF4F4A45)
+val LightOrangePrimaryContainer = Color(0xFFF6F1EE)
 
-val Orange80 = Color(0xFFE8A87C)
-val OrangeGrey80 = Color(0xFFC38D9E)
-val Coral80 = Color(0xFFE27D60)
-
-val Orange40 = Color(0xFFE8A87C)
-val OrangeGrey40 = Color(0xFFC38D9E)
+val LightOrangePrimary = Color(0xFFB9662D)
+val LightOrangeSecondary = Color(0xFF8F684B)
 val Coral40 = Color(0xFFAA604B)
 
 
-val Blue80 = Color(0xFFA7C5EB)
-val BlueGrey80 = Color(0xFFC2C2C2)
-val Cyan80 = Color(0xFFA7E8EB)
+val DarkBluePrimary = Color(0xFFA7C5EB)
+val DarkBlueSecondary = Color(0xFFC2C2C2)
+val DarkBlueTertiary = Color(0xFFA7E8EB)
 
 val Blue40 = Color(0xFF224E74)
 val BlueGrey40 = Color(0xFF4A5361)

@@ -105,23 +105,23 @@ private fun Themes(
 ) {
     val themes = appThemes
 
-
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 72.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            itemsIndexed(
-                items = themes,
-                key = { _: Int, theme: AppTheme -> theme.name }
-            ) { _: Int, theme: AppTheme ->
-                ThemeButton(
-                    isSelected = theme == selectedAppTheme,
-                    appTheme = theme,
-                    onAppThemeSelected = onAppThemeSelected
-                )
-            }
+    LazyVerticalGrid(
+        modifier = modifier,
+        columns = GridCells.Adaptive(minSize = 72.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        itemsIndexed(
+            items = themes,
+            key = { _: Int, theme: AppTheme -> theme.name }
+        ) { _: Int, theme: AppTheme ->
+            ThemeButton(
+                isSelected = theme == selectedAppTheme,
+                appTheme = theme,
+                onAppThemeSelected = onAppThemeSelected
+            )
         }
+    }
 }
 
 @ExperimentalComposeUiApi
@@ -136,7 +136,7 @@ private fun ThemeButton(
         if (isSelected) {
             MaterialTheme.colorScheme.primary
         } else {
-            MaterialTheme.colorScheme.outline
+            MaterialTheme.colorScheme.outlineVariant
         }, label = ""
     )
 
