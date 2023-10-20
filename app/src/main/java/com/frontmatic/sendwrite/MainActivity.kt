@@ -47,17 +47,17 @@ class MainActivity : ComponentActivity() {
             val hostState = remember { SnackbarHostState() }
 
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
-            val isDarkTheme = when (appTheme.value) {
-                AppTheme.SYSTEM -> isSystemInDarkTheme()
-                AppTheme.LIGHT -> false
-                AppTheme.DARK -> true
-            }
+//            val isDarkTheme = when (appTheme.value) {
+//                AppTheme.SYSTEM -> isSystemInDarkTheme()
+//                AppTheme.LIGHT -> false
+//                AppTheme.DARK -> true
+//            }
 
             CompositionLocalProvider(
                 LocalSnackbar provides LocalSnackbarContext(hostState)
             ) {
                 SendWriteTheme(
-                    darkTheme = isDarkTheme
+                    appTheme = appTheme.value
                 ) {
                     RootScaffold(
                         navController = navController,

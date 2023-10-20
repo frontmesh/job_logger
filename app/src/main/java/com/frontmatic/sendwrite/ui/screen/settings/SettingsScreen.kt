@@ -18,6 +18,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -42,6 +45,7 @@ import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.theme.DarkTheme
 import com.frontmatic.sendwrite.ui.theme.LightTheme
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
@@ -101,20 +105,23 @@ private fun Themes(
 ) {
     val themes = appThemes
 
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        for (theme in themes) {
-            ThemeButton(
-                modifier = Modifier
-                    .weight(1f),
-                isSelected = theme == selectedAppTheme,
-                appTheme = theme,
-                onAppThemeSelected = onAppThemeSelected
-            )
+
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 72.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            itemsIndexed(
+                items = themes,
+                key = { _: Int, theme: AppTheme -> theme.name }
+            ) { _: Int, theme: AppTheme ->
+                ThemeButton(
+                    isSelected = theme == selectedAppTheme,
+                    appTheme = theme,
+                    onAppThemeSelected = onAppThemeSelected
+                )
+            }
         }
-    }
 }
 
 @ExperimentalComposeUiApi
@@ -183,21 +190,12 @@ private fun ThemeButton(
                             }
                         }
                     }
-                    AppTheme.LIGHT -> {
-                        LightTheme {
+                    else -> {
+                        SendWriteTheme(appTheme = appTheme) {
                             Row(modifier = Modifier
                                 .fillMaxHeight()
                                 .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surface)) {
-                            }
-                        }
-                    }
-                    AppTheme.DARK -> {
-                        DarkTheme {
-                            Row(modifier = Modifier
-                                .fillMaxHeight()
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.surface)) {
+                                .background(MaterialTheme.colorScheme.primary)) {
                             }
                         }
                     }

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 
 @Composable
@@ -42,7 +43,9 @@ fun FancyIcon(
 @Preview
 @Composable
 private fun FancyIconPreview() {
-    SendWriteTheme {
+    SendWriteTheme(
+        appTheme = AppTheme.DARK_BLUE
+    ) {
         FancyIcon(
             icon = Icons.Default.NorthEast,
             contentDescription = "icon"

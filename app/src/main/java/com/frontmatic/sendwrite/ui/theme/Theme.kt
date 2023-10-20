@@ -15,8 +15,18 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.frontmatic.sendwrite.data.AppTheme
 
-private val DarkColorScheme = darkColorScheme(
+val DarkGreenColorScheme = darkColorScheme(
+    primary = Green80,
+    secondary = GreenGrey80,
+    tertiary = Lime80,
+    surface = Color.DarkGray,
+    onSurface = Color.LightGray,
+    primaryContainer = Color.DarkGray,
+)
+
+val DarkPurpleColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80,
@@ -24,7 +34,25 @@ private val DarkColorScheme = darkColorScheme(
     onSurface = Color.LightGray,
 )
 
-private val LightColorScheme = lightColorScheme(
+val DarkOrangeColorScheme = darkColorScheme(
+    primary = Orange80,
+    secondary = OrangeGrey80,
+    tertiary = Coral80,
+    surface = Color.DarkGray,
+    onSurface = Color.LightGray,
+    primaryContainer = Color.DarkGray,
+)
+
+val DarkBlueColorScheme = darkColorScheme(
+    primary = Blue80,
+    secondary = BlueGrey80,
+    tertiary = Cyan80,
+    surface = Color.DarkGray,
+    onSurface = Color.LightGray,
+)
+
+
+val LightPurpleColorScheme = lightColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Pink40,
@@ -42,11 +70,39 @@ private val LightColorScheme = lightColorScheme(
     */
 )
 
+val LightGreenColorScheme = lightColorScheme(
+    primary = Green40,
+    secondary = GreenGrey40,
+    primaryContainer = Green80,
+    tertiary = Lime40,
+    surface = Color.White,
+    onSurface = Color.DarkGray,
+)
+
+val LightOrangeColorScheme = lightColorScheme(
+    primary = Orange40,
+    secondary = OrangeGrey40,
+    primaryContainer = Orange80,
+    tertiary = Coral40,
+    surface = Color.White,
+    onSurface = Color.DarkGray,
+)
+
+val LightBlueColorScheme = lightColorScheme(
+    primary = Blue40,
+    secondary = BlueGrey40,
+    tertiary = Cyan40,
+    surface = Color.White,
+    onSurface = Color.DarkGray,
+)
+
+
 @Composable
 fun SendWriteTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
+    appTheme: AppTheme,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -55,9 +111,21 @@ fun SendWriteTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        appTheme == AppTheme.LIGHT ||
+        appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
+        appTheme == AppTheme.DARK_GREEN ||
+        appTheme == AppTheme.DARK ||
+        darkTheme -> DarkGreenColorScheme
+        appTheme == AppTheme.LIGHT_ORANGE -> LightOrangeColorScheme
+        appTheme == AppTheme.DARK_ORANGE -> DarkOrangeColorScheme
+        appTheme == AppTheme.LIGHT_PURPLE -> LightPurpleColorScheme
+        appTheme == AppTheme.DARK_PURPLE -> DarkPurpleColorScheme
+        appTheme == AppTheme.LIGHT_BLUE -> LightBlueColorScheme
+        appTheme == AppTheme.DARK_BLUE -> DarkBlueColorScheme
+
+        else -> LightGreenColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -84,7 +152,7 @@ fun DarkTheme(
             val context = LocalContext.current
             dynamicDarkColorScheme(context)
         }
-        else -> DarkColorScheme
+        else -> DarkGreenColorScheme
     }
 
     MaterialTheme(
@@ -104,7 +172,7 @@ fun LightTheme(
             val context = LocalContext.current
             dynamicLightColorScheme(context)
         }
-        else -> LightColorScheme
+        else -> LightGreenColorScheme
     }
 
     MaterialTheme(

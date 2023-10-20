@@ -1,14 +1,19 @@
 package com.frontmatic.sendwrite
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.collectAsState
+import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.screen.job.AddJobIntentScreen
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.kedia.ogparser.OpenGraphCacheProvider
@@ -23,6 +28,8 @@ import java.util.regex.Pattern
 @AndroidEntryPoint
 class ShareActivity : ComponentActivity(), OpenGraphCallback {
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initIntent()
@@ -36,17 +43,21 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
         )
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPostResponse(openGraphResult: OpenGraphResult) {
         initCompose(openGraphResult)
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initCompose(job: OpenGraphResult = OpenGraphResult()) {
         setContent {
             val windowSize = calculateWindowSizeClass(this).widthSizeClass
             val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
+            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
 
-            SendWriteTheme {
+            SendWriteTheme(
+                appTheme = appTheme.value,
+            ) {
                 AddJobIntentScreen(
                     intentJob = job,
                 )
