@@ -1,83 +1,38 @@
 package com.frontmatic.sendwrite.ui.screen.job.components
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.AppRegistration
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Task
 import androidx.compose.material.icons.rounded.Note
 import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.pickers.DatePickerField
 import com.frontmatic.sendwrite.ui.pickers.TimePickerField
 import com.frontmatic.sendwrite.ui.screen.job.AddEventAlertAction
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
-import java.text.SimpleDateFormat
+import com.frontmatic.sendwrite.util.JobEventUtility.getAvailableJobEventType
+import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
 import java.time.Instant
 import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-
-fun getAvailableJobEventType(eventType: JobEventType, events: List<JobEvent>): Boolean {
-    return when (eventType) {
-        JobEventType.APPLIED -> events.isEmpty()
-        JobEventType.INTERVIEW,
-        JobEventType.ASSIGNMENT,
-        JobEventType.OTHER -> events.any { it.type == JobEventType.APPLIED }
-        JobEventType.OFFER -> events.any { it.type == JobEventType.INTERVIEW }
-    }
-}
-
-fun getIconForEventType(eventType: JobEventType): ImageVector {
-    return when (eventType) {
-        JobEventType.APPLIED -> Icons.Filled.AppRegistration
-        JobEventType.INTERVIEW -> Icons.Filled.People
-        JobEventType.ASSIGNMENT -> Icons.Filled.Task
-        JobEventType.OFFER -> Icons.Filled.AttachMoney
-        JobEventType.OTHER -> Icons.Filled.Dashboard
-    }
-}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -143,7 +98,7 @@ fun AddEventAlertDialog(
                                },
                                leadingIcon = {
                                    Icon(
-                                       imageVector = getIconForEventType(selectionOption),
+                                       imageVector = getIconForJobEvent(selectionOption),
                                        contentDescription = null,
                                    )
                                },

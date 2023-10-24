@@ -18,13 +18,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Approval
-import androidx.compose.material.icons.rounded.EditNote
 import androidx.compose.material.icons.rounded.Event
-import androidx.compose.material.icons.rounded.EventBusy
-import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Link
-import androidx.compose.material.icons.rounded.Notes
 import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
@@ -42,12 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.frontmatic.sendwrite.local.model.JobEventType
+import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
@@ -56,9 +50,9 @@ import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.theme.JetLimeSurface
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
-import com.frontmatic.sendwrite.util.JobEventUtility.getIconAndDataForJobEventType
+import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
+import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJetLimeItem
 import com.frontmatic.sendwrite.util.LocalSnackbar
-import com.google.android.material.chip.Chip
 import com.pushpal.jetlime.data.JetLimeItemsModel
 import com.pushpal.jetlime.data.config.IconAnimation
 import com.pushpal.jetlime.data.config.IconType
@@ -102,19 +96,14 @@ fun JobDetailsScreen(
         derivedStateOf {
             val jetItemList: MutableList<JetLimeItemsModel.JetLimeItem> = mutableStateListOf()
             state.job?.events?.forEachIndexed { index, it ->
-                val (icon, description) = getIconAndDataForJobEventType(it)
                 val isLast = state.job?.events?.size?.minus(1) == index
-
                 jetItemList.add(
                     createJetLimeItem(
-                        title = formatEventTitle(it.typeToString, it.formatDate, it.name),
-                        description = description,
-                        icon = icon,
+                        item = it,
                         colorScheme = colorScheme,
                         isLast = isLast
                     )
                 )
-
             }
             JetLimeItemsModel(jetItemList)
         }
@@ -288,34 +277,28 @@ fun JobDetailsScreen(
     }
 }
 
-fun formatEventTitle(eventType: String, date: String?, title: String?): String {
-    return  if (date != null) "$eventType on $date" else "$eventType - $title"
-}
-
 fun createJetLimeItem(
-    title: String, description:String,
-    icon: ImageVector,
+    item: JobEvent,
     colorScheme: ColorScheme,
     isLast : Boolean = false
 ): JetLimeItemsModel.JetLimeItem {
     return JetLimeItemsModel.JetLimeItem(
-        title = title,
-        description = description,
+        title = getTitleForJetLimeItem(item),
         content = {
-            Box(
+            Row(
                 modifier = Modifier
                     .wrapContentSize()
-                    .fillMaxWidth(),
-//                verticalArrangement = Arrangement.Center,
-//                horizontalAlignment = Alignment.Start,
+                    .fillMaxSize(),
             ) {
-                Text(text = title)
-                Text(text = description)
+                Text(
+                    text = item.formatDate + if (item.description?.isNotEmpty() == true) " - ${item.description}" else "",
+                    color = colorScheme.onSurface,
+                )
             }
         },
         jetLimeItemConfig = JetLimeItemConfig(
             iconType = IconType.Custom(
-                iconImage = icon,
+                iconImage = getIconForJobEvent(item.type),
             ),
 //            itemHeight = 100.dp,
             iconColor = if (isLast) colorScheme.secondary else colorScheme.primary,
