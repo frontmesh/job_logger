@@ -78,7 +78,6 @@ dependencies {
     implementation(libs.coil.svg)
     implementation(libs.datastore.preferences)
     implementation(libs.opengraphparser)
-    implementation(libs.jetlime.compose)
     implementation(libs.appcompat)
     implementation(libs.material)
 

@@ -51,10 +51,8 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hil
 javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 
 opengraphparser = { group = "com.github.priyansh-kedia", name = "opengraphparser", version.ref = "opengraphparserPk" }
-jetlime-compose = { group = "io.github.pushpalroy", name = "jetlime", version.ref = "jetlime" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
 
 [bundles]
 [plugins]

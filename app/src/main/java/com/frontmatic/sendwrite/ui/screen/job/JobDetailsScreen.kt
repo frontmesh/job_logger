@@ -2,26 +2,26 @@ package com.frontmatic.sendwrite.ui.screen.job
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material3.Button
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -30,43 +30,36 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.ui.components.EmptyContent
+import com.frontmatic.sendwrite.ui.components.timeline.CircleParametersDefaults
+import com.frontmatic.sendwrite.ui.components.timeline.LineParametersDefaults
+import com.frontmatic.sendwrite.ui.components.timeline.MessageBubble
+import com.frontmatic.sendwrite.ui.components.timeline.StrokeParameters
+import com.frontmatic.sendwrite.ui.components.timeline.TimelineNode
+import com.frontmatic.sendwrite.ui.components.timeline.TimelineNodePosition
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
-import com.frontmatic.sendwrite.ui.theme.JetLimeSurface
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
 import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJetLimeItem
 import com.frontmatic.sendwrite.util.LocalSnackbar
-import com.pushpal.jetlime.data.JetLimeItemsModel
-import com.pushpal.jetlime.data.config.IconAnimation
-import com.pushpal.jetlime.data.config.IconType
-import com.pushpal.jetlime.data.config.JetLimeItemConfig
-import com.pushpal.jetlime.data.config.JetLimeViewConfig
-import com.pushpal.jetlime.data.config.LineType
-import com.pushpal.jetlime.ui.JetLimeView
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
-import kotlinx.coroutines.delay
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalAnimationApi::class)
 @Destination(
     navArgsDelegate = JobDetailsScreenNavArgs::class,
 )
@@ -92,28 +85,6 @@ fun JobDetailsScreen(
         }
     }
 
-    val timelineModel by remember {
-        derivedStateOf {
-            val jetItemList: MutableList<JetLimeItemsModel.JetLimeItem> = mutableStateListOf()
-            state.job?.events?.forEachIndexed { index, it ->
-                val isLast = state.job?.events?.size?.minus(1) == index
-                jetItemList.add(
-                    createJetLimeItem(
-                        item = it,
-                        colorScheme = colorScheme,
-                        isLast = isLast
-                    )
-                )
-            }
-            JetLimeItemsModel(jetItemList)
-        }
-    }
-
-
-    LaunchedEffect(timelineModel.items.size) {
-        delay(1)
-        jetLimeListState.scrollToItem(timelineModel.items.size)
-    }
 
     if (state.showAddNewEventDialog) {
         AddEventAlertDialog(
@@ -236,30 +207,68 @@ fun JobDetailsScreen(
                 )
             }
 
-            JetLimeSurface(
-                color = MaterialTheme.colorScheme.background,
-                shape = RoundedCornerShape(16.dp),
-                modifier = Modifier
-                    .wrapContentSize()
-                    .padding(PAGE_PADDING)
-            ) {
-                JetLimeView(
-                    jetLimeItemsModel = timelineModel,
-                    listState = jetLimeListState,
-                    jetLimeViewConfig = JetLimeViewConfig(
-                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                        lineColor = MaterialTheme.colorScheme.primary,
-                        showIcons = true,
-                        lineType = LineType.Solid,
-                        lineThickness = 16F,
-                        lineEndMargin = 30.dp,
-                        lineStartMargin = 35.dp,
-                        itemSpacing = 2.dp,
-                        iconBorderThickness = 1.dp,
-                        iconSize = 22.dp,
-                        iconShape = CircleShape,
-                    ),
+            val circleParameters = CircleParametersDefaults.circleParameters(
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                stroke = StrokeParameters(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    width = 3.dp
                 )
+            )
+            val lineParameters = LineParametersDefaults.solidColor(
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            LazyColumn(
+                modifier = Modifier.padding(all = PAGE_PADDING)
+            ) {
+                itemsIndexed(
+                    items = state.job!!.events!!,
+                ) {index, item ->
+
+                    val isLast = state.job?.events?.size?.minus(1) == index || state.job?.events?.size == 1
+                    val isFirst = index == 0 && state.job?.events?.size != 1
+
+                    TimelineNode(
+                        position = when {
+                            isFirst -> TimelineNodePosition.FIRST
+                            isLast -> TimelineNodePosition.LAST
+                            else -> TimelineNodePosition.MIDDLE
+                        },
+                        icon = getIconForJobEvent(item.type),
+                        circleParameters = circleParameters,
+                        lineParameters = lineParameters,
+                    ) { modifier ->
+                        MessageBubble(modifier) {
+                            Column(
+                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Text(
+                                    text = getTitleForJetLimeItem(item),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Row(
+                                    modifier = Modifier
+                                        .wrapContentSize(),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    item.formatDate?.let {
+                                        TimeChipContent(text = it, selected = isLast)
+                                    }
+                                    Text(
+                                        text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
+                                        color = colorScheme.onSurface,
+                                        modifier = Modifier.padding(horizontal = 4.dp),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         } else if (state.job?.events?.isNullOrEmpty() == true) {
             EmptyContent(
@@ -277,39 +286,6 @@ fun JobDetailsScreen(
     }
 }
 
-fun createJetLimeItem(
-    item: JobEvent,
-    colorScheme: ColorScheme,
-    isLast : Boolean = false
-): JetLimeItemsModel.JetLimeItem {
-    return JetLimeItemsModel.JetLimeItem(
-        title = getTitleForJetLimeItem(item),
-        content = {
-            Row(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .fillMaxSize(),
-            ) {
-                Text(
-                    text = item.formatDate + if (item.description?.isNotEmpty() == true) " - ${item.description}" else "",
-                    color = colorScheme.onSurface,
-                )
-            }
-        },
-        jetLimeItemConfig = JetLimeItemConfig(
-            iconType = IconType.Custom(
-                iconImage = getIconForJobEvent(item.type),
-            ),
-//            itemHeight = 100.dp,
-            iconColor = if (isLast) colorScheme.secondary else colorScheme.primary,
-            iconBackgroundColor = if (isLast) colorScheme.secondaryContainer
-             else colorScheme.primaryContainer,
-            titleColor = colorScheme.primary,
-            descriptionColor = colorScheme.onSurface,
-            iconAnimation = if (isLast) IconAnimation() else null,
-        )
-    )
-}
 
 @Composable
 fun JobDetailsCard(
@@ -356,6 +332,49 @@ fun JobDetailsCard(
                 )
             }
 
+        }
+    }
+}
+
+@Composable
+fun TimeChipContent(
+    text: String,
+    selected: Boolean,
+    icon: Boolean = true,
+    modifier: Modifier = Modifier
+) {
+    Row {
+        if (icon) {
+        Icon(
+            imageVector = Icons.Filled.CalendarMonth,
+            tint = when {
+                selected -> MaterialTheme.colorScheme.primary
+                else -> MaterialTheme.colorScheme.onSurface
+            },
+//            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
+            contentDescription = "Due date icon",
+            modifier = Modifier
+                .size(22.dp)
+                .padding(end = 4.dp)
+        )
+        }
+        Surface(
+            color = when {
+                selected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+            },
+            contentColor = when {
+                selected -> MaterialTheme.colorScheme.primary
+                else -> MaterialTheme.colorScheme.onSurface
+            },
+            shape = MaterialTheme.shapes.small,
+            modifier = modifier
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+            )
         }
     }
 }
