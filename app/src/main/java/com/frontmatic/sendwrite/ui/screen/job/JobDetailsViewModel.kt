@@ -12,8 +12,6 @@ import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.frontmatic.sendwrite.ui.screen.JobSortType
 import com.frontmatic.sendwrite.ui.screen.navArgs
-import com.pushpal.jetlime.data.JetLimeItemsModel
-import com.pushpal.jetlime.data.config.JetLimeItemConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,12 +41,6 @@ class JobDetailsViewModel @Inject() constructor(
             job = job,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), JobDetailState())
-    val jobTimeLine = MutableStateFlow(
-        JetLimeItemsModel(
-            list = mutableListOf()
-        )
-    )
-    .stateIn(viewModelScope, SharingStarted.Lazily, JetLimeItemsModel(list = mutableListOf()))
 
     fun onAddEventAlertAction(action: AddEventAlertAction): Unit {
         when(action) {

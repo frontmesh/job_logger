@@ -207,17 +207,6 @@ fun JobDetailsScreen(
                 )
             }
 
-            val circleParameters = CircleParametersDefaults.circleParameters(
-                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                stroke = StrokeParameters(
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                    width = 3.dp
-                )
-            )
-            val lineParameters = LineParametersDefaults.solidColor(
-                color = MaterialTheme.colorScheme.primary
-            )
-
             LazyColumn(
                 modifier = Modifier.padding(all = PAGE_PADDING)
             ) {
@@ -228,6 +217,17 @@ fun JobDetailsScreen(
                     val isLast = state.job?.events?.size?.minus(1) == index || state.job?.events?.size == 1
                     val isFirst = index == 0 && state.job?.events?.size != 1
 
+                    val circleParameters = CircleParametersDefaults.circleParameters(
+                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                        stroke = StrokeParameters(
+                            color = MaterialTheme.colorScheme.secondaryContainer,
+                            width = 3.dp
+                        )
+                    )
+                    val lineParameters = LineParametersDefaults.solidColor(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                    )
+
                     TimelineNode(
                         position = when {
                             isFirst -> TimelineNodePosition.FIRST
@@ -235,6 +235,10 @@ fun JobDetailsScreen(
                             else -> TimelineNodePosition.MIDDLE
                         },
                         icon = getIconForJobEvent(item.type),
+                        iconColor = when {
+                            isLast -> MaterialTheme.colorScheme.primary
+                            else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                        },
                         circleParameters = circleParameters,
                         lineParameters = lineParameters,
                     ) { modifier ->
@@ -246,7 +250,10 @@ fun JobDetailsScreen(
                                 Text(
                                     text = getTitleForJetLimeItem(item),
                                     style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.primary
+                                    color = when {
+                                        isLast -> MaterialTheme.colorScheme.primary
+                                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                    },
                                 )
                                 Row(
                                     modifier = Modifier
@@ -258,7 +265,7 @@ fun JobDetailsScreen(
                                     }
                                     Text(
                                         text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
-                                        color = colorScheme.onSurface,
+                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isLast) 1f else 0.6f) ,
                                         modifier = Modifier.padding(horizontal = 4.dp),
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
@@ -345,18 +352,18 @@ fun TimeChipContent(
 ) {
     Row {
         if (icon) {
-        Icon(
-            imageVector = Icons.Filled.CalendarMonth,
-            tint = when {
-                selected -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.onSurface
-            },
-//            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
-            contentDescription = "Due date icon",
-            modifier = Modifier
-                .size(22.dp)
-                .padding(end = 4.dp)
-        )
+            Icon(
+                imageVector = Icons.Filled.CalendarMonth,
+                tint = when {
+                    selected -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                },
+    //            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
+                contentDescription = "Due date icon",
+                modifier = Modifier
+                    .size(22.dp)
+                    .padding(end = 4.dp)
+            )
         }
         Surface(
             color = when {
@@ -373,6 +380,10 @@ fun TimeChipContent(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
+                color = when {
+                    selected -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                },
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
             )
         }

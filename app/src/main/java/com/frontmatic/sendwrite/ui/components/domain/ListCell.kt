@@ -37,10 +37,10 @@ fun ListCell(
     shape: Shape = RoundedCornerShape(size = MediumRadius),
     name: String,
     trailingText: String? = null,
-    color: Color = MaterialTheme.colorScheme.tertiaryContainer,
     listCellBackground: Color = MaterialTheme.colorScheme.primaryContainer,
     imageUrl: String? = null,
     icon: ImageVector? = null,
+    iconBackground: Color = MaterialTheme.colorScheme.onPrimary,
     onClick: () -> Unit,
 ) {
     // A simple box to draw the growing circle, which emanates from behind the icon
@@ -67,7 +67,10 @@ fun ListCell(
                     Box(
                         modifier = Modifier
                             .size(32.dp)
-                            .background(shape = CircleShape, color = color),
+                            .background(
+                                shape = CircleShape,
+                                color = iconBackground
+                            ),
                         contentAlignment = Alignment.Center
                     ) {
                         if (imageUrl != null) {

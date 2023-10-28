@@ -2,20 +2,20 @@ package com.frontmatic.sendwrite.data
 
 enum class AppTheme {
     SYSTEM,
-    DYNAMIC,
-    LIGHT_GREEN,
+//    DYNAMIC,
     LIGHT_ORANGE,
+    LIGHT_GREEN,
     LIGHT_BLUE,
     LIGHT_PURPLE,
-    DARK_GREEN,
     DARK_ORANGE,
+    DARK_GREEN,
     DARK_BLUE,
     DARK_PURPLE;
 
     fun getLocalizedString(): String {
         return when (this) {
             SYSTEM -> "System"
-            DYNAMIC -> "Dynamic"
+//            DYNAMIC -> "Dynamic"
             LIGHT_GREEN -> "Light Green"
             LIGHT_ORANGE -> "Light Orange"
             LIGHT_BLUE -> "Light Blue"

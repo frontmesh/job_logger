@@ -86,15 +86,15 @@ fun SendWriteTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
-        appTheme == AppTheme.DARK_GREEN ||
-        darkTheme -> DarkGreenColorScheme
         appTheme == AppTheme.LIGHT_ORANGE -> LightOrangeColorScheme
         appTheme == AppTheme.DARK_ORANGE -> DarkOrangeColorScheme
+        appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
+        appTheme == AppTheme.DARK_GREEN  -> DarkGreenColorScheme
         appTheme == AppTheme.LIGHT_PURPLE -> LightPurpleColorScheme
         appTheme == AppTheme.DARK_PURPLE -> DarkPurpleColorScheme
         appTheme == AppTheme.LIGHT_BLUE -> LightBlueColorScheme
         appTheme == AppTheme.DARK_BLUE -> DarkBlueColorScheme
+        darkTheme -> DarkGreenColorScheme
 
         else -> LightGreenColorScheme
     }

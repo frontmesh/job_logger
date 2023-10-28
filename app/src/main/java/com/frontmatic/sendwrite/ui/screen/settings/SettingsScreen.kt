@@ -192,7 +192,7 @@ private fun ThemeButton(
                     else -> {
                         SendWriteTheme(
                             appTheme = appTheme,
-                            dynamicColor = AppTheme.DYNAMIC == appTheme
+                            dynamicColor = AppTheme.SYSTEM == appTheme
                         ) {
                             Row(modifier = Modifier
                                 .fillMaxHeight()

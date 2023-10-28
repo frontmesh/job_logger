@@ -1,13 +1,13 @@
 package com.frontmatic.sendwrite.ui.theme.green
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF4A6700)
+val md_theme_light_primary = Color(0xFF376700)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFC4F265)
-val md_theme_light_onPrimaryContainer = Color(0xFF141F00)
-val md_theme_light_secondary = Color(0xFF006A65)
+val md_theme_light_primaryContainer = Color(0xFFDFE6D2)
+val md_theme_light_onPrimaryContainer = Color(0xFF0C1300)
+val md_theme_light_secondary = Color(0xFF4E8A2D)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
-val md_theme_light_secondaryContainer = Color(0xFF70F7EE)
+val md_theme_light_secondaryContainer = Color(0xFFD8E6E4)
 val md_theme_light_onSecondaryContainer = Color(0xFF00201E)
 val md_theme_light_tertiary = Color(0xFF7F5700)
 val md_theme_light_onTertiary = Color(0xFFFFFFFF)

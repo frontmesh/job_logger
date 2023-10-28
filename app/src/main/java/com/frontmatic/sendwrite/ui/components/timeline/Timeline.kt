@@ -235,7 +235,7 @@ private fun TimelinePreview() {
             )
         )
         val lineParameters = LineParametersDefaults.solidColor(
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
         )
 
         Column(
