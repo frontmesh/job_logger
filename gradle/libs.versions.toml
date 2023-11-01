@@ -18,6 +18,7 @@ hiltCompiler = "2.48"
 hiltNavigationCompose = "1.1.0-alpha01"
 material = "1.9.0"
 org-jetbrains-kotlin-android = "1.8.10"
+constraintlayout = "2.1.4"
 
 [libraries]
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -53,6 +54,7 @@ javapoet = { module = "com.squareup:javapoet", version.ref = "javapoet" }
 opengraphparser = { group = "com.github.priyansh-kedia", name = "opengraphparser", version.ref = "opengraphparserPk" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [bundles]
 [plugins]

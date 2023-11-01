@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
 
+
 @HiltViewModel
 class AddJobViewModel @Inject constructor(
     private val jobDataSource: JobLocalDataSource,

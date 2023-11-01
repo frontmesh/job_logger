@@ -50,6 +50,7 @@ import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
+import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
@@ -62,6 +63,7 @@ import com.ramcosta.composedestinations.navigation.popUpTo
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination(
     navArgsDelegate = JobDetailsScreenNavArgs::class,
+    style = DefaultTransitions::class,
 )
 @Composable
 fun JobDetailsScreen(
@@ -72,8 +74,6 @@ fun JobDetailsScreen(
     val state by viewModel.state.collectAsState(JobDetailState())
     val snack = LocalSnackbar.current
     val job = state.job
-    val colorScheme = MaterialTheme.colorScheme
-    val jetLimeListState = rememberLazyListState()
 
     LaunchedEffect(state.snackBarState) {
         if (state.snackBarState.showSnackbar) {
@@ -250,6 +250,8 @@ fun JobDetailsScreen(
                                 Text(
                                     text = getTitleForJetLimeItem(item),
                                     style = MaterialTheme.typography.titleMedium,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     color = when {
                                         isLast -> MaterialTheme.colorScheme.primary
                                         else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
@@ -267,7 +269,6 @@ fun JobDetailsScreen(
                                         text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
                                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isLast) 1f else 0.6f) ,
                                         modifier = Modifier.padding(horizontal = 4.dp),
-                                        maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
                                     )
                                 }

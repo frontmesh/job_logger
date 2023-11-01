@@ -97,6 +97,7 @@ dependencies {
     // Navigation - Compose Destinations
     implementation(libs.destinations.core)
     implementation(libs.destinations.animations.core)
+    implementation(libs.constraintlayout)
     ksp(libs.destinations.ksp)
 
     // Database

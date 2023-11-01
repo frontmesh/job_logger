@@ -16,6 +16,7 @@ import com.frontmatic.sendwrite.ext.cap
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.components.domain.ListCell
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconAndDataForJobEventType
 import com.ramcosta.composedestinations.annotation.Destination
@@ -25,6 +26,7 @@ import java.util.Locale
 
 @Destination(
     navArgsDelegate = EventListScreenNavArgs::class,
+    style = DefaultTransitions::class,
 )
 @Composable()
 fun EventListScreen(

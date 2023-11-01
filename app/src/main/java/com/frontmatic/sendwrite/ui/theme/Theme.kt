@@ -55,9 +55,10 @@ val DarkOrangeColorScheme = darkColorScheme(
 
 val LightPurpleColorScheme = lightColorScheme(
     primary = LightPurplePrimary,
+    primaryContainer = LightPurplePrimaryContainer,
     secondary = LightPurpleSecondary,
     tertiary = LightPurpleTertiary,
-    surface = LightBlueSurface,
+    surface = LightPurpleSurface,
     onSurface = LightPurplePrimary,
 
     /* Other default colors to override

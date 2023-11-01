@@ -76,12 +76,14 @@ fun BottomNavBar(
                 label = { Text(item.title) },
                 selected = isSelected,
                 onClick = {
-                    navController.navigate(item.direction) {
-                        popUpTo(NavGraphs.root) {
-                            saveState = false
+                    if (!isSelected) {
+                        navController.navigate(item.direction) {
+                            popUpTo(NavGraphs.root) {
+                                saveState = false
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
-                        launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(

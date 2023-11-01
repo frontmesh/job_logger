@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen
 
+//import com.frontmatic.sendwrite.ui.screen.destinations.AddJobScreenDestination
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,7 @@ import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
+import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
@@ -47,8 +49,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @RootNavGraph(start = true)
 @Destination(
-    route = "home",
-    start = true
+    style = DefaultTransitions::class,
 )
 @Composable
 fun HomeScreen(
