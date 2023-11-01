@@ -2,7 +2,6 @@ package com.frontmatic.sendwrite.ui.screen.job
 
 import android.app.Activity
 import android.os.Build
-import android.util.Log
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,7 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,10 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.local.mapper.toJob
 import com.frontmatic.sendwrite.ui.screen.job.components.AddJobContent
-import com.frontmatic.sendwrite.ui.screen.styles.AddJobTransitions
-import com.frontmatic.sendwrite.util.isUrlValid
 import com.kedia.ogparser.OpenGraphResult
-import com.ramcosta.composedestinations.annotation.Destination
 
 
 @RequiresApi(Build.VERSION_CODES.O)
