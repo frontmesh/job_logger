@@ -37,6 +37,8 @@ import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.events.EventListViewModel
+import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 
@@ -97,6 +99,18 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
                 hiltViewModel<JobDetailsViewModel>(navBackStackEntry).state.collectAsState(null).value
             }
             state?.job?.title ?: "Job Details"
+        }
+
+        EventListScreenDestination -> {
+            val period = navBackStackEntry?.let {
+                hiltViewModel<EventListViewModel>(navBackStackEntry).period
+            }
+
+            when (period) {
+                EventPeriod.TODAY -> "Today's Events"
+                EventPeriod.WEEK -> "This Week's Events"
+                else -> "Events"
+            }
         }
         else -> "Job Logger"
     }
