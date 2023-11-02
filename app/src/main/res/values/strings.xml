@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SendWrite</string>
+    <string name="app_name">JobOps</string>
     <string name="add_a_job">Add a Job</string>
     <string name="add_a_job_var">Add a %1$s Job</string>
     <string name="go_back">Go Back</string>

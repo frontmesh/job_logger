@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
+import android.media.Image
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -18,14 +19,23 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DataObject
+import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.PrivacyTip
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Web
+import androidx.compose.material.icons.filled.Weekend
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,14 +46,22 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.BuildConfig
+import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.data.appThemes
 import com.frontmatic.sendwrite.ui.components.FancyIcon
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
+import com.frontmatic.sendwrite.ui.theme.Shape
+
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
@@ -61,14 +79,98 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(all = PAGE_PADDING)
     ) {
-        JobListTitle(title = "Settings", padding = 0.dp)
+        JobListTitle(title = "App", padding = 0.dp)
         ThemesSection(
             appTheme = appTheme,
             onAppThemeSelected = {
                 viewModel.updateAppTheme(appTheme = it)
             }
         )
+        SectionSurface(
+            color = MaterialTheme.colorScheme.primaryContainer,
+            shape = Shape.medium
+        ) {
+            LazyColumn(content = {
+                item {
+                    Text(
+                        modifier = Modifier.padding(top = 16.dp, start = 16.dp),
+                        text = "General",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                item {
+                    SettingsOption(
+                        title = "Website",
+                        icon = Icons.Filled.Link,
+                        onClick = {}
+                    )
+                }
+                item {
+                    SettingsOption(
+                        title = "Privacy Policy",
+                        icon = Icons.Filled.PrivacyTip,
+                        onClick = {}
+                    )
+                }
 
+                item {
+                    SettingsOption(
+                        title = "Terms of Use",
+                        icon = Icons.Filled.Fingerprint,
+                        onClick = {}
+                    )
+                }
+
+                item {
+                    SettingsOption(
+                        title = "Rate the app",
+                        icon = Icons.Filled.Star,
+                        onClick = {}
+                    )
+                }
+                item {
+                    SettingsOption(
+                        title = "Data export/import",
+                        icon = Icons.Default.DataObject,
+                        onClick = {}
+                    )
+                }
+
+                item {
+                    AppVersion()
+                }
+            })
+        }
+    }
+}
+
+@Composable
+fun SettingsOption(
+    modifier: Modifier = Modifier,
+    title: String,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        FancyIcon(
+            icon = icon,
+            contentDescription = "Date",
+            iconColor = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onSurface
+        )
     }
 }
 
@@ -79,10 +181,13 @@ private fun ThemesSection(
     appTheme: AppTheme,
     onAppThemeSelected: (AppTheme) -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
         Text(
             modifier = Modifier.padding(top = 16.dp, start = 16.dp),
-            text = "Choose theme",
+            text = "Select a theme",
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -91,7 +196,32 @@ private fun ThemesSection(
             selectedAppTheme = appTheme,
             onAppThemeSelected = onAppThemeSelected
         )
+
+
     }
+}
+
+
+@Composable
+fun AppVersion() {
+
+    // on below line we are creating a column
+    Column(
+        // on below line we are adding a modifier to it
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        Text(
+            text = stringResource(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
+            fontSize = MaterialTheme.typography.titleMedium.fontSize,
+            fontWeight = FontWeight.Bold,
+        )
+
+        Text(text = "© 2023 Frontmatic", fontSize = MaterialTheme.typography.bodyMedium.fontSize)
+    }
+
 }
 
 

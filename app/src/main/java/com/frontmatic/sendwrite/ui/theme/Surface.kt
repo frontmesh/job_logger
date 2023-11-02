@@ -24,7 +24,7 @@ import kotlin.math.ln
  * An alternative to [androidx.compose.material.Surface]
  */
 @Composable
-fun JetLimeSurface(
+fun SectionSurface(
     modifier: Modifier = Modifier,
     shape: Shape = RectangleShape,
     color: Color = MaterialTheme.colorScheme.background,

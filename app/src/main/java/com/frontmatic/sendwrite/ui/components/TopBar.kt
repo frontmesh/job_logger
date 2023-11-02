@@ -34,9 +34,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import com.frontmatic.sendwrite.R
+import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.destinations.SettingsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.events.EventListViewModel
 import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
@@ -112,7 +114,11 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
                 else -> "Events"
             }
         }
-        else -> "Job Logger"
+
+        ArchiveScreenDestination -> "Archive"
+        SettingsScreenDestination -> "Settings"
+
+        else -> stringResource(id = R.string.app_name)
     }
 }
 
