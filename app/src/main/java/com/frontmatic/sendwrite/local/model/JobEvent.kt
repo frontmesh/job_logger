@@ -37,7 +37,7 @@ data class JobEvent(
 ) {
     // format date as DD-MM-YYYY
 
-    val formatDate: String?
+    val formatFullDate: String?
         get() = date?.let {
             val pattern = when (type) {
                 JobEventType.APPLIED -> "dd-MM-yyyy"
@@ -47,6 +47,19 @@ data class JobEvent(
                 JobEventType.OTHER -> "dd-MM-yyyy"
             }
 
+            val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+            sdf.format(it)
+        }
+
+    val formatDate: String?
+        get() = date?.let {
+            val pattern = "dd-MM-yyyy"
+            val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+            sdf.format(it)
+        }
+    val formatTime: String?
+        get() = date?.let {
+            val pattern = "HH:mm"
             val sdf = SimpleDateFormat(pattern, Locale.getDefault())
             sdf.format(it)
         }

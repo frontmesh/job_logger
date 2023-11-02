@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -262,7 +261,7 @@ fun JobDetailsScreen(
                                         .wrapContentSize(),
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    item.formatDate?.let {
+                                    item.formatFullDate?.let {
                                         TimeChipContent(text = it, selected = isLast)
                                     }
                                     Text(

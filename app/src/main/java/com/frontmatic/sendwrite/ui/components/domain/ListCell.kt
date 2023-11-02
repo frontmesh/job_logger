@@ -37,6 +37,7 @@ fun ListCell(
     shape: Shape = RoundedCornerShape(size = MediumRadius),
     name: String,
     trailingText: String? = null,
+    trailingContent: @Composable () -> Unit = {},
     listCellBackground: Color = MaterialTheme.colorScheme.primaryContainer,
     imageUrl: String? = null,
     icon: ImageVector? = null,
@@ -107,6 +108,10 @@ fun ListCell(
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaDisabled)
                         )
+                    }
+
+                    if (trailingContent != null) {
+                        trailingContent()
                     }
                 }
 
