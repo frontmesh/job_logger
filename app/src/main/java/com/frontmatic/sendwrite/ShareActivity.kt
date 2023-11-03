@@ -26,7 +26,7 @@ import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
-class ShareActivity : ComponentActivity(), OpenGraphCallback {
+class ShareActivity: ComponentActivity(), OpenGraphCallback {
 
     private val viewModel: MainViewModel by viewModels()
 

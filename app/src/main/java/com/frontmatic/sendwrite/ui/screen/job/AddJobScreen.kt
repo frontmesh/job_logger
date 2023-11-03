@@ -28,18 +28,15 @@ import com.kedia.ogparser.OpenGraphResult
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
-//@Destination(
-//    style = AddJobTransitions::class
-//)
 @Composable
 fun AddJobScreen(
     viewModel: AddJobViewModel = hiltViewModel(),
 ) {
 
-    val job by remember { mutableStateOf(OpenGraphResult()) }
-    val topBarTitle = job?.title?.takeIf {
+    var job: OpenGraphResult? by remember { mutableStateOf(null) }
+    val topBarTitle = job?.let { it.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
-    } ?: stringResource(R.string.add_a_job)
+    } } ?: stringResource(R.string.add_a_job)
     val datePickerState = rememberDatePickerState()
 
     val context = LocalContext.current as Activity
@@ -54,6 +51,7 @@ fun AddJobScreen(
         topBarTitle = topBarTitle,
         onJobSave = {
             viewModel.saveJob(job?.toJob(), datePickerState.selectedDateMillis)
+            context.finish()
         },
         onCancel = {
             context.finish()
@@ -62,18 +60,43 @@ fun AddJobScreen(
     ) {
         Text(
             modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            text = "Enter a valid url of job posting you wish to apply for and track"
+            text = "Enter a URL of job posting you wish to track"
         )
 
         TextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
             label = { Text("Enter Job URL") },
             isError = urlHasError,
             value = url,
             onValueChange = { newUrl ->
                 url = newUrl
                 urlHasError = URLUtil.isValidUrl(newUrl).not()
+
+                if (urlHasError.not()) {
+                    viewModel.parseUrl(newUrl)
+                }
             }
         )
+
+
+        when (val jobState = viewModel.openGraphUrlState) {
+            is OpenGraphUrlState.Loading -> {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    text = "Loading..."
+                )
+            }
+            is OpenGraphUrlState.Success -> {
+                job = jobState.result
+            }
+            is OpenGraphUrlState.Error -> {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    text = "Error loading job details"
+                )
+            }
+
+            else -> {}
+        }
     }
 }

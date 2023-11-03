@@ -28,6 +28,11 @@ fun ArchiveScreen(
             description = "You have ${jobs?.size ?: 0} archived jobs",
         )
 
+        var emptyContentMessage = """
+            No archived jobs. 
+            Your closed job applications will be showed here.
+        """.trimIndent()
+
         JobListContent(
             jobs = jobs,
             listCellBackground = MaterialTheme.colorScheme.primaryContainer.copy(
@@ -40,7 +45,7 @@ fun ArchiveScreen(
                     )
                 )
             },
-            emptyContentMessage = "No archived jobs. \r\n Your closed job applications will be showed here.",
+            emptyContentMessage = emptyContentMessage,
             emptyContentIcon = Icons.Filled.SendAndArchive
         )
     }

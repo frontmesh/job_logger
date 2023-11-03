@@ -192,7 +192,7 @@ fun JobDetailsScreen(
             modifier = Modifier.padding(PAGE_PADDING)
         )
 
-        if (state.job?.events?.isNullOrEmpty() == false) {
+        if (state.job != null && state.job?.events?.isNullOrEmpty() == false) {
             Row(
                 modifier = Modifier
                     .padding(all = PAGE_PADDING)

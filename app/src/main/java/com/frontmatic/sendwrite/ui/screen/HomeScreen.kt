@@ -1,6 +1,5 @@
 package com.frontmatic.sendwrite.ui.screen
 
-//import com.frontmatic.sendwrite.ui.screen.destinations.AddJobScreenDestination
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -102,12 +101,17 @@ fun HomeScreen(
             )
         }
 
+        val emptyContentMessage = """
+            No active jobs. 
+            Log your job application on a button below or share a link to this app.
+        """.trimIndent()
+
         JobListContent(
             jobs = jobs,
             onItemClick = { item ->
                 navigator.navigate(JobDetailsScreenDestination(item.id!!))
             },
-            emptyContentMessage = "No Active Jobs Found. \r\n \r\n Log your job application on a button below or share a link to this app.",
+            emptyContentMessage = emptyContentMessage,
             emptyContentIcon = Icons.Filled.WorkOff,
             listCellBackground = MaterialTheme.colorScheme.primaryContainer
         )
@@ -126,6 +130,7 @@ private fun JobCell(
     onClick: () -> Unit,
 ) {
     val shape = RoundedCornerShape(size = MediumRadius)
+
     Surface(
         modifier = modifier
             .clip(shape)

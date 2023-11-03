@@ -1,6 +1,5 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
-import android.media.Image
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -23,7 +22,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DataObject
@@ -31,11 +32,8 @@ import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Web
-import androidx.compose.material.icons.filled.Weekend
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -57,19 +55,19 @@ import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.data.appThemes
 import com.frontmatic.sendwrite.ui.components.FancyIcon
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
+import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.frontmatic.sendwrite.ui.theme.Shape
-
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination(
-    route = "settings",
+    style = DefaultTransitions::class,
 )
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel()
+    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val appTheme: AppTheme by viewModel.appTheme
         .collectAsState(AppTheme.LIGHT_GREEN)
@@ -79,27 +77,28 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(all = PAGE_PADDING)
     ) {
-        JobListTitle(title = "App", padding = 0.dp)
-        ThemesSection(
-            appTheme = appTheme,
-            onAppThemeSelected = {
-                viewModel.updateAppTheme(appTheme = it)
-            }
-        )
+//        JobListTitle(title = "App", padding = 0.dp)
+//
+//        Text(
+//            modifier = Modifier.padding(top = 16.dp, start = 16.dp),
+//            text = "General",
+//            style = MaterialTheme.typography.titleMedium,
+//            fontWeight = FontWeight.Bold,
+//            color = MaterialTheme.colorScheme.primary
+//        )
         SectionSurface(
             color = MaterialTheme.colorScheme.primaryContainer,
             shape = Shape.medium
         ) {
             LazyColumn(content = {
-                item {
-                    Text(
-                        modifier = Modifier.padding(top = 16.dp, start = 16.dp),
-                        text = "General",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+//                item {
+//                    ThemesSection(
+//                        appTheme = appTheme,
+//                        onAppThemeSelected = {
+//                            viewModel.updateAppTheme(appTheme = it)
+//                        }
+//                    )
+//                }
                 item {
                     SettingsOption(
                         title = "Website",
@@ -110,7 +109,8 @@ fun SettingsScreen(
                 item {
                     SettingsOption(
                         title = "Privacy Policy",
-                        icon = Icons.Filled.PrivacyTip,
+                        icon = Icons.Filled.Fingerprint,
+
                         onClick = {}
                     )
                 }
@@ -118,7 +118,7 @@ fun SettingsScreen(
                 item {
                     SettingsOption(
                         title = "Terms of Use",
-                        icon = Icons.Filled.Fingerprint,
+                        icon = Icons.Filled.PrivacyTip,
                         onClick = {}
                     )
                 }
@@ -137,12 +137,10 @@ fun SettingsScreen(
                         onClick = {}
                     )
                 }
-
-                item {
-                    AppVersion()
-                }
             })
         }
+
+        AppVersion()
     }
 }
 
