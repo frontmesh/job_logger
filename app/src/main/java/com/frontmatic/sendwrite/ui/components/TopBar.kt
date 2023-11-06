@@ -38,11 +38,14 @@ import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.events.EventListViewModel
 import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
+import com.frontmatic.sendwrite.ui.screen.settings.ChildPage
+import com.frontmatic.sendwrite.ui.screen.settings.SettingsChildViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +75,8 @@ fun TopBar(
         navigationIcon = {
             when (destination) {
                 JobDetailsScreenDestination,
-                EventListScreenDestination -> {
+                EventListScreenDestination,
+                SettingsChildScreenDestination -> {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
@@ -117,6 +121,16 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
 
         ArchiveScreenDestination -> "Archive"
         SettingsScreenDestination -> "Settings"
+        SettingsChildScreenDestination -> {
+            val childPage = navBackStackEntry?.let {
+                hiltViewModel<SettingsChildViewModel>(navBackStackEntry).navArgs.page
+            }
+
+            when (childPage) {
+                ChildPage.THEMES -> "Themes"
+                else -> "Settings"
+            }
+        }
 
         else -> stringResource(id = R.string.app_name)
     }

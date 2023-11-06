@@ -21,7 +21,7 @@ import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 fun FancyIcon(
     modifier: Modifier = Modifier,
     icon: ImageVector,
-    contentDescription: String,
+    contentDescription: String?,
     iconColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 ) {
 

@@ -206,75 +206,77 @@ fun JobDetailsScreen(
                 )
             }
 
-            LazyColumn(
-                modifier = Modifier.padding(all = PAGE_PADDING)
-            ) {
-                itemsIndexed(
-                    items = state.job!!.events!!,
-                ) {index, item ->
+            state.job?.let {
+                LazyColumn(
+                    modifier = Modifier.padding(all = PAGE_PADDING)
+                ) {
+                    itemsIndexed(
+                        items = it.events,
+                    ) { index, item ->
 
-                    val isLast = state.job?.events?.size?.minus(1) == index || state.job?.events?.size == 1
-                    val isFirst = index == 0 && state.job?.events?.size != 1
+                        val isLast =
+                            it.events?.size?.minus(1) == index || it.events?.size == 1
+                        val isFirst = index == 0 && it.events?.size != 1
 
-                    val circleParameters = CircleParametersDefaults.circleParameters(
-                        backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                        stroke = StrokeParameters(
-                            color = MaterialTheme.colorScheme.secondaryContainer,
-                            width = 3.dp
+                        val circleParameters = CircleParametersDefaults.circleParameters(
+                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                            stroke = StrokeParameters(
+                                color = MaterialTheme.colorScheme.secondaryContainer,
+                                width = 3.dp
+                            )
                         )
-                    )
-                    val lineParameters = LineParametersDefaults.solidColor(
-                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                    )
+                        val lineParameters = LineParametersDefaults.solidColor(
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                        )
 
-                    TimelineNode(
-                        position = when {
-                            isFirst -> TimelineNodePosition.FIRST
-                            isLast -> TimelineNodePosition.LAST
-                            else -> TimelineNodePosition.MIDDLE
-                        },
-                        icon = getIconForJobEvent(item.type),
-                        iconColor = when {
-                            isLast -> MaterialTheme.colorScheme.primary
-                            else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                        },
-                        circleParameters = circleParameters,
-                        lineParameters = lineParameters,
-                    ) { modifier ->
-                        MessageBubble(modifier) {
-                            Column(
-                                modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                                verticalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Text(
-                                    text = getTitleForJetLimeItem(item),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    color = when {
-                                        isLast -> MaterialTheme.colorScheme.primary
-                                        else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                                    },
-                                )
-                                Row(
-                                    modifier = Modifier
-                                        .wrapContentSize(),
-                                    verticalAlignment = Alignment.CenterVertically,
+                        TimelineNode(
+                            position = when {
+                                isFirst -> TimelineNodePosition.FIRST
+                                isLast -> TimelineNodePosition.LAST
+                                else -> TimelineNodePosition.MIDDLE
+                            },
+                            icon = getIconForJobEvent(item.type),
+                            iconColor = when {
+                                isLast -> MaterialTheme.colorScheme.primary
+                                else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                            },
+                            circleParameters = circleParameters,
+                            lineParameters = lineParameters,
+                        ) { modifier ->
+                            MessageBubble(modifier) {
+                                Column(
+                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    item.formatFullDate?.let {
-                                        TimeChipContent(text = it, selected = isLast)
-                                    }
                                     Text(
-                                        text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
-                                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isLast) 1f else 0.6f) ,
-                                        modifier = Modifier.padding(horizontal = 4.dp),
+                                        text = getTitleForJetLimeItem(item),
+                                        style = MaterialTheme.typography.titleMedium,
+                                        maxLines = 1,
                                         overflow = TextOverflow.Ellipsis,
+                                        color = when {
+                                            isLast -> MaterialTheme.colorScheme.primary
+                                            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                        },
                                     )
+                                    Row(
+                                        modifier = Modifier
+                                            .wrapContentSize(),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        item.formatFullDate?.let {
+                                            TimeChipContent(text = it, selected = isLast)
+                                        }
+                                        Text(
+                                            text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
+                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isLast) 1f else 0.6f),
+                                            modifier = Modifier.padding(horizontal = 4.dp),
+                                            overflow = TextOverflow.Ellipsis,
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
-
                 }
             }
         } else if (state.job?.events?.isNullOrEmpty() == true) {
@@ -360,7 +362,6 @@ fun TimeChipContent(
                     selected -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
                 },
-    //            tint = MaterialTheme.colorScheme.secondary.copy(alpha = 0.8f),
                 contentDescription = "Due date icon",
                 modifier = Modifier
                     .size(22.dp)
