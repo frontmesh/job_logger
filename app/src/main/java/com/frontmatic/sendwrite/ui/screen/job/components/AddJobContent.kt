@@ -38,7 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.frontmatic.sendwrite.ui.components.OptionData
 import com.frontmatic.sendwrite.ui.components.OptionRow
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.kedia.ogparser.OpenGraphResult
@@ -140,12 +139,11 @@ fun AddJobContent(
                     )
 
                     OptionRow(
-                        setting = OptionData(
-                            "Applied",
-                            "applied",
-                            false
-                        )
-                    ) { value -> applied = value }
+                        modifier = Modifier.padding(top = 16.dp),
+                        label = "Applied",
+                        enabled = false,
+                        onToggle = { value -> applied = value }
+                    )
 
                     if (applied) {
                         DatePicker(

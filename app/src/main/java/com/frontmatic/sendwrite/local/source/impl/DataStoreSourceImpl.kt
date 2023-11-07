@@ -3,6 +3,7 @@ package com.frontmatic.sendwrite.local.source.impl
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -26,6 +27,8 @@ class DataStoreSourceImpl(context: Context): DataStoreSource {
 
     private object PreferencesKeys {
         val APP_THEME_KEY = stringPreferencesKey("app_theme")
+        val JOB_EVENT_NOTIFICATIONS = booleanPreferencesKey("job_event_notifications")
+        val DAILY_TIPS_NOTIFICATIONS = booleanPreferencesKey("daily_tips_notifications")
     }
 
     override fun appThemeFlow(): Flow<AppTheme> {
@@ -48,6 +51,46 @@ class DataStoreSourceImpl(context: Context): DataStoreSource {
     override suspend fun updateAppTheme(appTheme: AppTheme) {
         dataStore.edit { pref ->
             pref[PreferencesKeys.APP_THEME_KEY] = appTheme.toString()
+        }
+    }
+
+    override fun isJobEventNotificationEnabled(): Flow<Boolean> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[PreferencesKeys.JOB_EVENT_NOTIFICATIONS] ?: false
+            }
+    }
+
+    override suspend fun updateIsJobEventNotificationEnabled(isEnabled: Boolean) {
+        dataStore.edit { pref ->
+            pref[PreferencesKeys.JOB_EVENT_NOTIFICATIONS] = isEnabled
+        }
+    }
+
+    override fun isDailyTipsNotificationEnabled(): Flow<Boolean> {
+        return dataStore.data
+            .catch { exception ->
+                if (exception is IOException) {
+                    emit(emptyPreferences())
+                } else {
+                    throw exception
+                }
+            }
+            .map { preferences ->
+                preferences[PreferencesKeys.DAILY_TIPS_NOTIFICATIONS] ?: false
+            }
+    }
+
+    override suspend fun updateIsDailyTipsNotificationEnabled(isEnabled: Boolean) {
+        dataStore.edit { pref ->
+            pref[PreferencesKeys.DAILY_TIPS_NOTIFICATIONS] = isEnabled
         }
     }
 }

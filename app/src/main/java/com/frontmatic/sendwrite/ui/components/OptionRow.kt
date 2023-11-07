@@ -15,27 +15,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 
-data class OptionData(val title : String, val name: String, val isChecked : Boolean)
-
 @Composable
-fun OptionRow(setting: OptionData, onToggle: (Boolean) -> Unit) {
-    var switchState by remember { mutableStateOf(setting.isChecked) }
-
-    fun onToggle() {
-        switchState = !switchState
-        onToggle(switchState)
-    }
-
-    Box(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+fun OptionRow(
+    modifier: Modifier = Modifier,
+    label: String,
+    enabled: Boolean,
+    textColor: Color = MaterialTheme.colorScheme.primary,
+    onToggle: (Boolean) -> Unit
+) {
+    Box(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -44,15 +43,21 @@ fun OptionRow(setting: OptionData, onToggle: (Boolean) -> Unit) {
                     shape = RoundedCornerShape(size = MediumRadius)
                 )
                 .clip(RoundedCornerShape(size = MediumRadius))
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clickable { onToggle() },
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = setting.title, fontWeight = FontWeight.Bold)
+            Text(
+                text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = textColor
+            )
             Switch(
-                checked = switchState,
-                onCheckedChange = { onToggle() },
+                checked = enabled,
+                onCheckedChange = onToggle,
             )
         }
     }

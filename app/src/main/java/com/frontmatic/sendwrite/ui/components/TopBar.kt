@@ -128,6 +128,7 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
 
             when (childPage) {
                 ChildPage.THEMES -> "Themes"
+                ChildPage.NOTIFICATIONS -> "Notifications"
                 else -> "Settings"
             }
         }

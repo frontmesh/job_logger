@@ -21,9 +21,4 @@ class SettingsViewModel @Inject() constructor(
         initialValue = AppTheme.LIGHT_GREEN
     )
 
-    fun updateAppTheme(appTheme: AppTheme) {
-        viewModelScope.launch {
-            dataStoreSource.updateAppTheme(appTheme = appTheme)
-        }
-    }
 }

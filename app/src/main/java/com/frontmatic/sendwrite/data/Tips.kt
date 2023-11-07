@@ -1,0 +1,33 @@
+package com.frontmatic.sendwrite.data
+
+val jobSearchingTips = listOf(
+    "Tailor your resume for each job application to highlight relevant skills and experiences.",
+    "Craft a compelling cover letter that demonstrates your passion for the role and company.",
+    "Research the company's culture and values to align your application with their mission.",
+    "Prepare a list of questions to ask during interviews to show your genuine interest.",
+    "Use LinkedIn to connect with professionals in your industry and join relevant groups.",
+    "Attend industry-specific webinars, seminars, and conferences to expand your knowledge.",
+    "Set up informational interviews with professionals to gain insights into different career paths.",
+    "Utilize job search engines like Indeed, LinkedIn, and Glassdoor to find job opportunities.",
+    "Create a master list of your professional contacts and reach out for job leads or referrals.",
+    "Learn and practice common behavioral interview techniques and responses.",
+    "Build a personal brand by sharing your expertise on LinkedIn through articles and posts.",
+    "Maintain an updated LinkedIn profile, highlighting your skills, experiences, and achievements.",
+    "Consider seeking career guidance and advice from a career counselor or coach.",
+    "Reach out to your alumni network for job opportunities and career advice.",
+    "Subscribe to relevant industry newsletters and blogs to stay informed about trends.",
+    "Develop and refine your elevator pitch to succinctly explain your professional background.",
+    "Invest time in developing your soft skills, such as communication, teamwork, and adaptability.",
+    "Leverage online portfolio websites to showcase your work, projects, and accomplishments.",
+    "Use a professional email signature with your contact information and LinkedIn profile link.",
+    "Set up a dedicated job search email address to keep your job-related correspondence organized.",
+    "Network with local professionals by attending industry-specific meetups and events.",
+    "Practice active listening during interviews to better understand and respond to questions.",
+    "Maintain a positive online presence by avoiding controversial posts and comments on social media.",
+    "Consider temporary or contract work opportunities to gain experience and expand your network.",
+    "Set specific and achievable job search goals, such as applying to a certain number of jobs per week.",
+    "Follow up with potential employers after interviews with a thoughtful thank-you email.",
+    "Join professional associations in your field to access resources and networking opportunities.",
+    "Consider creating a personal website or blog to showcase your expertise and thought leadership.",
+    "Take care of your physical and mental health to stay focused and resilient during your job search."
+)

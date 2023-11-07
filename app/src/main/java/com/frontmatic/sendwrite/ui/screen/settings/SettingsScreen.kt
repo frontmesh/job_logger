@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -13,9 +14,11 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -42,13 +45,15 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 enum class ChildPage {
     NONE,
-    THEMES
+    THEMES,
+    NOTIFICATIONS,
+    WEBSITE
 }
 sealed class SettingsOption {
     data class Option(
         val name: String,
         val icon: ImageVector,
-        val clickHandler: () -> Unit,
+        val clickHandler: () -> Unit = {},
         val childPage: ChildPage
     ) : SettingsOption()
 
@@ -71,12 +76,30 @@ fun setOptions(
             },
             childPage = ChildPage.THEMES
         ),
+        SettingsOption.Option(
+            name = "Notifications",
+            icon = Icons.Filled.Notifications,
+            clickHandler = {
+                navigator.navigate(
+                    SettingsChildScreenDestination(
+                        ChildPage.NOTIFICATIONS
+                    )
+                )
+            },
+            childPage = ChildPage.NOTIFICATIONS
+        ),
         SettingsOption.Divider,
         SettingsOption.Option(
             name = "Website",
             icon = Icons.Filled.Link,
-            clickHandler = {},
-            childPage = ChildPage.NONE
+            clickHandler = {
+               navigator.navigate(
+                    SettingsChildScreenDestination(
+                        ChildPage.WEBSITE
+                    )
+                )
+            },
+            childPage = ChildPage.WEBSITE
         ),
         SettingsOption.Option(
             name = "Privacy Policy",
@@ -123,15 +146,6 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(all = PAGE_PADDING)
     ) {
-//        JobListTitle(title = "App", padding = 0.dp)
-//
-//        Text(
-//            modifier = Modifier.padding(top = 16.dp, start = 16.dp),
-//            text = "General",
-//            style = MaterialTheme.typography.titleMedium,
-//            fontWeight = FontWeight.Bold,
-//            color = MaterialTheme.colorScheme.primary
-//        )
         SectionSurface(
             color = MaterialTheme.colorScheme.primaryContainer,
             shape = Shape.medium
@@ -140,7 +154,7 @@ fun SettingsScreen(
                 items(options) { option ->
                     when (option) {
                         is SettingsOption.Option ->
-                            OptionLayout(
+                            OptionRow(
                                 option = option,
                                 onClick = option.clickHandler
                             )
@@ -155,7 +169,7 @@ fun SettingsScreen(
 }
 
 @Composable
-fun OptionLayout(
+fun OptionRow(
     modifier: Modifier = Modifier,
     option: SettingsOption.Option,
     onClick: () -> Unit
@@ -171,7 +185,8 @@ fun OptionLayout(
             FancyIcon(
                 icon = option.icon,
                 contentDescription = null,
-                iconColor = MaterialTheme.colorScheme.primary
+                iconColor = MaterialTheme.colorScheme.secondary,
+                circleColor = MaterialTheme.colorScheme.secondaryContainer
             )
             Text(
                 modifier = Modifier
@@ -179,7 +194,7 @@ fun OptionLayout(
                 text = option.name,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.primary
             )
             Column(
                 modifier = Modifier
@@ -187,10 +202,12 @@ fun OptionLayout(
                 horizontalAlignment = Alignment.End
             ) {
                 if (option.childPage != ChildPage.NONE) {
-                    FancyIcon(
-                        icon = Icons.Filled.ArrowForward,
+                    Icon(
+                        imageVector = Icons.Filled.ArrowForward,
                         contentDescription = null,
-                        iconColor = MaterialTheme.colorScheme.primary
+                        tint = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier
+                            .size(24.dp)
                     )
                 }
             }

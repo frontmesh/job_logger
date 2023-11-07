@@ -112,10 +112,14 @@ dependencies {
     // DI
     implementation(libs.google.hilt.android)
     kapt(libs.hilt.compiler)
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    kapt(libs.androidx.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.work)
 //    implementation(libs.javapoet)
     annotationProcessor(libs.hilt.compiler)
+
+    // Work Manager
+    implementation(libs.androidx.work.runtime.ktx)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

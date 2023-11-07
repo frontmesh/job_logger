@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
@@ -23,19 +24,24 @@ fun FancyIcon(
     icon: ImageVector,
     contentDescription: String?,
     iconColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+    circleColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    iconSize: Dp = 32.dp
 ) {
 
     Surface(
         modifier = modifier
             .alpha(1f)
-            .size(32.dp),
+            .size(iconSize),
         shape = CircleShape,
-        color = MaterialTheme.colorScheme.primaryContainer
+        color = circleColor
     ) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
-            tint = iconColor
+            tint = iconColor,
+            modifier = Modifier
+                .padding(4.dp)
+//                .size(iconSize)
         )
     }
 }
