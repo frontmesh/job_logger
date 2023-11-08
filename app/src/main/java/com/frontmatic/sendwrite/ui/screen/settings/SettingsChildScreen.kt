@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +44,11 @@ fun SettingsChildScreen(
             isJobEventNotificationEnabled = isJobEventNotificationEnabled,
             isDailyTipsNotificationEnabled = isDailyTipsNotificationEnabled,
             updateIsJobEventNotificationEnabled = viewModel::updateIsJobEventNotificationEnabled,
-            updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled
+            updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled,
+            onButtonClick = {
+                Log.d("SettingsChildScreen", "onButtonClick: ")
+                viewModel.testDailyTipsNotification()
+            }
         )
         ChildPage.WEBSITE -> WebView(url = "https://www.jobops.app/")
         else -> {}

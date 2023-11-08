@@ -102,7 +102,7 @@ class NotificationRepositoryImpl @Inject constructor(
 
         return NotificationCompat.Builder(appContext, dailyTipChannelId)
             .setContentTitle("Daily Job Searching Tip")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.jobops_icon_mono)
             .setContentText(jobSearchingTips.random())
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)

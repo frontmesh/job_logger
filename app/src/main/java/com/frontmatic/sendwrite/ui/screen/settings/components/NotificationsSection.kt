@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Error
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,7 +42,8 @@ fun NotificationsSection(
     isJobEventNotificationEnabled: Boolean,
     isDailyTipsNotificationEnabled: Boolean,
     updateIsJobEventNotificationEnabled: (Boolean) -> Unit,
-    updateIsDailyTipsNotificationEnabled: (Boolean, Context) -> Unit
+    updateIsDailyTipsNotificationEnabled: (Boolean, Context) -> Unit,
+    onButtonClick : () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -106,5 +108,11 @@ fun NotificationsSection(
                 updateIsDailyTipsNotificationEnabled(it, context)
             }
         )
+        
+        Row {
+            Button(onClick = onButtonClick) {
+                Text(text = "Test Daily Tip Notification")
+            }
+        }
     }
 }

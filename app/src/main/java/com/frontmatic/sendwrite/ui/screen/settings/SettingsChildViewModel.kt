@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.local.source.DataStoreSource
+import com.frontmatic.sendwrite.repository.NotificationRepositoryImpl
 import com.frontmatic.sendwrite.ui.screen.navArgs
 import com.frontmatic.sendwrite.worker.DailyTipNotificationWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class SettingsChildViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val dataStoreSource: DataStoreSource,
+    private val notificationRepository: NotificationRepositoryImpl,
 ): ViewModel() {
     val navArgs: SettingsChildScreenNavArgs = savedStateHandle.navArgs()
 
@@ -70,6 +72,12 @@ class SettingsChildViewModel @Inject constructor(
         } else {
             DailyTipNotificationWorker.cancel(context)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun testDailyTipsNotification() {
+        Log.d("SettingsChildViewModel", "testDailyTipsNotification: ")
+        notificationRepository.showDailyTipNotification()
     }
 
 }

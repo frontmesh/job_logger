@@ -10,6 +10,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.frontmatic.sendwrite.repository.NotificationRepository
+import com.frontmatic.sendwrite.repository.NotificationRepositoryImpl
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.time.Duration
@@ -19,7 +20,7 @@ import java.time.Duration
 class DailyTipNotificationWorker  @AssistedInject constructor(
     @Assisted private val context: Context,
     @Assisted private val workerParameters: WorkerParameters,
-    private val notificationRepository: NotificationRepository,
+    private val notificationRepository: NotificationRepositoryImpl,
 ) : CoroutineWorker(context, workerParameters) {
 
     companion object {
@@ -29,14 +30,14 @@ class DailyTipNotificationWorker  @AssistedInject constructor(
         fun enqueue(context: Context, force: Boolean = false) {
             val manager = WorkManager.getInstance(context)
             val requestBuilder = PeriodicWorkRequestBuilder<DailyTipNotificationWorker>(
-                Duration.ofDays(1)
+                repeatInterval = Duration.ofMinutes(1)
             )
 
             var workPolicy = ExistingPeriodicWorkPolicy.KEEP
 
             // Replace any enqueued work and expedite the request
             if (force) {
-                workPolicy = ExistingPeriodicWorkPolicy.REPLACE
+                workPolicy = ExistingPeriodicWorkPolicy.UPDATE
             }
 
             manager.enqueueUniquePeriodicWork(
@@ -52,6 +53,7 @@ class DailyTipNotificationWorker  @AssistedInject constructor(
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
         return try {
             notificationRepository.showDailyTipNotification()
