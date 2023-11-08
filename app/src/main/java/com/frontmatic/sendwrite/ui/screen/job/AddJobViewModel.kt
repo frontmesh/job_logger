@@ -50,7 +50,7 @@ class AddJobViewModel @Inject constructor(
                     type = JobEventType.APPLIED,
                     date = Date(date),
                     name = "Job Application",
-                    description = "Applied for job",
+                    description = "",
                     jobId = jobId,
                     url = null,
                 )

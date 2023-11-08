@@ -6,8 +6,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface JobLocalDataSource {
     fun getAllJobs(): Flow<List<Job>>
+
+    fun getAllJobsWithEvents(): Flow<List<JobAndEvents>>
     fun getAllJobsSortedByTitle(): Flow<List<Job>>
     fun getAllArchivedJobs(): Flow<List<Job>>
+
+    fun getAllArchivedJobsWithEvents(): Flow<List<JobAndEvents>>
     fun getById(id: Long): Flow<Job>
 
     fun getByIdWithEvents(id: Long): Flow<JobAndEvents>

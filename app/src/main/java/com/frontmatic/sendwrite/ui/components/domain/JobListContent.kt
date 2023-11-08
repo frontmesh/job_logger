@@ -7,12 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.frontmatic.sendwrite.local.model.Job
+import com.frontmatic.sendwrite.local.model.JobAndEvents
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 
 @Composable
 fun JobListContent(
-    jobs: List<Job>?,
-    onItemClick: (Job) -> Unit,
+    jobs: List<JobAndEvents>?,
+    onItemClick: (JobAndEvents) -> Unit,
     emptyContentMessage: String,
     emptyContentIcon: ImageVector,
     listCellBackground: Color
@@ -28,16 +29,16 @@ fun JobListContent(
         Column {
             LazyColumn() {
                 items(
-                    items = jobs!!,
+                    items = jobs,
                     key = { item -> item.id.toString() }
-                ) {
+                ) {job ->
                     ListCell(
-                        name = it.title,
-                        imageUrl = it.imageUrl,
+                        name = job.title,
+                        imageUrl = job.imageUrl,
 //                        trailingText = it..size,
                         listCellBackground = listCellBackground,
                         onClick = {
-                            onItemClick(it)
+                            onItemClick(job)
                         }
                     )
                 }

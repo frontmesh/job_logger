@@ -16,12 +16,20 @@ class JobLocalDataSourceImpl(database: SendWriteDatabase): JobLocalDataSource {
         return jobDao.getAllSortedByApplied()
     }
 
+    override fun getAllJobsWithEvents(): Flow<List<JobAndEvents>> {
+        return jobDao.getAllWithEvents()
+    }
+
     override fun getAllJobsSortedByTitle(): Flow<List<Job>> {
         return jobDao.getAll()
     }
 
     override fun getAllArchivedJobs(): Flow<List<Job>> {
         return jobDao.getAllArchived()
+    }
+
+    override fun getAllArchivedJobsWithEvents(): Flow<List<JobAndEvents>> {
+        return jobDao.getAllArchivedWithEvents()
     }
 
     override fun getById(id: Long): Flow<Job> {

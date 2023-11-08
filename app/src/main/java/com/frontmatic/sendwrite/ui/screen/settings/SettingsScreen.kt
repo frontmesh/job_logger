@@ -158,7 +158,10 @@ fun SettingsScreen(
                                 option = option,
                                 onClick = option.clickHandler
                             )
-                        is SettingsOption.Divider -> Divider()
+                        is SettingsOption.Divider -> Divider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.primaryContainer
+                        )
                     }
                 }
             }

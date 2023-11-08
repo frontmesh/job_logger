@@ -30,7 +30,7 @@ class DailyTipNotificationWorker  @AssistedInject constructor(
         fun enqueue(context: Context, force: Boolean = false) {
             val manager = WorkManager.getInstance(context)
             val requestBuilder = PeriodicWorkRequestBuilder<DailyTipNotificationWorker>(
-                repeatInterval = Duration.ofMinutes(1)
+                repeatInterval = Duration.ofDays(1)
             )
 
             var workPolicy = ExistingPeriodicWorkPolicy.KEEP

@@ -26,12 +26,14 @@ class HomeScreenViewModel @Inject constructor(
 
     private val _jobSortType = MutableStateFlow(JobSortType.APPLIED)
 
-    val jobs: StateFlow<List<Job>?> = _jobSortType.flatMapLatest {
-        when (it) {
-            JobSortType.APPLIED -> jobLocalDataSource.getAllJobs()
-            JobSortType.TITLE -> jobLocalDataSource.getAllJobsSortedByTitle()
-        }
-    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+//    val jobs: StateFlow<List<Job>?> = _jobSortType.flatMapLatest {
+//        when (it) {
+//            JobSortType.APPLIED -> jobLocalDataSource.getAllJobs()
+//            JobSortType.TITLE -> jobLocalDataSource.getAllJobsSortedByTitle()
+//        }
+//    }.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    val jobs = jobLocalDataSource.getAllJobsWithEvents().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val todayEvents = jobEventLocalDataSource
         .getTodayEvents().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())

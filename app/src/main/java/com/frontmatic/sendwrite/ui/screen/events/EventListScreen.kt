@@ -81,7 +81,8 @@ fun EventListScreen(
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          fontWeight = FontWeight.Medium,
+                                          color = MaterialTheme.colorScheme.tertiary,
+//                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis
                                       )
@@ -101,7 +102,8 @@ fun EventListScreen(
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          fontWeight = FontWeight.Medium,
+                                          color = MaterialTheme.colorScheme.tertiary,
+//                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis
                                       )

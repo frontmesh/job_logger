@@ -11,10 +11,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination
+@Destination(
+    style = DefaultTransitions::class,
+)
 @Composable
 fun ArchiveScreen(
     navigator: DestinationsNavigator,

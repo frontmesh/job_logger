@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.ui.components.domain
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,12 +26,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.ui.theme.Shape
 
 @Composable
 fun ListCell(
@@ -67,17 +70,22 @@ fun ListCell(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
+                            .size(42.dp)
                             .background(
-                                shape = CircleShape,
-                                color = iconBackground
-                            ),
+                                shape = Shape.medium,
+                                color = iconBackground,
+                            ).border(
+                                width = 1.dp,
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = AlphaDisabled),
+                                shape = Shape.medium,
+                            )
+                            .clip(Shape.medium),
                         contentAlignment = Alignment.Center
                     ) {
                         if (imageUrl != null) {
                             CoilAsyncImage(
                                 imageUrl = imageUrl,
-                                imageShape = RoundedCornerShape(MediumRadius),
+                                imageShape = Shape.medium,
                                 imageSize = 42.dp
                             )
                         } else if (icon != null) {
@@ -91,14 +99,15 @@ fun ListCell(
                             )
                         }
                     }
-                    Spacer(Modifier.size(8.dp))
+                    Spacer(Modifier.size(10.dp))
                     Text(
                         text = name,
-                        style = MaterialTheme.typography.titleSmall,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.W400,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.tertiary
                     )
                     Spacer(Modifier.size(8.dp))
 

@@ -13,6 +13,6 @@ class ArchiveViewModel @Inject() constructor(
     private val localDataSource: JobLocalDataSource
 ): ViewModel() {
 
-    val archivedJobs = localDataSource.getAllArchivedJobs()
+    val archivedJobs = localDataSource.getAllArchivedJobsWithEvents()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 }

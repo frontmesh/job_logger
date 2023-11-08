@@ -17,6 +17,10 @@ interface JobDao {
     fun getAll(): Flow<List<Job>>
 
     @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title ASC")
+    fun getAllWithEvents(): Flow<List<JobAndEvents>>
+
+
+    @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title ASC")
     fun getAllSortedByApplied(): Flow<List<Job>>
 
     @Transaction
@@ -28,6 +32,9 @@ interface JobDao {
 
     @Query("SELECT * FROM jobs WHERE archived = 1")
     fun getAllArchived(): Flow<List<Job>>
+
+    @Query("SELECT * FROM jobs WHERE archived = 1")
+    fun getAllArchivedWithEvents(): Flow<List<JobAndEvents>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(job: Job): Long
