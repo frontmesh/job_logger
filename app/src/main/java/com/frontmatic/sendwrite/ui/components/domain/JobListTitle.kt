@@ -16,13 +16,18 @@ import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 fun JobListTitle(
     title: String,
     description: String? = null,
-    padding: Dp = PAGE_PADDING
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(padding)
+            .padding(
+                top = 12.dp,
+                bottom = 6.dp,
+                start = PAGE_PADDING,
+                end = PAGE_PADDING
+            )
     ) {
         Text(
             text = title,

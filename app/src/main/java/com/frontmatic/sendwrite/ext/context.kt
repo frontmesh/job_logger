@@ -1,18 +1,16 @@
 package com.frontmatic.sendwrite.ext
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 
-fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
+//fun Context.findActivity(): Activity? = when (this) {
+//    is Activity -> this
+//    is ContextWrapper -> baseContext.findActivity()
+//    else -> null
+//}
 
 
 fun Context.hasNotificationPermission(): Boolean {

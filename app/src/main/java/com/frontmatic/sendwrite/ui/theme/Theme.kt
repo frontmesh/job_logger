@@ -38,6 +38,7 @@ val LightOrangeColorScheme = lightColorScheme(
     secondary = LightOrangeSecondary,
     secondaryContainer = LightOrangeSecondaryContainer,
     tertiary = LightOrangeTertiary,
+    tertiaryContainer = LightOrangeTertiaryContainer,
     surface = LightOrangePrimaryContainer,
     onSurface = Color.DarkGray,
 )
@@ -106,7 +107,8 @@ fun SendWriteTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+//            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = Color.Transparent.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

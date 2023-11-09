@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,6 +38,7 @@ fun ListCell(
     name: String,
     trailingText: String? = null,
     trailingContent: @Composable () -> Unit = {},
+    secondaryContent: @Composable (() -> Unit)? = null,
     listCellBackground: Color = MaterialTheme.colorScheme.primaryContainer,
     imageUrl: String? = null,
     icon: ImageVector? = null,
@@ -57,24 +55,32 @@ fun ListCell(
                 .fillMaxWidth()
                 .padding(horizontal = PAGE_PADDING)
                 .clip(shape)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                    shape = shape,
+                )
                 .clickable(onClick = onClick),
             shape = shape,
             color = listCellBackground
 
         ) {
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.padding(all = 16.dp)
-                ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = PAGE_PADDING, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Column {
                     Box(
                         modifier = Modifier
                             .size(42.dp)
                             .background(
                                 shape = Shape.medium,
                                 color = iconBackground,
-                            ).border(
+                            )
+                            .border(
                                 width = 1.dp,
                                 color = MaterialTheme.colorScheme.primary.copy(alpha = AlphaDisabled),
                                 shape = Shape.medium,
@@ -95,22 +101,41 @@ fun ListCell(
                                 modifier = Modifier
                                     .padding(4.dp)
                                     .size(42.dp),
-                                tint = MaterialTheme.colorScheme.secondary
+                                tint = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
-                    Spacer(Modifier.size(10.dp))
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.W400,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f),
-                        color = MaterialTheme.colorScheme.tertiary
-                    )
-                    Spacer(Modifier.size(8.dp))
+                }
+                Spacer(Modifier.size(10.dp))
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = name,
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.W400,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
 
+                    }
+                    if (secondaryContent != null) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        ) {
+                            secondaryContent()
+                        }
+                    }
+                }
+                Spacer(Modifier.size(8.dp))
+                Column {
                     if (trailingText != null) {
                         Text(
                             text = trailingText,
@@ -122,16 +147,6 @@ fun ListCell(
                     if (trailingContent != null) {
                         trailingContent()
                     }
-                }
-
-                Row {
-                    Spacer(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(color = MaterialTheme.colorScheme.secondary.copy(alpha = AlphaDisabled))
-                    )
-                    Divider(color = MaterialTheme.colorScheme.primary)
                 }
             }
 

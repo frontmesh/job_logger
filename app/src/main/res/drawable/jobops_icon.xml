@@ -3,13 +3,13 @@
     android:height="512dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
-  <path
-      android:pathData="M0,0h510v510h-510z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="4"
-      android:fillColor="#e2e3db"
-      android:strokeColor="#00000000"
-      android:strokeLineCap="round"/>
+<!--  <path-->
+<!--      android:pathData="M0,0h510v510h-510z"-->
+<!--      android:strokeLineJoin="round"-->
+<!--      android:strokeWidth="4"-->
+<!--      android:fillColor="#e2e3db"-->
+<!--      android:strokeColor="#00000000"-->
+<!--      android:strokeLineCap="round"/>-->
   <path
       android:pathData="M211.35,233.72l5.08,0l0,7.62l-5.08,0z"
       android:strokeLineJoin="round"

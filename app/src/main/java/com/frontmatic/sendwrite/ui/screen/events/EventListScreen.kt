@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -18,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +26,7 @@ import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.components.domain.ListCell
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
+import com.frontmatic.sendwrite.ui.theme.ICON_SMALL
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconAndDataForJobEventType
 import com.ramcosta.composedestinations.annotation.Destination
@@ -76,12 +77,13 @@ fun EventListScreen(
                                       Icon(
                                           imageVector = Icons.Rounded.DateRange,
                                           contentDescription = "Date",
-                                          tint = MaterialTheme.colorScheme.primary
+                                          tint = MaterialTheme.colorScheme.primary,
+                                          modifier = Modifier.size(ICON_SMALL)
                                       )
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          color = MaterialTheme.colorScheme.tertiary,
+                                          color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
 //                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis
@@ -97,12 +99,13 @@ fun EventListScreen(
                                       Icon(
                                           imageVector = Icons.Rounded.AccessTime,
                                           contentDescription = "Time",
-                                          tint = MaterialTheme.colorScheme.primary
+                                          tint = MaterialTheme.colorScheme.primary,
+                                          modifier = Modifier.size(ICON_SMALL)
                                       )
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          color = MaterialTheme.colorScheme.tertiary,
+                                          color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
 //                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis

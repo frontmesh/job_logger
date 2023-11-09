@@ -30,7 +30,7 @@ fun SectionSurface(
     color: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     border: BorderStroke? = null,
-    elevation: Dp = 2.dp,
+    elevation: Dp = 0.dp,
     content: @Composable () -> Unit
 ) {
     Box(

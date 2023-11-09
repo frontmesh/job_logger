@@ -38,8 +38,8 @@ fun ArchiveScreen(
 
         JobListContent(
             jobs = jobs,
-            listCellBackground = MaterialTheme.colorScheme.primaryContainer.copy(
-                alpha = 0.5f
+            listCellBackground = MaterialTheme.colorScheme.tertiaryContainer.copy(
+                alpha = 0.35f
             ),
             onItemClick = { item ->
                 navigator.navigate(

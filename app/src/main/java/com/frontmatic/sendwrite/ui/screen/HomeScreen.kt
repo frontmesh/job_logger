@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
@@ -95,12 +97,13 @@ fun HomeScreen(
                 )
             }
 
-            JobListTitle(
-                title = "All Jobs",
-                description = "You have ${jobs?.size ?: 0} saved jobs",
-            )
+
         }
 
+        JobListTitle(
+            title = "Active Jobs",
+            description = "You have ${jobs?.size ?: 0} saved jobs",
+        )
         val emptyContentMessage = """
             No active jobs. 
             Log your job application on a button below or share a link to this app.
@@ -113,7 +116,7 @@ fun HomeScreen(
             },
             emptyContentMessage = emptyContentMessage,
             emptyContentIcon = Icons.Filled.WorkOff,
-            listCellBackground = MaterialTheme.colorScheme.primaryContainer
+            listCellBackground = MaterialTheme.colorScheme.primaryContainer,
         )
     }
 
@@ -162,7 +165,7 @@ private fun JobCell(
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp),
-                        tint = MaterialTheme.colorScheme.primary.copy(alpha = AlphaHigh)
+                        tint = MaterialTheme.colorScheme.secondary.copy(alpha = AlphaHigh)
 
                     )
 
@@ -172,7 +175,7 @@ private fun JobCell(
                             fontSize = 8.sp,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                             modifier = Modifier.padding(top = 2.dp),
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.secondary
                         )
                     }
                 }
@@ -180,7 +183,7 @@ private fun JobCell(
                 Text(
                     text = taskCount,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
 
@@ -190,7 +193,7 @@ private fun JobCell(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.secondary,
                 )
             }
 
