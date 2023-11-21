@@ -1,7 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -11,6 +10,7 @@ import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.components.WebView
 import com.frontmatic.sendwrite.ui.screen.settings.components.NotificationsSection
 import com.frontmatic.sendwrite.ui.screen.settings.components.ThemesSection
+import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -47,6 +47,7 @@ fun SettingsChildScreen(
             updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled,
         )
         ChildPage.WEBSITE -> WebView(url = "https://www.jobops.app/")
+        ChildPage.PRIVACY -> WebView(url = "https://www.jobops.app/privacy")
         else -> {}
     }
 }

@@ -36,6 +36,7 @@ import com.frontmatic.sendwrite.BuildConfig
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.components.FancyIcon
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestination
+import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SectionSurface
@@ -44,12 +45,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
-enum class ChildPage {
-    NONE,
-    THEMES,
-    NOTIFICATIONS,
-    WEBSITE
-}
+
 sealed class SettingsOption {
     data class Option(
         val name: String,
@@ -105,8 +101,14 @@ fun setOptions(
         SettingsOption.Option(
             name = "Privacy Policy",
             icon = Icons.Filled.Fingerprint,
-            clickHandler = {},
-            childPage = ChildPage.NONE
+            clickHandler = {
+                navigator.navigate(
+                    SettingsChildScreenDestination(
+                        ChildPage.PRIVACY
+                    )
+                )
+            },
+            childPage = ChildPage.PRIVACY
         ),
         SettingsOption.Option(
             name = "Terms of Use",

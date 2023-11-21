@@ -1,11 +1,9 @@
 package com.frontmatic.sendwrite.ui.components
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.DropdownMenu
@@ -24,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -42,10 +39,9 @@ import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestin
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsScreenDestination
 import com.frontmatic.sendwrite.ui.screen.events.EventListViewModel
 import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
-import com.frontmatic.sendwrite.ui.screen.job.JobDetailState
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
-import com.frontmatic.sendwrite.ui.screen.settings.ChildPage
 import com.frontmatic.sendwrite.ui.screen.settings.SettingsChildViewModel
+import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -129,6 +125,7 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
             when (childPage) {
                 ChildPage.THEMES -> "Themes"
                 ChildPage.NOTIFICATIONS -> "Notifications"
+                ChildPage.PRIVACY -> "Privacy Policy"
                 else -> "Settings"
             }
         }
