@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +56,7 @@ fun AddJobContent(
     onCancel: () -> Unit = {},
     content : @Composable () -> Unit = {}
 ) {
-    var applied by remember { mutableStateOf(false) }
+    var applied by rememberSaveable { mutableStateOf(false) }
     val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
 
     Scaffold(
@@ -141,7 +142,7 @@ fun AddJobContent(
                     OptionRow(
                         modifier = Modifier.padding(top = 16.dp),
                         label = "Applied",
-                        enabled = false,
+                        enabled = applied,
                         onToggle = { value -> applied = value }
                     )
 

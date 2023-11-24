@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,16 +34,16 @@ fun AddJobScreen(
     viewModel: AddJobViewModel = hiltViewModel(),
 ) {
 
-    var job: OpenGraphResult? by remember { mutableStateOf(null) }
-    val topBarTitle = job?.let { it.title?.takeIf {
+    var job: OpenGraphResult? by rememberSaveable { mutableStateOf(null) }
+    val topBarTitle = job?.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
-    } } ?: stringResource(R.string.add_a_job)
+    } ?: stringResource(R.string.add_a_job)
     val datePickerState = rememberDatePickerState()
 
     val context = LocalContext.current as Activity
 
-    var url by remember { mutableStateOf("") }
-    var urlHasError by remember {
+    var url by rememberSaveable { mutableStateOf("") }
+    var urlHasError by rememberSaveable {
         mutableStateOf(false)
     }
 
@@ -59,12 +60,16 @@ fun AddJobScreen(
         datePickerState = datePickerState
     ) {
         Text(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
             text = "Enter a URL of job posting you wish to track"
         )
 
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 16.dp),
             label = { Text("Enter Job URL") },
             isError = urlHasError,
             value = url,
@@ -82,7 +87,9 @@ fun AddJobScreen(
         when (val jobState = viewModel.openGraphUrlState) {
             is OpenGraphUrlState.Loading -> {
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
                     text = "Loading..."
                 )
             }
@@ -91,7 +98,9 @@ fun AddJobScreen(
             }
             is OpenGraphUrlState.Error -> {
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
                     text = "Error loading job details"
                 )
             }

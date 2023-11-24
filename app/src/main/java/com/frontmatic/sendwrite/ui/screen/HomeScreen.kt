@@ -147,7 +147,7 @@ private fun JobCell(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
-                    .padding(all = 16.dp)
+                    .padding(top = 16.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
                     .fillMaxWidth()
             ) {
                 Box(

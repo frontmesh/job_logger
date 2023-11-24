@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Event
@@ -31,6 +34,7 @@ import com.frontmatic.sendwrite.local.model.JobAndEvents
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.theme.ICON_SMALL
+import com.frontmatic.sendwrite.ui.theme.topBottomFade
 
 @Composable
 fun JobListContent(
@@ -41,6 +45,8 @@ fun JobListContent(
     listCellBackground: Color,
     modifier: Modifier = Modifier,
 ) {
+    val lazyListState = rememberLazyListState()
+
     if (jobs != null && jobs.isEmpty()) {
         EmptyContent(
             icon = emptyContentIcon,
@@ -48,15 +54,13 @@ fun JobListContent(
         )
     }
     if (!jobs.isNullOrEmpty()){
-
-
         Column() {
-            val topFade = Brush.verticalGradient(0f to Color.Transparent, 0.3f to Color.White)
-            val topBottomFade = Brush.verticalGradient(0f to Color.Transparent, 0.05f to Color.White, 0.95f to Color.White, 1f to Color.Transparent)
-
             LazyColumn(
+                state = lazyListState,
                 modifier = modifier
-                    .fadingEdge(topBottomFade)
+                    .fadingEdge(
+                        lazyListState = lazyListState
+                    )
                     .background(Color.Transparent)
                     .fillMaxSize()
             ) {

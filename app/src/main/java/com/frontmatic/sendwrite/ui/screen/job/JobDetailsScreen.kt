@@ -3,17 +3,21 @@ package com.frontmatic.sendwrite.ui.screen.job
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,11 +37,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.ext.fadingEdge
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.components.timeline.CircleParametersDefaults
 import com.frontmatic.sendwrite.ui.components.timeline.LineParametersDefaults
@@ -52,6 +59,9 @@ import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.ui.theme.Shape
+import com.frontmatic.sendwrite.ui.theme.topBottomFade
+import com.frontmatic.sendwrite.ui.theme.topBottomLightFade
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
 import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJetLimeItem
 import com.frontmatic.sendwrite.util.LocalSnackbar
@@ -180,9 +190,9 @@ fun JobDetailsScreen(
         )
     }
 
-    Column(
-    ) {
+    Column {
         val uriHandler = LocalUriHandler.current
+        val lazyListState = rememberLazyListState()
 
         JobDetailsCard(
             text = job?.description ?: "",
@@ -208,7 +218,12 @@ fun JobDetailsScreen(
 
             state.job?.let {
                 LazyColumn(
-                    modifier = Modifier.padding(all = PAGE_PADDING)
+                    state = lazyListState,
+                    modifier = Modifier
+                        .padding(all = PAGE_PADDING)
+                        .fadingEdge(lazyListState = lazyListState)
+                        .background(Color.Transparent)
+                        .fillMaxSize()
                 ) {
                     itemsIndexed(
                         items = it.events,
@@ -243,7 +258,13 @@ fun JobDetailsScreen(
                             circleParameters = circleParameters,
                             lineParameters = lineParameters,
                         ) { modifier ->
-                            MessageBubble(modifier) {
+                            MessageBubble(
+                                modifier = modifier.border(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                                    shape = Shape.medium,
+                                )
+                            ) {
                                 Column(
                                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
                                     verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -261,7 +282,8 @@ fun JobDetailsScreen(
                                     Row(
                                         modifier = Modifier
                                             .wrapContentSize(),
-                                        verticalAlignment = Alignment.CenterVertically,
+                                        verticalAlignment = Alignment.Top,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         item.formatFullDate?.let {
                                             TimeChipContent(text = it, selected = isLast)

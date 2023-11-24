@@ -38,6 +38,7 @@ import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.screen.job.TimeChipContent
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
+import com.frontmatic.sendwrite.ui.theme.Shape
 
 enum class TimelineNodePosition {
     FIRST,
@@ -213,7 +214,7 @@ fun MessageBubble(
     Card(
         modifier = modifier
             .fillMaxWidth(),
-//            .height(100.dp),
+        shape = Shape.medium,
         colors = CardDefaults.cardColors(
             containerColor = containerColor
         )

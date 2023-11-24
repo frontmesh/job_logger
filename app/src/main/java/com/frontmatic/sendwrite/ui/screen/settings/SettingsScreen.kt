@@ -11,11 +11,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.DataObject
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.PrivacyTip
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -43,7 +41,6 @@ import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.frontmatic.sendwrite.ui.theme.Shape
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-
 
 
 sealed class SettingsOption {
@@ -110,24 +107,24 @@ fun setOptions(
             },
             childPage = ChildPage.PRIVACY
         ),
-        SettingsOption.Option(
-            name = "Terms of Use",
-            icon = Icons.Filled.PrivacyTip,
-            clickHandler = {},
-            childPage = ChildPage.NONE
-        ),
+//        SettingsOption.Option(
+//            name = "Terms of Use",
+//            icon = Icons.Filled.PrivacyTip,
+//            clickHandler = {},
+//            childPage = ChildPage.NONE
+//        ),
         SettingsOption.Option(
             name = "Rate the app",
             icon = Icons.Filled.Star,
             clickHandler = {},
             childPage = ChildPage.NONE
         ),
-        SettingsOption.Option(
-            name = "Data export/import",
-            icon = Icons.Default.DataObject,
-            clickHandler = {},
-            childPage = ChildPage.NONE
-        ),
+//        SettingsOption.Option(
+//            name = "Data export/import",
+//            icon = Icons.Default.DataObject,
+//            clickHandler = {},
+//            childPage = ChildPage.NONE
+//        ),
     )
 }
 

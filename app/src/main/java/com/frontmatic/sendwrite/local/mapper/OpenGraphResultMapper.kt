@@ -13,6 +13,8 @@ fun OpenGraphResult.toJob(
         url = url!!,
         imageUrl = image!!,
 //        applied = if (applied) Date() else null,
-        archived = false
+        archived = false,
+        createdAt = System.currentTimeMillis(),
+        modifiedAt = System.currentTimeMillis()
     )
 }

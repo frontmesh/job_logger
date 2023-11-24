@@ -16,7 +16,7 @@ interface JobDao {
     @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title DESC")
     fun getAll(): Flow<List<Job>>
 
-    @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY title ASC")
+    @Query("SELECT * FROM jobs WHERE archived = 0 ORDER BY id DESC")
     fun getAllWithEvents(): Flow<List<JobAndEvents>>
 
 
@@ -37,10 +37,17 @@ interface JobDao {
     fun getAllArchivedWithEvents(): Flow<List<JobAndEvents>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(job: Job): Long
+    fun insert(job: Job): Long {
+        return insert(job.apply{
+            createdAt = System.currentTimeMillis()
+            modifiedAt = System.currentTimeMillis()
+        })
+    }
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(job: Job): Int
+    fun update(job: Job): Int {
+        return update(job.apply { modifiedAt = System.currentTimeMillis() })
+    }
 
     @Delete(entity = Job::class)
     fun delete(job: Job): Int

@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.local.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -12,4 +13,7 @@ data class Job(
     val url: String,
     val imageUrl: String,
     val archived: Boolean,
+
+    @ColumnInfo(name = "created_at") var createdAt: Long?,
+    @ColumnInfo(name = "modified_at") var modifiedAt: Long?
 ) 

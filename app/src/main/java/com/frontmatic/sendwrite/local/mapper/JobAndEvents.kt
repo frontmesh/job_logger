@@ -10,6 +10,8 @@ fun JobAndEvents.toJob(): Job {
         description = description,
         url = url,
         imageUrl = imageUrl,
-        archived = archived
+        archived = archived,
+        createdAt = System.currentTimeMillis(),
+        modifiedAt = System.currentTimeMillis()
     )
 }
