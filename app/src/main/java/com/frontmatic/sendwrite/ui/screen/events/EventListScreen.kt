@@ -84,7 +84,6 @@ fun EventListScreen(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
                                           color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
-//                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis
                                       )

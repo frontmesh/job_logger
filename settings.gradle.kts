@@ -14,6 +14,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SendWrite"
+rootProject.name = "JobOps"
 include(":app")
  

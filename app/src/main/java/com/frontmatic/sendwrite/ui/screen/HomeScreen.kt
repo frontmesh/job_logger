@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,7 +33,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
@@ -44,6 +44,7 @@ import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -58,9 +59,14 @@ fun HomeScreen(
     homeScreenViewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val jobs by homeScreenViewModel.jobs.collectAsState(null)
+    val lazyListState = rememberLazyListState()
 
     val todayEvents by homeScreenViewModel.todayEvents.collectAsState(emptyList())
     val weeklyEvents by homeScreenViewModel.weeklyEvents.collectAsState(emptyList())
+
+    LaunchedEffect(jobs?.size) {
+        lazyListState.scrollToItem(0)
+    }
 
     Column {
         Column {
@@ -110,6 +116,7 @@ fun HomeScreen(
         """.trimIndent()
 
         JobListContent(
+            lazyListState = lazyListState,
             jobs = jobs,
             onItemClick = { item ->
                 navigator.navigate(JobDetailsScreenDestination(item.id!!))
@@ -134,13 +141,12 @@ private fun JobCell(
 ) {
     val shape = RoundedCornerShape(size = MediumRadius)
 
-    Surface(
+    SectionSurface(
         modifier = modifier
             .clip(shape)
             .clickable(onClick = onClick),
         shape = shape,
         color = MaterialTheme.colorScheme.primaryContainer
-
     ) {
         Column {
             Row(
@@ -155,8 +161,7 @@ private fun JobCell(
                         .size(34.dp)
                         .background(
                             shape = CircleShape,
-                            color =
-                            MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.background
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -188,7 +193,7 @@ private fun JobCell(
             }
 
             Spacer(Modifier.height(8.dp))
-            Row (modifier = Modifier
+            Row(modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)){
                 Text(
                     text = title,

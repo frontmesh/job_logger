@@ -35,7 +35,7 @@ fun SectionSurface(
 ) {
     Box(
         modifier = modifier
-            .shadow(elevation = elevation, shape = shape, clip = false)
+            .shadow(elevation = elevation, shape = shape, clip = true)
             .zIndex(elevation.value)
             .then(if (border != null) Modifier.border(border, shape) else Modifier)
             .background(

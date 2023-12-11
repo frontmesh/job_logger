@@ -33,13 +33,15 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isDebuggable = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
     }
+
 
     compileOptions {
 //        sourceCompatibility = JavaVersion.VERSION_1_8
@@ -120,6 +122,9 @@ dependencies {
 
     // Work Manager
     implementation(libs.androidx.work.runtime.ktx)
+
+    // App Store Review
+    implementation(libs.review.ktx)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

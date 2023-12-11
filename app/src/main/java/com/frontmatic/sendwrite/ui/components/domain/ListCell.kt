@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
+import com.frontmatic.sendwrite.ui.theme.DividerAlpha
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
@@ -57,7 +58,7 @@ fun ListCell(
                 .clip(shape)
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                    color = MaterialTheme.colorScheme.primary.copy(DividerAlpha),
                     shape = shape,
                 )
                 .clickable(onClick = onClick),
@@ -121,7 +122,7 @@ fun ListCell(
                             fontWeight = FontWeight.W400,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = MaterialTheme.colorScheme.secondary
                         )
 
                     }
@@ -144,9 +145,7 @@ fun ListCell(
                         )
                     }
 
-                    if (trailingContent != null) {
-                        trailingContent()
-                    }
+                    trailingContent()
                 }
             }
 

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -37,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -60,8 +58,6 @@ import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
-import com.frontmatic.sendwrite.ui.theme.topBottomFade
-import com.frontmatic.sendwrite.ui.theme.topBottomLightFade
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
 import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJetLimeItem
 import com.frontmatic.sendwrite.util.LocalSnackbar
@@ -83,15 +79,21 @@ fun JobDetailsScreen(
     val state by viewModel.state.collectAsState(JobDetailState())
     val snack = LocalSnackbar.current
     val job = state.job
+    val uriHandler = LocalUriHandler.current
+    val lazyListState = rememberLazyListState()
 
     LaunchedEffect(state.snackBarState) {
         if (state.snackBarState.showSnackbar) {
             snack.showSnackbar(
-                message = state.snackBarState!!.message,
+                message = state.snackBarState.message,
             )
 
             viewModel.resetSnackBar()
         }
+    }
+
+    LaunchedEffect(job?.events?.size) {
+        job?.events?.size?.minus(1)?.let { lazyListState.scrollToItem(it) }
     }
 
 
@@ -121,12 +123,11 @@ fun JobDetailsScreen(
                 }
             },
             dismissButton = {
-                Box(
-                ) {
+                Box {
                     OutlinedButton(
                         onClick = { viewModel.toggleRemoveLastEventDialog(false) },
                     ) {
-                        Text("Cancel",)
+                        Text("Cancel")
                     }
                 }
             },
@@ -141,7 +142,7 @@ fun JobDetailsScreen(
             message = "Are you sure you want to delete your job application?",
             confirmButton = { Button(
                 onClick = {
-                    viewModel?.deleteJob()
+                    viewModel.deleteJob()
                     navigator.popBackStack()
                 },
             ) {
@@ -191,18 +192,20 @@ fun JobDetailsScreen(
     }
 
     Column {
-        val uriHandler = LocalUriHandler.current
-        val lazyListState = rememberLazyListState()
-
         JobDetailsCard(
             text = job?.description ?: "",
             onClick = {
                 job?.url?.let { uriHandler.openUri(it) }
             },
             modifier = Modifier.padding(PAGE_PADDING)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                    shape = Shape.medium,
+                )
         )
 
-        if (state.job != null && state.job?.events?.isNullOrEmpty() == false) {
+        if (job != null && job.events?.isNullOrEmpty() == false) {
             Row(
                 modifier = Modifier
                     .padding(all = PAGE_PADDING)
@@ -230,8 +233,8 @@ fun JobDetailsScreen(
                     ) { index, item ->
 
                         val isLast =
-                            it.events?.size?.minus(1) == index || it.events?.size == 1
-                        val isFirst = index == 0 && it.events?.size != 1
+                            it.events.size.minus(1) == index || it.events.size == 1
+                        val isFirst = index == 0 && it.events.size != 1
 
                         val circleParameters = CircleParametersDefaults.circleParameters(
                             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -371,10 +374,10 @@ fun JobDetailsCard(
 
 @Composable
 fun TimeChipContent(
+    modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
     icon: Boolean = true,
-    modifier: Modifier = Modifier
 ) {
     Row {
         if (icon) {

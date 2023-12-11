@@ -37,17 +37,10 @@ interface JobDao {
     fun getAllArchivedWithEvents(): Flow<List<JobAndEvents>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(job: Job): Long {
-        return insert(job.apply{
-            createdAt = System.currentTimeMillis()
-            modifiedAt = System.currentTimeMillis()
-        })
-    }
+    fun insert(job: Job): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(job: Job): Int {
-        return update(job.apply { modifiedAt = System.currentTimeMillis() })
-    }
+    fun update(job: Job): Int
 
     @Delete(entity = Job::class)
     fun delete(job: Job): Int

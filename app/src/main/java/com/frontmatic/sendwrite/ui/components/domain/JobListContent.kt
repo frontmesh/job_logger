@@ -1,19 +1,15 @@
 package com.frontmatic.sendwrite.ui.components.domain
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Event
@@ -21,23 +17,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import com.frontmatic.sendwrite.ext.fadingEdge
-import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobAndEvents
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.theme.ICON_SMALL
-import com.frontmatic.sendwrite.ui.theme.topBottomFade
 
 @Composable
 fun JobListContent(
+    lazyListState: LazyListState = rememberLazyListState(),
     jobs: List<JobAndEvents>?,
     onItemClick: (JobAndEvents) -> Unit,
     emptyContentMessage: String,
@@ -45,8 +37,6 @@ fun JobListContent(
     listCellBackground: Color,
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState = rememberLazyListState()
-
     if (jobs != null && jobs.isEmpty()) {
         EmptyContent(
             icon = emptyContentIcon,
@@ -54,7 +44,7 @@ fun JobListContent(
         )
     }
     if (!jobs.isNullOrEmpty()){
-        Column() {
+        Column {
             LazyColumn(
                 state = lazyListState,
                 modifier = modifier
@@ -104,13 +94,13 @@ fun JobListContent(
                                 Icon(
                                     imageVector = Icons.Filled.AccessTime,
                                     contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                                    tint = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f),
                                     modifier = Modifier.size(ICON_SMALL)
                                 )
                                 Text(
                                     text = it.dateToRelativeTime,
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
+                                    color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
                                 )
                             }
                         }

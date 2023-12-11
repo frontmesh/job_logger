@@ -11,6 +11,7 @@ destinations = "1.9.51"
 hiltWork = "1.1.0"
 javapoet = "1.13.0"
 opengraphparserPk = "2.5.6"
+reviewKtx = "2.0.1"
 room = "2.5.2"
 coil = "2.2.2"
 jetlime = "1.0.3"
@@ -60,6 +61,7 @@ opengraphparser = { group = "com.github.priyansh-kedia", name = "opengraphparser
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "reviewKtx" }
 
 [bundles]
 [plugins]

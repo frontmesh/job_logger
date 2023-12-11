@@ -46,7 +46,8 @@ val LightOrangeColorScheme = lightColorScheme(
 
 val DarkOrangeColorScheme = darkColorScheme(
     primary = DarkOrangePrimary,
-    secondary = LightOrangeTertiary,
+    onPrimary = DarkOrangeOnPrimary,
+    secondary = DarkOrangeSecondary,
     tertiary = DarkOrangeTertiary,
     surface = Color.DarkGray,
     onSurface = Color.LightGray,

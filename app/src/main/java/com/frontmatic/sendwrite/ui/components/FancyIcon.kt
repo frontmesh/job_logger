@@ -2,6 +2,7 @@ package com.frontmatic.sendwrite.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.NorthEast
 import androidx.compose.material3.Icon
@@ -25,14 +26,15 @@ fun FancyIcon(
     contentDescription: String?,
     iconColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
     circleColor: Color = MaterialTheme.colorScheme.primaryContainer,
-    iconSize: Dp = 32.dp
+    iconSize: Dp = 32.dp,
+    outerShape: CornerBasedShape = CircleShape
 ) {
 
     Surface(
         modifier = modifier
             .alpha(1f)
             .size(iconSize),
-        shape = CircleShape,
+        shape = outerShape,
         color = circleColor
     ) {
         Icon(

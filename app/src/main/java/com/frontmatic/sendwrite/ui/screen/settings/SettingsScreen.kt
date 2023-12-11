@@ -1,5 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
+import android.app.Activity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,59 +10,67 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Window
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.BuildConfig
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.components.FancyIcon
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestination
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
+import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
+import com.frontmatic.sendwrite.ui.theme.DividerAlpha
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.frontmatic.sendwrite.ui.theme.Shape
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
-sealed class SettingsOption {
-    data class Option(
-        val name: String,
-        val icon: ImageVector,
-        val clickHandler: () -> Unit = {},
-        val childPage: ChildPage
-    ) : SettingsOption()
+data class SettingsOption(
+    val name: String,
+    val icon: ImageVector,
+    val clickHandler: () -> Unit = {},
+    val childPage: ChildPage
+)
 
-    object Divider : SettingsOption()
-}
 
 fun setOptions(
     navigator: DestinationsNavigator,
+    onAppReview: () -> Unit
 ): List<SettingsOption> {
     return listOf(
-        SettingsOption.Option(
+        SettingsOption(
             name = "Select a theme",
-            icon = Icons.Filled.Star,
+            icon = Icons.Filled.Window,
             clickHandler = {
                 navigator.navigate(
                     SettingsChildScreenDestination(
@@ -70,7 +80,7 @@ fun setOptions(
             },
             childPage = ChildPage.THEMES
         ),
-        SettingsOption.Option(
+        SettingsOption(
             name = "Notifications",
             icon = Icons.Filled.Notifications,
             clickHandler = {
@@ -82,8 +92,7 @@ fun setOptions(
             },
             childPage = ChildPage.NOTIFICATIONS
         ),
-        SettingsOption.Divider,
-        SettingsOption.Option(
+        SettingsOption(
             name = "Website",
             icon = Icons.Filled.Link,
             clickHandler = {
@@ -95,7 +104,7 @@ fun setOptions(
             },
             childPage = ChildPage.WEBSITE
         ),
-        SettingsOption.Option(
+        SettingsOption(
             name = "Privacy Policy",
             icon = Icons.Filled.Fingerprint,
             clickHandler = {
@@ -107,19 +116,19 @@ fun setOptions(
             },
             childPage = ChildPage.PRIVACY
         ),
-//        SettingsOption.Option(
+//        SettingsOption(
 //            name = "Terms of Use",
 //            icon = Icons.Filled.PrivacyTip,
 //            clickHandler = {},
 //            childPage = ChildPage.NONE
 //        ),
-        SettingsOption.Option(
+        SettingsOption(
             name = "Rate the app",
             icon = Icons.Filled.Star,
-            clickHandler = {},
+            clickHandler = onAppReview,
             childPage = ChildPage.NONE
         ),
-//        SettingsOption.Option(
+//        SettingsOption(
 //            name = "Data export/import",
 //            icon = Icons.Default.DataObject,
 //            clickHandler = {},
@@ -134,11 +143,25 @@ fun setOptions(
 @Composable
 fun SettingsScreen(
     navigator: DestinationsNavigator,
-    viewModel: SettingsViewModel = hiltViewModel(),
+//    viewModel: SettingsViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current as Activity
+
+    val reviewManager = remember {
+        ReviewManagerFactory.create(context)
+    }
+
+    val reviewInfo = rememberReviewTask(reviewManager = reviewManager)
 
     val options = remember {
-        setOptions(navigator = navigator)
+        setOptions(
+            navigator = navigator,
+            onAppReview = {
+                reviewInfo?.let {
+                    reviewManager.launchReviewFlow(context, reviewInfo)
+                }
+            }
+        )
     }
 
     Column(
@@ -146,27 +169,27 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(all = PAGE_PADDING)
     ) {
-        SectionSurface(
-            color = MaterialTheme.colorScheme.primaryContainer,
-            shape = Shape.medium
+        Surface(
+            color = MaterialTheme.colorScheme.background,
+            shape = Shape.medium,
+            modifier = Modifier
+                .shadow(elevation = 2.dp, clip = true, shape = Shape.medium)
         ) {
             LazyColumn {
-                items(options) { option ->
-                    when (option) {
-                        is SettingsOption.Option ->
-                            OptionRow(
-                                option = option,
-                                onClick = option.clickHandler
-                            )
-                        is SettingsOption.Divider -> Divider(
+                itemsIndexed(options) { index, option ->
+                    OptionRow(
+                        option = option,
+                        onClick = option.clickHandler
+                    )
+                    if (index < options.size - 1) {
+                        Divider(
                             thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.primaryContainer
+                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = AlphaDisabled)
                         )
                     }
                 }
             }
         }
-
         AppVersion()
     }
 }
@@ -174,10 +197,13 @@ fun SettingsScreen(
 @Composable
 fun OptionRow(
     modifier: Modifier = Modifier,
-    option: SettingsOption.Option,
+    option: SettingsOption,
     onClick: () -> Unit
 ) {
-    Surface(onClick = onClick) {
+    Surface(
+        onClick = onClick,
+        color = MaterialTheme.colorScheme.primaryContainer
+    ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -189,7 +215,8 @@ fun OptionRow(
                 icon = option.icon,
                 contentDescription = null,
                 iconColor = MaterialTheme.colorScheme.secondary,
-                circleColor = MaterialTheme.colorScheme.secondaryContainer
+                circleColor = MaterialTheme.colorScheme.background,
+                outerShape = Shape.medium
             )
             Text(
                 modifier = Modifier
@@ -197,7 +224,7 @@ fun OptionRow(
                 text = option.name,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.secondary
             )
             Column(
                 modifier = Modifier
@@ -208,7 +235,7 @@ fun OptionRow(
                     Icon(
                         imageVector = Icons.Filled.ArrowForward,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.tertiary,
+                        tint = MaterialTheme.colorScheme.secondary,
                         modifier = Modifier
                             .size(24.dp)
                     )
@@ -219,7 +246,19 @@ fun OptionRow(
 }
 
 
+@Composable
+fun rememberReviewTask(reviewManager: ReviewManager): ReviewInfo? {
+    var reviewInfo: ReviewInfo? by remember {
+        mutableStateOf(null)
+    }
+    reviewManager.requestReviewFlow().addOnCompleteListener {
+        if (it.isSuccessful) {
+            reviewInfo = it.result
+        }
+    }
 
+    return reviewInfo
+}
 
 
 @Composable

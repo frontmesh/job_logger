@@ -13,8 +13,9 @@ val LightPurpleSurface = Color(0xFFF0F0FF)
 val LightPurplePrimaryContainer = Color(0xFFEDE9FF)
 
 val DarkOrangePrimary = Color(0xFFED7D31)
-
-val DarkOrangeTertiary = Color(0xFF4F4A45)
+val DarkOrangeOnPrimary = Color(0xFF694932)
+val DarkOrangeSecondary = Color(0xFFB1592D)
+val DarkOrangeTertiary = Color(0xFFFBC02D)
 
 
 val LightOrangePrimary = Color(0xFFB9662D)
@@ -22,8 +23,9 @@ val LightOrangePrimaryContainer = Color(0xFFF6F1EE)
 //val LightOrangeSecondary = Color(0xFF8F684B)
 //val LightOrangeSecondary = Color(0xFF6096B4)
 //val LightOrangeSecondary = Color(0xFF0E5572)
-val LightOrangeSecondary = Color(0xFF209273)
-val LightOrangeSecondaryContainer = Color(0xFFE6EEF3)
+//val LightOrangeSecondary = Color(0xFF209273)
+val LightOrangeSecondary = Color(0xFF703A00)
+val LightOrangeSecondaryContainer = Color(0xFFE0D2C1)
 val LightOrangeTertiary = Color(0xFF6C5F5B)
 //val LightOrangeTertiary = Color(0xFF6C5F5B)
 val LightOrangeTertiaryContainer = Color(0xFFEAD7BB)
