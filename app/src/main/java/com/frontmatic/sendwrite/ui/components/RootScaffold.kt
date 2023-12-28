@@ -53,11 +53,11 @@ fun RootScaffold(
     }
 }
 
-val Destination.shouldShowScaffoldElements get() =
-    when (this) {
-//        is AddJobScreenDestination -> false
-        else -> true
-    }
+val Destination.shouldShowScaffoldElements get() = true
+//    when (this) {
+////        is AddJobScreenDestination -> false
+//        else -> true
+//    }
 
 val Destination.shouldShowFloatingActionButton get() =
     when (this) {

@@ -132,9 +132,9 @@ fun AddJobContent(
 
                 if (job?.url?.isNotEmpty() == true) {
                     JobCard(
-                        title = job?.title ?: "",
-                        description = job?.description ?: "",
-                        imageUrl = job?.image ?: "",
+                        title = job.title ?: "",
+                        description = job.description ?: "",
+                        imageUrl = job.image ?: "",
                         isWorkshopStarred = false,
                         starPainterResource = Icons.Outlined.Star
                     )

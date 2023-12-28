@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
+import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.screen.job.AddJobIntentScreen
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
@@ -25,12 +26,13 @@ import java.util.regex.Pattern
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
-class ShareActivity: ComponentActivity(), OpenGraphCallback {
+class ShareActivity : ComponentActivity(), OpenGraphCallback {
 
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Aptabase.instance.initialize(this, "A-EU-9748382829");
         initIntent()
     }
 
@@ -51,7 +53,8 @@ class ShareActivity: ComponentActivity(), OpenGraphCallback {
     private fun initCompose(job: OpenGraphResult = OpenGraphResult()) {
         setContent {
             val windowSize = calculateWindowSizeClass(this).widthSizeClass
-            val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
+            // TODO: Look into this when creating a tablet version
+//            val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
 
             SendWriteTheme(
@@ -65,7 +68,7 @@ class ShareActivity: ComponentActivity(), OpenGraphCallback {
     }
 
     override fun onError(error: String) {
-        Log.e("ERROR TAG!!!!", "$error")
+        Aptabase.instance.trackEvent("OpenGraphError", mapOf("message" to error))
     }
 
     private fun initIntent() {
@@ -73,12 +76,13 @@ class ShareActivity: ComponentActivity(), OpenGraphCallback {
             if ("text/plain" == intent.type) {
                 val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
                 if (sharedText != null) {
-                    Log.d("ShareActivity", "sharedText: $sharedText")
+//                    Log.d("ShareActivity", "sharedText: $sharedText")
                     // Handle the share d text (LinkedIn job posting)
                     // Here, you can parse and process the shared content as needed.
                     val url = extractUrl(sharedText)
-                    Log.d("ShareActivity", "url: $url")
+//                    Log.d("ShareActivity", "url: $url")
                     if (url != null) {
+                        Aptabase.instance.trackEvent("OpenGraphUrl", mapOf("url" to url))
                         openGraphParser.parse(url)
                     }
                 }

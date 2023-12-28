@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
@@ -62,6 +63,7 @@ class AddJobViewModel @Inject constructor(
 
     fun parseUrl(url: String) {
         openGraphUrlState = OpenGraphUrlState.Loading
+        Aptabase.instance.trackEvent("OpenGraphUrl", mapOf("url" to url))
         openGraphParser.parse(url)
     }
 
@@ -75,6 +77,7 @@ class AddJobViewModel @Inject constructor(
 
     override fun onError(error: String) {
         openGraphUrlState = OpenGraphUrlState.Error(error)
+        Aptabase.instance.trackEvent("OpenGraphError", mapOf("message" to error))
     }
 
     override fun onPostResponse(openGraphResult: OpenGraphResult) {

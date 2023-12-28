@@ -31,3 +31,5 @@
 -dontnote okhttp3.**
 
 -keep class com.google.gson.stream.** { *; }
+
+-keep class org.jsoup.**

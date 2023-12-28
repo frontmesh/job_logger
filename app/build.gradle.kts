@@ -15,8 +15,8 @@ android {
         applicationId = "com.frontmatic.sendwrite"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -34,11 +34,12 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            isDebuggable = true
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
         }
     }
 
@@ -125,6 +126,9 @@ dependencies {
 
     // App Store Review
     implementation(libs.review.ktx)
+
+    // Tracking
+    implementation(libs.aptabase)
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

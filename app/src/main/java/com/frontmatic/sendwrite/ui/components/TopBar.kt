@@ -88,7 +88,7 @@ fun TopBar(
         },
 
         actions = {
-            destination.topBarActions(navBackStackEntry, navController)
+            destination.topBarActions(navBackStackEntry)
         }
     )
 }
@@ -135,7 +135,7 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
 }
 
 @Composable
-fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?, navController: NavHostController) {
+fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?) {
     when (this) {
         JobDetailsScreenDestination -> {
             val jobDetailsViewModel = navBackStackEntry?.let {

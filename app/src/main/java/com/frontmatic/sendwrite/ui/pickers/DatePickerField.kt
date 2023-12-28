@@ -58,7 +58,7 @@ fun DatePickerField(
         derivedStateOf {
             datePickerState.selectedDateMillis?.let {
                 Date(it).toFormattedString()
-            } ?: null
+            }
         }
     }
 
@@ -73,7 +73,7 @@ fun DatePickerField(
                 TextButton(
                     onClick = {
                         openDialog = false
-                        onSelect(datePickerState.selectedDateMillis ?: null)
+                        onSelect(datePickerState.selectedDateMillis)
                     },
                     enabled = confirmEnabled.value
                 ) {

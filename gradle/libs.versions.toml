@@ -7,6 +7,7 @@ androidxComposeBom = "2023.10.00"
 androidxComposeUi = "1.5.1"
 androidxLifecycle = "2.6.2"
 androidxDataStore = "1.0.0"
+aptabase = "0.0.6"
 destinations = "1.9.51"
 hiltWork = "1.1.0"
 javapoet = "1.13.0"
@@ -28,6 +29,7 @@ androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref =
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+aptabase = { module = "com.aptabase:aptabase", version.ref = "aptabase" }
 google-hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }

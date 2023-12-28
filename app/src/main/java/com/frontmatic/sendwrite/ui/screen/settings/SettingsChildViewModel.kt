@@ -76,7 +76,7 @@ class SettingsChildViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun testDailyTipsNotification() {
-        Log.d("SettingsChildViewModel", "testDailyTipsNotification: ")
+//        Log.d("SettingsChildViewModel", "testDailyTipsNotification: ")
         notificationRepository.showDailyTipNotification()
     }
 

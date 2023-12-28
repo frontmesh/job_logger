@@ -62,7 +62,7 @@ fun MultiFloatingActionButton(
                         item = item,
                         fabOption = fabOption,
                         onFabItemClicked = {
-                            item -> onFabItemClicked(item)
+                            fabItem -> onFabItemClicked(fabItem)
                             fabState.value = fabState.value.toggleValue()
                         }
                     )

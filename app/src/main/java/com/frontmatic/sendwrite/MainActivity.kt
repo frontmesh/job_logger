@@ -15,6 +15,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.components.ActionButton
 import com.frontmatic.sendwrite.ui.components.BottomNavBar
@@ -41,6 +42,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
+
+        // Tracking
+        Aptabase.instance.initialize(this, "A-EU-9748382829");
 
         setContent {
             val engine = rememberAnimatedNavHostEngine()
@@ -85,7 +89,6 @@ class MainActivity : ComponentActivity() {
                                     destination = destination,
                                     navBackStackEntry = navBackStackEntry,
 //                                    snackbarHostState = hostState,
-                                    navController = navController
                                 )
                             }
                         }
