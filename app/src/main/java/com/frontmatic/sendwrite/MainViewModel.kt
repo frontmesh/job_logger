@@ -12,4 +12,6 @@ class MainViewModel @Inject constructor(
 
     val appTheme = dataStoreSource.appThemeFlow()
 
+    val isOnboardingCompleted = dataStoreSource.isOnboardingCompleted()
+
 }

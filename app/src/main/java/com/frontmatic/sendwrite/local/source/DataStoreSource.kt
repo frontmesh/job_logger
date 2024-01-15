@@ -13,4 +13,7 @@ interface DataStoreSource {
     fun isDailyTipsNotificationEnabled(): Flow<Boolean>
     suspend fun updateIsDailyTipsNotificationEnabled(enabled: Boolean)
 
+    fun isOnboardingCompleted(): Flow<Boolean>
+    suspend fun updateIsOnboardingCompleted(completed: Boolean)
+
 }

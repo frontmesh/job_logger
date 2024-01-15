@@ -24,6 +24,7 @@ import com.frontmatic.sendwrite.ui.components.TopBar
 import com.frontmatic.sendwrite.ui.components.shouldShowFloatingActionButton
 import com.frontmatic.sendwrite.ui.components.shouldShowScaffoldElements
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
+import com.frontmatic.sendwrite.ui.screen.onboarding.OnboardingScreen
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.frontmatic.sendwrite.util.LocalSnackbar
 import com.frontmatic.sendwrite.util.LocalSnackbarContext
@@ -54,12 +55,19 @@ class MainActivity : ComponentActivity() {
 
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
 
+            val isOnboardingCompleted = viewModel.isOnboardingCompleted.collectAsState(initial = false)
+
             CompositionLocalProvider(
                 LocalSnackbar provides LocalSnackbarContext(hostState)
             ) {
                 SendWriteTheme(
                     appTheme = appTheme.value
                 ) {
+                    if (!isOnboardingCompleted.value) {
+                        OnboardingScreen()
+                        return@SendWriteTheme
+                    }
+
                     RootScaffold(
                         navController = navController,
                         startRoute = startRoute,
