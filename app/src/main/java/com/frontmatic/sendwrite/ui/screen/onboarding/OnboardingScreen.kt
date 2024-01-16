@@ -2,6 +2,7 @@ package com.frontmatic.sendwrite.ui.screen.onboarding
 
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -9,38 +10,48 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+
+val titles = listOf(
+    "Share and add jobs links with ease",
+    "Get notifications about important dates",
+    "Follow a job application timeline"
+)
+
+val descriptions = listOf(
+    "Share a desired job link from any mobile app or a website by pressing a share button and selecting JobOps app from the list.",
+    "Allow notifications, add interview and assignment due dates for a desired job that you are tracking to get notified.",
+    "Have a chronological view of each job application for easy tracking."
+)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen() {
 
-    val titles = listOf(
-        "Add or share jobs to your app",
-        "Get notified when a new job event happens",
-        "View your job application timeline"
-    )
 
-    val descriptions = listOf(
-        "It is easy to share any job link from any job board or website, or just simply copy and paste a job link.",
-        "Allow notifications and add due dates to a job event to get notified when a new job event happens.",
-        ""
-    )
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -48,14 +59,22 @@ fun OnboardingScreen() {
     )
 
     Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(bottom = 35.dp)
+            .fillMaxSize(),
         verticalArrangement = Arrangement.Center
     ) {
 
         HorizontalPager(
             state = pagerState,
         ) { currentPage ->
+
+            val textOpacity = animateFloatAsState(
+                targetValue = if (currentPage == pagerState.currentPage) 1f else 0f,
+                animationSpec = TweenSpec(durationMillis = 500),
+                label = ""
+            ).value
+
             Column(
                 modifier = Modifier
                     .wrapContentSize()
@@ -67,24 +86,80 @@ fun OnboardingScreen() {
                     text = titles[currentPage],
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .padding(bottom = 16.dp)
+                        .alpha(textOpacity)
                 )
                 Text(
                     text = descriptions[currentPage],
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .alpha(textOpacity)
                 )
             }
 
         }
+    }
+
+    OnboardingButtons(
+        pagerState = pagerState,
+    )
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun OnboardingButtons(pagerState: PagerState) {
+    val scope = rememberCoroutineScope()
+    val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp)
+    ) {
 
         PageIndicator(
             pageCount = titles.size,
             currentPage = pagerState.currentPage,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(16.dp)
         )
+
+        if (pagerState.currentPage > 0) {
+            TextButton(
+                modifier = Modifier.align(Alignment.BottomStart),
+                onClick = { scope.launch {
+                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                } }
+            ) { Text(text = "Back") }
+        }
+
+
+        if (!isLastPage) {
+            TextButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
+                }
+            ) {
+                Text(text = "Next")
+            }
+        } else {
+            OutlinedButton(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                onClick = { /*TODO*/ }
+            ) {
+                Text(text = "Get Started")
+            }
+        }
     }
 }
+
 
 @Composable
 fun PageIndicator(
@@ -92,10 +167,10 @@ fun PageIndicator(
     currentPage: Int,
     modifier: Modifier = Modifier,
 ) {
-
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
     ) {
         repeat(pageCount) {
             IndicatorDot(isSelected = it == currentPage)
@@ -123,5 +198,11 @@ fun IndicatorDot(isSelected: Boolean) {
                 color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
             )
     )
+}
 
+
+@Preview(showBackground = true)
+@Composable
+fun OnboardingScreenPreview() {
+    OnboardingScreen()
 }
