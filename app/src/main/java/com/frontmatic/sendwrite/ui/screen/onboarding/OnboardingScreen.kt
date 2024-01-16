@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
@@ -30,9 +31,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.lottie.compose.rememberLottieDynamicProperties
+import com.airbnb.lottie.compose.rememberLottieDynamicProperty
+import com.frontmatic.sendwrite.R
 import kotlinx.coroutines.launch
 
 val titles = listOf(
@@ -42,16 +52,15 @@ val titles = listOf(
 )
 
 val descriptions = listOf(
-    "Share a desired job link from any mobile app or a website by pressing a share button and selecting JobOps app from the list.",
+    "Share a desired job link from any mobile app or a website by pressing a share button and select JobOps app to handle the rest.",
     "Allow notifications, add interview and assignment due dates for a desired job that you are tracking to get notified.",
-    "Have a chronological view of each job application for easy tracking."
+    "See a timeline view of each job application event you have logged for overall effortless tracking."
 )
 
+val animations = listOf(R.raw.share_animation, R.raw.notifcation_animation, R.raw.timeline_animation)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen() {
-
-
 
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -68,7 +77,7 @@ fun OnboardingScreen() {
         HorizontalPager(
             state = pagerState,
         ) { currentPage ->
-
+            
             val textOpacity = animateFloatAsState(
                 targetValue = if (currentPage == pagerState.currentPage) 1f else 0f,
                 animationSpec = TweenSpec(durationMillis = 500),
@@ -82,6 +91,35 @@ fun OnboardingScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
+                
+                val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(animations[currentPage]))
+
+                val dynamicProperties = rememberLottieDynamicProperties(
+                    rememberLottieDynamicProperty(
+                        property = LottieProperty.COLOR,
+                        value = MaterialTheme.colorScheme.primary.toArgb(),
+                        keyPath = arrayOf(
+                            "**"
+                        ),
+                    ),
+                    rememberLottieDynamicProperty(
+                        property = LottieProperty.COLOR,
+                        value = MaterialTheme.colorScheme.primary.toArgb(),
+                        keyPath = arrayOf(
+                            "Stroke 1"
+                        )
+                    )
+                )
+
+                LottieAnimation(
+                    modifier = Modifier
+                        .size(400.dp),
+                    composition = composition,
+                    iterations = LottieConstants.IterateForever,
+                    dynamicProperties = dynamicProperties
+                )
+
+                
                 Text(
                     text = titles[currentPage],
                     textAlign = TextAlign.Center,
@@ -99,7 +137,6 @@ fun OnboardingScreen() {
                         .alpha(textOpacity)
                 )
             }
-
         }
     }
 
