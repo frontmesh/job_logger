@@ -1,8 +1,5 @@
 package com.frontmatic.sendwrite.ui.components
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -18,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,32 +51,20 @@ fun TopBar(
     navController: NavHostController
 ) {
 
-    var visibleTitle by remember { mutableStateOf(false) }
-
-    LaunchedEffect(destination) {
-        visibleTitle = true
-    }
-
     TopAppBar(
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-            AnimatedVisibility(
-                visible = visibleTitle,
-                enter = fadeIn(),
-                exit = fadeOut(),
-            ) {
-                    Text(
-                        text = destination.topBarTitle(navBackStackEntry),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.padding(start = 6.dp, end = 12.dp)
-                    )
-                }
+                Text(
+                    text = destination.topBarTitle(navBackStackEntry),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(start = 6.dp, end = 12.dp)
+                )
             }
         },
 
@@ -104,7 +88,7 @@ fun TopBar(
         },
 
         actions = {
-            destination.topBarActions(navBackStackEntry)
+            destination.TopBarActions(navBackStackEntry)
         }
     )
 }
@@ -151,7 +135,7 @@ fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
 }
 
 @Composable
-fun Destination.topBarActions(navBackStackEntry: NavBackStackEntry?) {
+fun Destination.TopBarActions(navBackStackEntry: NavBackStackEntry?) {
     when (this) {
         JobDetailsScreenDestination -> {
             val jobDetailsViewModel = navBackStackEntry?.let {
