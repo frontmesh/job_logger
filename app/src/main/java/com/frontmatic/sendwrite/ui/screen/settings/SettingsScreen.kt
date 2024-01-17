@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.AndroidUriHandler
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -60,7 +61,7 @@ data class SettingsOption(
 
 fun setOptions(
     navigator: DestinationsNavigator,
-    onAppReview: () -> Unit
+    localUriHandler: AndroidUriHandler
 ): List<SettingsOption> {
     return listOf(
         SettingsOption(
@@ -120,7 +121,9 @@ fun setOptions(
         SettingsOption(
             name = "Rate the app",
             icon = Icons.Filled.Star,
-            clickHandler = onAppReview,
+            clickHandler = {
+                localUriHandler.openUri("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
+            },
             childPage = ChildPage.NONE
         ),
 //        SettingsOption(
@@ -151,11 +154,7 @@ fun SettingsScreen(
     val options = remember {
         setOptions(
             navigator = navigator,
-            onAppReview = {
-                reviewInfo?.let {
-                    reviewManager.launchReviewFlow(context, reviewInfo)
-                }
-            }
+            localUriHandler = AndroidUriHandler(context),
         )
     }
 

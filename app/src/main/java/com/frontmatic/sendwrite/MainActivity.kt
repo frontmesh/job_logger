@@ -61,8 +61,6 @@ class MainActivity : ComponentActivity() {
 
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
 
-
-
             CompositionLocalProvider(
                 LocalSnackbar provides LocalSnackbarContext(hostState)
             ) {
