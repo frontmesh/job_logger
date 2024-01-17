@@ -1,7 +1,6 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
 import android.app.Activity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,9 +43,7 @@ import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestin
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
-import com.frontmatic.sendwrite.ui.theme.DividerAlpha
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
-import com.frontmatic.sendwrite.ui.theme.SectionSurface
 import com.frontmatic.sendwrite.ui.theme.Shape
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
@@ -54,14 +51,12 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-
 data class SettingsOption(
     val name: String,
     val icon: ImageVector,
     val clickHandler: () -> Unit = {},
     val childPage: ChildPage
 )
-
 
 fun setOptions(
     navigator: DestinationsNavigator,

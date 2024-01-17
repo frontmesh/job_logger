@@ -14,6 +14,7 @@ import com.frontmatic.sendwrite.ui.screen.appCurrentDestinationAsState
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
+import com.frontmatic.sendwrite.ui.screen.destinations.OnboardingScreenDestination
 import com.frontmatic.sendwrite.ui.screen.startAppDestination
 import com.ramcosta.composedestinations.spec.Route
 
@@ -53,11 +54,11 @@ fun RootScaffold(
     }
 }
 
-val Destination.shouldShowScaffoldElements get() = true
-//    when (this) {
-////        is AddJobScreenDestination -> false
-//        else -> true
-//    }
+val Destination.shouldShowScaffoldElements get() =
+    when (this) {
+        is OnboardingScreenDestination -> false
+        else -> true
+    }
 
 val Destination.shouldShowFloatingActionButton get() =
     when (this) {

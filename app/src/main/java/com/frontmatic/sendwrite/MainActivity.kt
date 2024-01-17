@@ -11,10 +11,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.components.ActionButton
@@ -24,13 +27,15 @@ import com.frontmatic.sendwrite.ui.components.TopBar
 import com.frontmatic.sendwrite.ui.components.shouldShowFloatingActionButton
 import com.frontmatic.sendwrite.ui.components.shouldShowScaffoldElements
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
-import com.frontmatic.sendwrite.ui.screen.onboarding.OnboardingScreen
+import com.frontmatic.sendwrite.ui.screen.appCurrentDestinationAsState
+import com.frontmatic.sendwrite.ui.screen.destinations.OnboardingScreenDestination
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.frontmatic.sendwrite.util.LocalSnackbar
 import com.frontmatic.sendwrite.util.LocalSnackbarContext
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -49,13 +54,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val engine = rememberAnimatedNavHostEngine()
+            val isOnboardingCompleted by viewModel.isOnboardingCompleted.collectAsState(true)
             val navController = engine.rememberNavController()
-            val startRoute = NavGraphs.root.startRoute
+            val startRoute = if (isOnboardingCompleted) NavGraphs.root.startRoute else OnboardingScreenDestination
             val hostState = remember { SnackbarHostState() }
 
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
 
-            val isOnboardingCompleted = viewModel.isOnboardingCompleted.collectAsState(initial = false)
+
 
             CompositionLocalProvider(
                 LocalSnackbar provides LocalSnackbarContext(hostState)
@@ -63,10 +69,6 @@ class MainActivity : ComponentActivity() {
                 SendWriteTheme(
                     appTheme = appTheme.value
                 ) {
-                    if (!isOnboardingCompleted.value) {
-                        OnboardingScreen()
-                        return@SendWriteTheme
-                    }
 
                     RootScaffold(
                         navController = navController,
@@ -108,12 +110,36 @@ class MainActivity : ComponentActivity() {
                             DestinationsNavHost(
                                 navController = navController,
                                 engine = engine,
-                                navGraph = NavGraphs.root
+                                navGraph = NavGraphs.root,
+                                startRoute = startRoute
+                            )
+
+                            ShowOnbardingFlowIfNotCompleted(
+                                isOnboardingCompleted = isOnboardingCompleted,
+                                navController = navController
                             )
                         }
                     }
+
+
                 }
             }
+        }
+    }
+}
+
+
+@Composable
+fun ShowOnbardingFlowIfNotCompleted(
+    isOnboardingCompleted: Boolean,
+    navController: NavController
+) {
+
+    val currentDestination by navController.appCurrentDestinationAsState()
+
+    if (!isOnboardingCompleted && currentDestination != OnboardingScreenDestination) {
+        navController.navigate(OnboardingScreenDestination) {
+            launchSingleTop = true
         }
     }
 }

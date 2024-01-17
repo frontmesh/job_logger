@@ -1,8 +1,16 @@
 package com.frontmatic.sendwrite.ui.screen.onboarding
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -25,6 +33,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,8 +42,8 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -43,11 +52,17 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
 import com.frontmatic.sendwrite.R
+import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
+import com.frontmatic.sendwrite.ui.screen.onboarding.components.CompanyLogoAnimation
+import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
+
 val titles = listOf(
-    "Share and add jobs links with ease",
-    "Get notifications about important dates",
+    "Add job links with ease",
+    "Get notified about important dates",
     "Follow a job application timeline"
 )
 
@@ -59,9 +74,12 @@ val descriptions = listOf(
 
 val animations = listOf(R.raw.share_animation, R.raw.notifcation_animation, R.raw.timeline_animation)
 @OptIn(ExperimentalFoundationApi::class)
+@Destination
 @Composable
-fun OnboardingScreen() {
-
+fun OnboardingScreen(
+    navigator: DestinationsNavigator,
+    viewModel: OnboardingViewModel = hiltViewModel(),
+) {
     val pagerState = rememberPagerState(
         initialPage = 0,
         pageCount = { titles.size },
@@ -77,9 +95,10 @@ fun OnboardingScreen() {
         HorizontalPager(
             state = pagerState,
         ) { currentPage ->
+            val isCurrentPage = pagerState.currentPage == currentPage
             
             val textOpacity = animateFloatAsState(
-                targetValue = if (currentPage == pagerState.currentPage) 1f else 0f,
+                targetValue = if (isCurrentPage) 1f else 0f,
                 animationSpec = TweenSpec(durationMillis = 500),
                 label = ""
             ).value
@@ -111,50 +130,86 @@ fun OnboardingScreen() {
                     )
                 )
 
-                LottieAnimation(
-                    modifier = Modifier
-                        .size(400.dp),
-                    composition = composition,
-                    iterations = LottieConstants.IterateForever,
-                    dynamicProperties = dynamicProperties
-                )
+                AnimatedVisibility(
+                    visible = isCurrentPage,
+                    enter = slideInVertically() + fadeIn(),
+                    exit = fadeOut(),
+                ) {
+                    when (currentPage) {
+                        0 -> CompanyLogoAnimation()
+                        1 -> {
+                            val permissionLauncher = rememberLauncherForActivityResult(
+                                ActivityResultContracts.RequestPermission()
+                            ) {}
 
-                
-                Text(
-                    text = titles[currentPage],
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineMedium,
-                    modifier = Modifier
-                        .padding(bottom = 16.dp)
-                        .alpha(textOpacity)
-                )
-                Text(
-                    text = descriptions[currentPage],
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .alpha(textOpacity)
-                )
+                            LaunchedEffect(Unit) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                }
+                            }
+                        }
+
+                    }
+
+                    LottieAnimation(
+                        modifier = Modifier
+                            .size(400.dp),
+                        composition = composition,
+                        iterations = LottieConstants.IterateForever,
+                        dynamicProperties = dynamicProperties
+                    )
+                }
+
+                AnimatedVisibility(
+                    visible = isCurrentPage,
+                    enter = slideInVertically(
+                        initialOffsetY = { it / 2 },
+                    ),
+                    exit = fadeOut()
+                ) {
+                    Text(
+                        text = titles[currentPage],
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier
+                            .padding(bottom = 16.dp)
+                            .alpha(textOpacity)
+                    )
+                }
+                    Text(
+                        text = descriptions[currentPage],
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .alpha(textOpacity)
+                    )
             }
         }
     }
 
     OnboardingButtons(
         pagerState = pagerState,
+        onComplete = {
+            viewModel.completeOnboarding()
+            navigator.navigate(HomeScreenDestination)
+         },
     )
 
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun OnboardingButtons(pagerState: PagerState) {
+fun OnboardingButtons(
+    pagerState: PagerState,
+    onComplete: () -> Unit
+) {
     val scope = rememberCoroutineScope()
     val isLastPage = pagerState.currentPage == pagerState.pageCount - 1
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp)
+            .padding(horizontal = PAGE_PADDING, vertical = 30.dp)
     ) {
 
         PageIndicator(
@@ -189,7 +244,7 @@ fun OnboardingButtons(pagerState: PagerState) {
         } else {
             OutlinedButton(
                 modifier = Modifier.align(Alignment.BottomEnd),
-                onClick = { /*TODO*/ }
+                onClick = onComplete
             ) {
                 Text(text = "Get Started")
             }
@@ -232,14 +287,10 @@ fun IndicatorDot(isSelected: Boolean) {
             .width(width)
             .clip(CircleShape)
             .background(
-                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondary
+                color = if (isSelected)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.secondary
             )
     )
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun OnboardingScreenPreview() {
-    OnboardingScreen()
 }
