@@ -37,16 +37,21 @@ fun AddJobIntentScreen(
     val datePickerState = rememberDatePickerState()
     val context = LocalContext.current as Activity
 
+    val intent = Intent(context, MainActivity::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+
     AddJobContent(
         job = job,
         topBarTitle = topBarTitle,
         onJobSave = {
             viewModel.saveJob(job?.toJob(), datePickerState.selectedDateMillis)
-            context.startActivity(Intent(context, MainActivity::class.java))
+            context.startActivity(
+                intent
+            )
             context.finish()
         },
         onCancel = {
-            context.startActivity(Intent(context, MainActivity::class.java))
+            context.startActivity(intent)
             context.finish()
         },
         datePickerState = datePickerState

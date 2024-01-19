@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.AddActivity
 import com.frontmatic.sendwrite.MainActivity
 import com.frontmatic.sendwrite.ui.components.multifab.FabIcon
@@ -53,6 +54,7 @@ fun ActionButton(
                 containerColor = MaterialTheme.colorScheme.primary,
                 onClick = {
 //                    navController.navigate(AddJobScreenDestination())
+                    Aptabase.instance.trackEvent("clickAddJob", mapOf("clicked" to true))
                     context.startActivity(Intent(context, AddActivity::class.java))
 //                    context.finish()
 //                    scope.launch {

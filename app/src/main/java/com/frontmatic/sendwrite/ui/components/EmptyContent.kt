@@ -36,7 +36,6 @@ fun EmptyContent(alphaAnim: Float = 1f, icon: ImageVector, message: String) {
         mutableStateOf(false)
     }
 
-
     LaunchedEffect(key1 = true) {
         visibleContent = true
     }

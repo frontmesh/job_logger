@@ -3,13 +3,11 @@ package com.frontmatic.sendwrite
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import com.aptabase.Aptabase
@@ -82,7 +80,7 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
                     val url = extractUrl(sharedText)
 //                    Log.d("ShareActivity", "url: $url")
                     if (url != null) {
-                        Aptabase.instance.trackEvent("OpenGraphUrl", mapOf("url" to url))
+                        Aptabase.instance.trackEvent("ShareActivity", mapOf("OpenGraphUrlAdded" to url))
                         openGraphParser.parse(url)
                     }
                 }

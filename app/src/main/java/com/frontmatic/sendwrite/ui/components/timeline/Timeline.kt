@@ -1,5 +1,16 @@
 package com.frontmatic.sendwrite.ui.components.timeline
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -17,6 +28,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -29,6 +42,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.withTransform
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,8 +133,10 @@ object CircleParametersDefaults {
     )
 }
 
+
 @Composable
 fun TimelineNode(
+    modifier: Modifier = Modifier,
     position: TimelineNodePosition,
     icon: ImageVector? = null,
     iconColor: Color = MaterialTheme.colorScheme.primary,
@@ -134,74 +150,86 @@ fun TimelineNode(
         rememberVectorPainter(image = it)
     }
 
-    Box(
-        modifier = Modifier
-            .wrapContentSize()
-            .drawBehind {
-                val circleRadiusInPx = circleParameters.radius.toPx()
+    val scale = remember { Animatable(0f) }
 
-                lineParameters?.let {
-                    if (position != TimelineNodePosition.LAST) {
-                        drawLine(
-                            brush = it.brush,
-                            start = Offset(x = circleRadiusInPx, y = circleRadiusInPx * 2),
-                            end = Offset(x = circleRadiusInPx, y = this.size.height),
-                            strokeWidth = it.strokeWidth.toPx()
+    LaunchedEffect(Unit) {
+            scale.animateTo(1f, animationSpec = tween(300, easing = FastOutSlowInEasing))
+    }
+
+        Box(
+            modifier = modifier
+                .wrapContentSize()
+                .drawBehind {
+                    val circleRadiusInPx = circleParameters.radius.toPx()
+
+                    lineParameters?.let {
+                        if (position != TimelineNodePosition.LAST) {
+                            drawLine(
+                                brush = it.brush,
+                                start = Offset(x = circleRadiusInPx, y = (circleRadiusInPx * 2) * scale.value),
+                                end = Offset(x = circleRadiusInPx, y = this.size.height * scale.value),
+                                strokeWidth = it.strokeWidth.toPx()
+                            )
+                        }
+                    }
+
+                    drawCircle(
+                        color = circleParameters.backgroundColor,
+                        radius = circleRadiusInPx * scale.value,
+                        center = Offset(circleRadiusInPx, circleRadiusInPx)
+                    )
+
+                    circleParameters.stroke?.let { stroke ->
+                        val strokeWidthInPx = stroke.width.toPx()
+                        drawCircle(
+                            color = stroke.color,
+                            radius = (circleRadiusInPx - strokeWidthInPx / 2f) * scale.value,
+                            center = Offset(circleRadiusInPx, circleRadiusInPx),
+                            style = Stroke(width = strokeWidthInPx)
+                        )
+                    }
+
+                    iconPainter?.let { painter ->
+                        this.withTransform(
+                            transformBlock = {
+                                translate(
+                                    left = circleRadiusInPx - painter.intrinsicSize.width / 2f,
+                                    top = circleRadiusInPx - painter.intrinsicSize.height / 2f
+                                )
+                                scale(scale.value, scale.value, Offset(circleRadiusInPx, circleRadiusInPx))
+                            },
+                            drawBlock = {
+                                this.drawIntoCanvas {
+                                    with(painter) {
+                                        draw(
+                                            intrinsicSize,
+                                            colorFilter = ColorFilter.tint(
+                                                color = iconColor,
+                                                blendMode = BlendMode.SrcIn
+                                            )
+                                        )
+                                    }
+                                }
+                            }
                         )
                     }
                 }
-
-                drawCircle(
-                    color = circleParameters.backgroundColor,
-                    radius = circleRadiusInPx,
-                    center = Offset(circleRadiusInPx, circleRadiusInPx)
-                )
-
-                circleParameters.stroke?.let { stroke ->
-                    val strokeWidthInPx = stroke.width.toPx()
-                    drawCircle(
-                        color = stroke.color,
-                        radius = circleRadiusInPx - strokeWidthInPx / 2f,
-                        center = Offset(circleRadiusInPx, circleRadiusInPx),
-                        style = Stroke(width = strokeWidthInPx)
+        ) {
+            content(
+                Modifier
+                    .padding(
+                        start = circleParameters.radius * 2 + contentStartOffset,
+                        bottom = if (position != TimelineNodePosition.LAST) {
+                            spacerBetweenNodes
+                        } else {
+                            0.dp
+                        }
                     )
-                }
-
-                iconPainter?.let { painter ->
-                    this.withTransform(
-                        transformBlock = {
-                            translate(
-                                left = circleRadiusInPx - painter.intrinsicSize.width / 2f,
-                                top = circleRadiusInPx - painter.intrinsicSize.height / 2f
-                            )
-                        },
-                        drawBlock = {
-                            this.drawIntoCanvas {
-                                with(painter) {
-                                    draw(
-                                        intrinsicSize,
-                                        colorFilter = ColorFilter.tint(
-                                            color = iconColor,
-                                            blendMode = BlendMode.SrcIn
-                                        )
-                                    )
-                                }
-                            }
-                        })
-                }
-            }
-    ) {
-        content(
-            Modifier
-                .padding(
-                    start = circleParameters.radius * 2 + contentStartOffset,
-                    bottom = if (position != TimelineNodePosition.LAST) {
-                        spacerBetweenNodes
-                    } else {
-                        0.dp
+                    .graphicsLayer {
+                        scaleX = scale.value
+                        scaleY = scale.value
                     }
-                )
-        )
+            )
     }
 }
 

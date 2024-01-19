@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -57,6 +58,9 @@ class MainActivity : ComponentActivity() {
             val isOnboardingCompleted by viewModel.isOnboardingCompleted.collectAsState(true)
             val navController = engine.rememberNavController()
             val startRoute = if (isOnboardingCompleted) NavGraphs.root.startRoute else OnboardingScreenDestination
+
+
+            Log.d("StartRoute", "onCreate: $startRoute")
             val hostState = remember { SnackbarHostState() }
 
             val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)

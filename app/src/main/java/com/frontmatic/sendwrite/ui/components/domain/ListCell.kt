@@ -35,6 +35,7 @@ import com.frontmatic.sendwrite.ui.theme.Shape
 
 @Composable
 fun ListCell(
+    modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(size = MediumRadius),
     name: String,
     trailingText: String? = null,
@@ -48,8 +49,7 @@ fun ListCell(
 ) {
     // A simple box to draw the growing circle, which emanates from behind the icon
     Box(
-        Modifier
-            .padding(vertical = 6.dp)
+        modifier = modifier.padding(vertical = 6.dp)
     ) {
         Surface(
             modifier = Modifier

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -87,15 +86,15 @@ fun JobDetailsScreen(
             snack.showSnackbar(
                 message = state.snackBarState.message,
             )
-
             viewModel.resetSnackBar()
         }
     }
 
     LaunchedEffect(job?.events?.size) {
-        job?.events?.size?.minus(1)?.let { lazyListState.scrollToItem(it) }
+        job?.events?.size?.minus(1)?.let {
+            if (it >= 0) lazyListState.scrollToItem(it)
+        }
     }
-
 
     if (state.showAddNewEventDialog) {
         AddEventAlertDialog(
@@ -228,9 +227,10 @@ fun JobDetailsScreen(
                         .background(Color.Transparent)
                         .fillMaxSize()
                 ) {
-                    itemsIndexed(
-                        items = it.events,
-                    ) { index, item ->
+                    items(
+                        it.events.size,
+                    ) { index ->
+                        val item = it.events[index]
 
                         val isLast =
                             it.events.size.minus(1) == index || it.events.size == 1
@@ -248,6 +248,7 @@ fun JobDetailsScreen(
                         )
 
                         TimelineNode(
+                            modifier = Modifier,
                             position = when {
                                 isFirst -> TimelineNodePosition.FIRST
                                 isLast -> TimelineNodePosition.LAST
@@ -262,14 +263,16 @@ fun JobDetailsScreen(
                             lineParameters = lineParameters,
                         ) { modifier ->
                             MessageBubble(
-                                modifier = modifier.border(
-                                    width = 1.dp,
-                                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
-                                    shape = Shape.medium,
-                                )
+                                modifier = modifier
+                                    .border(
+                                        width = 1.dp,
+                                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                                        shape = Shape.medium,
+                                    )
                             ) {
                                 Column(
-                                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                                    modifier = Modifier
+                                        .padding(vertical = 8.dp, horizontal = 16.dp),
                                     verticalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
                                     Text(
@@ -304,7 +307,7 @@ fun JobDetailsScreen(
                     }
                 }
             }
-        } else if (state.job?.events?.isNullOrEmpty() == true) {
+        } else if (state.job?.events?.isEmpty() == true) {
             EmptyContent(
                 icon = Icons.Rounded.Event,
                 message = "This job application doesn't have any events logged. \n" +

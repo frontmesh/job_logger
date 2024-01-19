@@ -1,5 +1,7 @@
 package com.frontmatic.sendwrite.ui.components.domain
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.theme.ICON_SMALL
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JobListContent(
     lazyListState: LazyListState = rememberLazyListState(),
@@ -58,7 +61,11 @@ fun JobListContent(
                     items = jobs,
                     key = { item -> item.id.toString() }
                 ) {job ->
+
                     ListCell(
+                        modifier = Modifier.animateItemPlacement(
+                            animationSpec = tween(300)
+                        ),
                         name = job.title,
                         imageUrl = job.imageUrl,
                         listCellBackground = listCellBackground,

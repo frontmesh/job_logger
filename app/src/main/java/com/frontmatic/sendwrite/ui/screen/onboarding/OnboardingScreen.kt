@@ -51,6 +51,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.airbnb.lottie.compose.rememberLottieDynamicProperties
 import com.airbnb.lottie.compose.rememberLottieDynamicProperty
+import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.onboarding.components.CompanyLogoAnimation
@@ -193,6 +194,7 @@ fun OnboardingScreen(
         onComplete = {
             viewModel.completeOnboarding()
             navigator.navigate(HomeScreenDestination)
+
          },
     )
 
