@@ -1,16 +1,8 @@
 package com.frontmatic.sendwrite.ui.components.timeline
 
-import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -156,64 +148,64 @@ fun TimelineNode(
             scale.animateTo(1f, animationSpec = tween(300, easing = FastOutSlowInEasing))
     }
 
-        Box(
-            modifier = modifier
-                .wrapContentSize()
-                .drawBehind {
-                    val circleRadiusInPx = circleParameters.radius.toPx()
+    Box(
+        modifier = modifier
+            .wrapContentSize()
+            .drawBehind {
+                val circleRadiusInPx = circleParameters.radius.toPx()
 
-                    lineParameters?.let {
-                        if (position != TimelineNodePosition.LAST) {
-                            drawLine(
-                                brush = it.brush,
-                                start = Offset(x = circleRadiusInPx, y = (circleRadiusInPx * 2) * scale.value),
-                                end = Offset(x = circleRadiusInPx, y = this.size.height * scale.value),
-                                strokeWidth = it.strokeWidth.toPx()
-                            )
-                        }
-                    }
-
-                    drawCircle(
-                        color = circleParameters.backgroundColor,
-                        radius = circleRadiusInPx * scale.value,
-                        center = Offset(circleRadiusInPx, circleRadiusInPx)
-                    )
-
-                    circleParameters.stroke?.let { stroke ->
-                        val strokeWidthInPx = stroke.width.toPx()
-                        drawCircle(
-                            color = stroke.color,
-                            radius = (circleRadiusInPx - strokeWidthInPx / 2f) * scale.value,
-                            center = Offset(circleRadiusInPx, circleRadiusInPx),
-                            style = Stroke(width = strokeWidthInPx)
-                        )
-                    }
-
-                    iconPainter?.let { painter ->
-                        this.withTransform(
-                            transformBlock = {
-                                translate(
-                                    left = circleRadiusInPx - painter.intrinsicSize.width / 2f,
-                                    top = circleRadiusInPx - painter.intrinsicSize.height / 2f
-                                )
-                                scale(scale.value, scale.value, Offset(circleRadiusInPx, circleRadiusInPx))
-                            },
-                            drawBlock = {
-                                this.drawIntoCanvas {
-                                    with(painter) {
-                                        draw(
-                                            intrinsicSize,
-                                            colorFilter = ColorFilter.tint(
-                                                color = iconColor,
-                                                blendMode = BlendMode.SrcIn
-                                            )
-                                        )
-                                    }
-                                }
-                            }
+                lineParameters?.let {
+                    if (position != TimelineNodePosition.LAST) {
+                        drawLine(
+                            brush = it.brush,
+                            start = Offset(x = circleRadiusInPx, y = (circleRadiusInPx * 2) * scale.value),
+                            end = Offset(x = circleRadiusInPx, y = this.size.height * scale.value),
+                            strokeWidth = it.strokeWidth.toPx()
                         )
                     }
                 }
+
+                drawCircle(
+                    color = circleParameters.backgroundColor,
+                    radius = circleRadiusInPx * scale.value,
+                    center = Offset(circleRadiusInPx, circleRadiusInPx)
+                )
+
+                circleParameters.stroke?.let { stroke ->
+                    val strokeWidthInPx = stroke.width.toPx()
+                    drawCircle(
+                        color = stroke.color,
+                        radius = (circleRadiusInPx - strokeWidthInPx / 2f) * scale.value,
+                        center = Offset(circleRadiusInPx, circleRadiusInPx),
+                        style = Stroke(width = strokeWidthInPx)
+                    )
+                }
+
+                iconPainter?.let { painter ->
+                    this.withTransform(
+                        transformBlock = {
+                            translate(
+                                left = circleRadiusInPx - painter.intrinsicSize.width / 2.45f,
+                                top = circleRadiusInPx - painter.intrinsicSize.height / 2.45f
+                            )
+                            scale(scale.value, scale.value, Offset(circleRadiusInPx, circleRadiusInPx))
+                        },
+                        drawBlock = {
+                            this.drawIntoCanvas {
+                                with(painter) {
+                                    draw(
+                                        size = intrinsicSize / 1.20f,
+                                        colorFilter = ColorFilter.tint(
+                                            color = iconColor,
+                                            blendMode = BlendMode.SrcIn
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
+            }
         ) {
             content(
                 Modifier

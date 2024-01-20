@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Note
 import androidx.compose.material.icons.rounded.Notes
@@ -63,7 +64,7 @@ fun AddEventAlertDialog(
     }
 
     AlertDialog(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
         title = { Text("Add a Job Event") },
         text = {
            Column(

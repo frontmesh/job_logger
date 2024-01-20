@@ -4,9 +4,19 @@ import android.app.Activity
 import android.os.Build
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
@@ -16,8 +26,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.R
@@ -32,7 +46,6 @@ import com.kedia.ogparser.OpenGraphResult
 fun AddJobScreen(
     viewModel: AddJobViewModel = hiltViewModel(),
 ) {
-
     var job: OpenGraphResult? by rememberSaveable { mutableStateOf(null) }
     val topBarTitle = job?.title?.takeIf {
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
@@ -58,21 +71,11 @@ fun AddJobScreen(
         },
         datePickerState = datePickerState
     ) {
-        Text(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            text = "Enter a URL of job posting you wish to track"
-        )
 
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            label = { Text("Enter Job URL") },
-            isError = urlHasError,
-            value = url,
-            onValueChange = { newUrl ->
+        JobEditContent(
+            url = url,
+            urlHasError = urlHasError,
+            onTextFieldChange = { newUrl ->
                 url = newUrl
                 urlHasError = URLUtil.isValidUrl(newUrl).not()
 
@@ -107,4 +110,79 @@ fun AddJobScreen(
             else -> {}
         }
     }
+}
+
+
+@Composable
+fun JobEditContent(
+    url: String,
+    urlHasError: Boolean,
+    onTextFieldChange : (String) -> Unit
+) {
+
+    val primaryColor = MaterialTheme.colorScheme.surface
+
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .drawBehind {
+                val borderSize = 1.dp.toPx()
+                drawLine(
+                    color = primaryColor,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = borderSize
+                )
+                drawLine(
+                    color = primaryColor,
+                    start = Offset(0f, size.height),
+                    end = Offset(size.width, size.height),
+                    strokeWidth = borderSize
+                )
+            },
+        placeholder = { Text("Enter Job Posting URL") },
+        leadingIcon = { Icon(imageVector = Icons.Outlined.Link, contentDescription = "") },
+        isError = urlHasError,
+        value = url,
+        onValueChange = onTextFieldChange,
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            disabledContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.primary,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.primary,
+            errorPlaceholderColor = MaterialTheme.colorScheme.error,
+            focusedBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent,
+            errorLeadingIconColor = MaterialTheme.colorScheme.error,
+        )
+    )
+
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun JobEditContentPreview() {
+    JobEditContent(
+        url = "",
+        urlHasError = false,
+        onTextFieldChange = {
+
+        }
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview
+@Composable
+fun JobEditContentErrorPreview() {
+    JobEditContent(
+        url = "",
+        urlHasError = true,
+        onTextFieldChange = {}
+    )
 }

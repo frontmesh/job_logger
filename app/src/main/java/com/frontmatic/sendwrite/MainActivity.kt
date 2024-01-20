@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -22,6 +21,7 @@ import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.components.ActionButton
 import com.frontmatic.sendwrite.ui.components.BottomNavBar
+import com.frontmatic.sendwrite.ui.components.CustomSnackbarHost
 import com.frontmatic.sendwrite.ui.components.RootScaffold
 import com.frontmatic.sendwrite.ui.components.TopBar
 import com.frontmatic.sendwrite.ui.components.shouldShowFloatingActionButton
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startRoute = startRoute,
                         snackbarHost = {
-                            SnackbarHost(
+                            CustomSnackbarHost(
                                 hostState = hostState,
                             )
                         },
@@ -96,7 +96,6 @@ class MainActivity : ComponentActivity() {
                                 ActionButton(
                                     destination = destination,
                                     navBackStackEntry = navBackStackEntry,
-//                                    snackbarHostState = hostState,
                                 )
                             }
                         }

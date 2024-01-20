@@ -239,12 +239,12 @@ fun JobDetailsScreen(
                         val circleParameters = CircleParametersDefaults.circleParameters(
                             backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                             stroke = StrokeParameters(
-                                color = MaterialTheme.colorScheme.secondaryContainer,
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .7f else .35f),
                                 width = 3.dp
                             )
                         )
                         val lineParameters = LineParametersDefaults.solidColor(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                            color = MaterialTheme.colorScheme.primary.copy(alpha = .35f)
                         )
 
                         TimelineNode(
@@ -266,9 +266,10 @@ fun JobDetailsScreen(
                                 modifier = modifier
                                     .border(
                                         width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
+                                        color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .35f else .05f),
                                         shape = Shape.medium,
-                                    )
+                                    ),
+                                containerColor =  MaterialTheme.colorScheme.primaryContainer.copy(alpha = if (isLast) 1f else .5f)
                             ) {
                                 Column(
                                     modifier = Modifier
