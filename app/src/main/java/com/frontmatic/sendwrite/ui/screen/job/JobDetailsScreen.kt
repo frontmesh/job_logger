@@ -54,6 +54,7 @@ import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
+import com.frontmatic.sendwrite.ui.theme.AlphaMedium
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
@@ -269,7 +270,8 @@ fun JobDetailsScreen(
                                         color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .35f else .05f),
                                         shape = Shape.medium,
                                     ),
-                                containerColor =  MaterialTheme.colorScheme.primaryContainer.copy(alpha = if (isLast) 1f else .5f)
+                                containerColor = MaterialTheme.colorScheme.background
+//                                containerColor =  MaterialTheme.colorScheme.primaryContainer.copy(alpha = if (isLast) 1f else .5f)
                             ) {
                                 Column(
                                     modifier = Modifier
@@ -383,40 +385,46 @@ fun TimeChipContent(
     selected: Boolean,
     icon: Boolean = true,
 ) {
-    Row {
-        if (icon) {
-            Icon(
-                imageVector = Icons.Filled.CalendarMonth,
-                tint = when {
-                    selected -> MaterialTheme.colorScheme.primary
-                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                },
-                contentDescription = "Due date icon",
-                modifier = Modifier
-                    .size(22.dp)
-                    .padding(end = 4.dp)
+    val primaryTint = when {
+//        selected -> Color(0xFFF2AC3C)
+        // green
+        selected -> Color(0xFF4CAF50)
+        else ->  MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaMedium)
+    }
+
+    Surface(
+        color = when {
+            selected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+        },
+        contentColor = when {
+            selected -> MaterialTheme.colorScheme.primary
+            else -> MaterialTheme.colorScheme.onSurface
+        },
+        shape = MaterialTheme.shapes.small,
+        modifier = modifier
+    ) {
+        Row (
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(
+                horizontal = 8.dp,
+                vertical = 4.dp
             )
-        }
-        Surface(
-            color = when {
-                selected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-            },
-            contentColor = when {
-                selected -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.onSurface
-            },
-            shape = MaterialTheme.shapes.small,
-            modifier = modifier
-        ) {
+        ){
+            if (icon) {
+                Icon(
+                    imageVector = Icons.Filled.CalendarMonth,
+                    tint = primaryTint,
+                    contentDescription = "Due date icon",
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+            }
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = when {
-                    selected -> MaterialTheme.colorScheme.primary
-                    else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                },
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
+                color = primaryTint,
             )
         }
     }

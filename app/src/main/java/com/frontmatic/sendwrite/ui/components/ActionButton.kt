@@ -3,7 +3,7 @@ package com.frontmatic.sendwrite.ui.components
 import android.app.Activity
 import android.content.Intent
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AddLink
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
@@ -48,8 +48,8 @@ fun ActionButton(
             ) {
                 Icon(
                     modifier = Modifier,
-                    imageVector = Icons.Outlined.Add,
-                    tint = Color.White,
+                    imageVector = Icons.Outlined.AddLink,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = null
                 )
             }

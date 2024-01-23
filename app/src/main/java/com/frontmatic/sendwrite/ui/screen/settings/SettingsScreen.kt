@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.settings
 
 import android.app.Activity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -164,7 +165,7 @@ fun SettingsScreen(
             .padding(all = PAGE_PADDING)
     ) {
         Surface(
-            color = MaterialTheme.colorScheme.background,
+            color = MaterialTheme.colorScheme.surface,
             shape = Shape.medium,
             modifier = Modifier
                 .shadow(elevation = 2.dp, clip = true, shape = Shape.medium)
@@ -195,14 +196,13 @@ fun OptionRow(
     onClick: () -> Unit
 ) {
     Surface(
-        onClick = onClick,
-        color = MaterialTheme.colorScheme.primaryContainer
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(12.dp),
     ) {
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             FancyIcon(
@@ -213,12 +213,10 @@ fun OptionRow(
                 outerShape = Shape.medium
             )
             Text(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 text = option.name,
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.secondary
+                color = MaterialTheme.colorScheme.onSurface
             )
             Column(
                 modifier = Modifier
@@ -257,7 +255,6 @@ fun rememberReviewTask(reviewManager: ReviewManager): ReviewInfo? {
 
 @Composable
 fun AppVersion() {
-
     // on below line we are creating a column
     Column(
         // on below line we are adding a modifier to it

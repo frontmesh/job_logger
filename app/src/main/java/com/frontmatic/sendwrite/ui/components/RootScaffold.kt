@@ -1,8 +1,11 @@
 package com.frontmatic.sendwrite.ui.components
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -42,12 +45,15 @@ fun RootScaffold(
             )
        },
         snackbarHost = snackbarHost,
+
     )
     {
-        Surface(modifier = Modifier
-            .fillMaxSize()
-            .padding(it)
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
         ) {
+
             content(it)
         }
     }

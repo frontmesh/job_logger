@@ -45,7 +45,7 @@ fun EventListScreen(
     val events by viewModel.eventList.collectAsState(emptyList())
     val period = viewModel.period.toString().lowercase()
 
-    if (events != null && events.isEmpty()) {
+    if (events.isEmpty()) {
         EmptyContent(
             icon = Icons.Rounded.DateRange,
             message = "No events found for ${if (period == "today") period else "following $period"}"

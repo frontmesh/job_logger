@@ -21,12 +21,14 @@ hiltNavigationCompose = "1.1.0-alpha01"
 material = "1.9.0"
 org-jetbrains-kotlin-android = "1.8.10"
 constraintlayout = "2.1.4"
+uiTextGoogleFonts = "1.5.4"
 workRuntimeKtx = "2.8.1"
 
 [libraries]
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltWork" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
+androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 aptabase = { module = "com.aptabase:aptabase", version.ref = "aptabase" }
 

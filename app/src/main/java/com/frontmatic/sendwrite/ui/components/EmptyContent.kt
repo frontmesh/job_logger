@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -27,13 +29,18 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EmptyContent(alphaAnim: Float = 1f, icon: ImageVector, message: String) {
+fun EmptyContent(
+    alphaAnim: Float = 1f,
+    icon: ImageVector,
+    message: String
+) {
 
     var visibleContent by remember {
-        mutableStateOf(false)
+        mutableStateOf(alphaAnim < 1f)
     }
 
     LaunchedEffect(key1 = true) {
@@ -59,7 +66,7 @@ fun EmptyContent(alphaAnim: Float = 1f, icon: ImageVector, message: String) {
                     .alpha(alphaAnim)
                     .size(120.dp),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Icon(
                     modifier = Modifier
@@ -82,4 +89,15 @@ fun EmptyContent(alphaAnim: Float = 1f, icon: ImageVector, message: String) {
             )
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewEmptyContent() {
+    EmptyContent(
+        alphaAnim = 0f,
+        icon = Icons.Rounded.Link,
+        message = "This is screen for content that is missing"
+    )
 }

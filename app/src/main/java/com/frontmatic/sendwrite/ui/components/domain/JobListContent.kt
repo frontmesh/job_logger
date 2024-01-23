@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.ext.fadingEdge
 import com.frontmatic.sendwrite.local.model.JobAndEvents
@@ -32,13 +33,13 @@ import com.frontmatic.sendwrite.ui.theme.ICON_SMALL
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun JobListContent(
+    modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     jobs: List<JobAndEvents>?,
     onItemClick: (JobAndEvents) -> Unit,
     emptyContentMessage: String,
     emptyContentIcon: ImageVector,
     listCellBackground: Color,
-    modifier: Modifier = Modifier,
 ) {
     if (jobs != null && jobs.isEmpty()) {
         EmptyContent(
@@ -89,6 +90,7 @@ fun JobListContent(
                                     Text(
                                         text = "${job.events.size}",
                                         style = MaterialTheme.typography.bodySmall,
+                                        fontWeight = FontWeight.SemiBold,
                                         color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.5f)
                                     )
                                 }

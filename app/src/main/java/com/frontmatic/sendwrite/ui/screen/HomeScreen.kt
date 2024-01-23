@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.ext.primaryContainerBackground
 import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
@@ -41,6 +42,7 @@ import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
+import com.frontmatic.sendwrite.ui.theme.AlphaMedium
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SectionSurface
@@ -101,8 +103,6 @@ fun HomeScreen(
                     },
                 )
             }
-
-
         }
 
         JobListTitle(
@@ -122,7 +122,7 @@ fun HomeScreen(
             },
             emptyContentMessage = emptyContentMessage,
             emptyContentIcon = Icons.Filled.WorkOff,
-            listCellBackground = MaterialTheme.colorScheme.primaryContainer,
+            listCellBackground = MaterialTheme.colorScheme.surface,
         )
     }
 
@@ -145,7 +145,7 @@ private fun JobCell(
             .clip(shape)
             .clickable(onClick = onClick),
         shape = shape,
-        color = MaterialTheme.colorScheme.primaryContainer
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Column {
             Row(
@@ -160,7 +160,7 @@ private fun JobCell(
                         .size(34.dp)
                         .background(
                             shape = CircleShape,
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.primary
                         ),
                     contentAlignment = Alignment.Center
                 ) {
@@ -169,8 +169,7 @@ private fun JobCell(
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp),
-                        tint = MaterialTheme.colorScheme.secondary.copy(alpha = AlphaHigh)
-
+                        tint = MaterialTheme.colorScheme.background.copy(alpha = AlphaHigh)
                     )
 
                     if (iconText.isNotBlank()) {
@@ -179,7 +178,7 @@ private fun JobCell(
                             fontSize = 8.sp,
                             style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                             modifier = Modifier.padding(top = 2.dp),
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -187,7 +186,7 @@ private fun JobCell(
                 Text(
                     text = taskCount,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.secondary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 
@@ -197,18 +196,8 @@ private fun JobCell(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.secondary,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
-            }
-
-            Row {
-                Spacer(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(1.dp)
-                        .background(color = MaterialTheme.colorScheme.secondary.copy(alpha = AlphaDisabled))
-                )
-                Divider(color = MaterialTheme.colorScheme.primary)
             }
         }
     }

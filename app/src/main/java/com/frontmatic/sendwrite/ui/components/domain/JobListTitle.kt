@@ -14,9 +14,9 @@ import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 
 @Composable
 fun JobListTitle(
+    modifier: Modifier = Modifier,
     title: String,
     description: String? = null,
-    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,

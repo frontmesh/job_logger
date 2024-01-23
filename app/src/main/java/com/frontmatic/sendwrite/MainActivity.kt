@@ -102,7 +102,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Surface(
                             modifier = Modifier.fillMaxSize(),
-                            color = MaterialTheme.colorScheme.background
+                            color = MaterialTheme.colorScheme.background // background color for the whole app
                         ) {
                             DestinationsNavHost(
                                 navController = navController,
