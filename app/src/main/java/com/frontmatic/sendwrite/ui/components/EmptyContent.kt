@@ -84,7 +84,7 @@ fun EmptyContent(
                     .padding(all = 32.dp),
                 text = message,
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary
             )
         }

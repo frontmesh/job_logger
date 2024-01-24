@@ -42,6 +42,7 @@ import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 import com.frontmatic.sendwrite.ui.screen.settings.SettingsChildViewModel
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
+import com.frontmatic.sendwrite.ui.theme.fontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,8 +61,10 @@ fun TopBar(
                     text = destination.topBarTitle(navBackStackEntry),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
+//                    fontFamily = fontFamily,
+//                    fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(start = 6.dp, end = 12.dp)
                 )

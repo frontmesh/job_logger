@@ -73,7 +73,12 @@ fun BottomNavBar(
             val icon = if (isSelected) item.iconSelected else item.icon
             NavigationBarItem(
                 icon = { Icon(icon, contentDescription = item.title) },
-                label = { Text(item.title) },
+                label = {
+                    Text(
+                        text =item.title,
+                        style = MaterialTheme.typography.labelMedium
+                    )
+                },
                 selected = isSelected,
                 onClick = {
                     if (!isSelected) {
