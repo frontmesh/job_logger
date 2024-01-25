@@ -1,6 +1,8 @@
 package com.frontmatic.sendwrite.ui.screen.job.components
 
+import android.graphics.drawable.shapes.Shape
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
+import com.frontmatic.sendwrite.ui.components.LetterImagePlaceholder
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 
 
@@ -30,7 +33,8 @@ fun JobCard(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
-    imageUrl: String,
+    imageUrl: String?,
+    url: String,
     isWorkshopStarred: Boolean = false,
     starPainterResource: ImageVector = Icons.Outlined.Star
 ) {
@@ -43,12 +47,16 @@ fun JobCard(
             .padding(16.dp),
         verticalAlignment = Alignment.Top
     ) {
-
-        CoilAsyncImage(
-            imageUrl = imageUrl,
-            imageShape = RoundedCornerShape(MediumRadius),
-            imageSize = 42.dp
-        )
+        val imageShape = RoundedCornerShape(MediumRadius)
+        if (imageUrl != null) {
+            CoilAsyncImage(
+                imageUrl = imageUrl,
+                imageShape = imageShape,
+                imageSize = 42.dp
+            )
+        } else {
+            LetterImagePlaceholder(shape = imageShape, url = url)
+        }
 
         Column(
             modifier = Modifier
@@ -84,6 +92,8 @@ fun JobCard(
 }
 
 
+
+
 @Preview
 @Composable
 fun JobCardPreview() {
@@ -94,6 +104,22 @@ fun JobCardPreview() {
         description = "description",
         imageUrl = "https://www.mindinventory.com/blog/wp-content/uploads/2018/05/android-jetpack.jpg",
         isWorkshopStarred = false,
-        starPainterResource = Icons.Outlined.Star
+        starPainterResource = Icons.Outlined.Star,
+        url = "https://www.mindinventory.com/blog/wp-content/uploads/2018/05/android-jetpack.jpg"
+    )
+}
+
+@Preview
+@Composable
+fun JobCardLetterPreview() {
+    JobCard(
+        modifier = Modifier
+            .padding(vertical = 6.dp, horizontal = 16.dp),
+        title = "title",
+        description = "description",
+        imageUrl = null,
+        isWorkshopStarred = false,
+        starPainterResource = Icons.Outlined.Star,
+        url = "https://www.mindinventory.com/blog/wp-content/uploads/2018/05/android-jetpack.jpg"
     )
 }

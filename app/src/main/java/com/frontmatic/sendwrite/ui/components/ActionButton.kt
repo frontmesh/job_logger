@@ -83,9 +83,9 @@ fun ActionButton(
                         icon = Icons.Outlined.EventAvailable
                     ),
                     MultiFabItem(
-                        id = 3,
+                        id = 2,
                         icon = Icons.Outlined.Archive,
-                        label = "Close job application"
+                        label = "Archive application"
                     )
                 ),
                 onFabItemClicked = { item ->

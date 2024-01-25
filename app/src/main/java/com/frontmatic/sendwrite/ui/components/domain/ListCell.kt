@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.ui.components.CoilAsyncImage
+import com.frontmatic.sendwrite.ui.components.LetterImagePlaceholder
 import com.frontmatic.sendwrite.ui.theme.AlphaDisabled
 import com.frontmatic.sendwrite.ui.theme.AlphaMedium
 import com.frontmatic.sendwrite.ui.theme.ICON_LARGE
@@ -44,6 +45,7 @@ fun ListCell(
     secondaryContent: @Composable (() -> Unit)? = null,
     imageUrl: String? = null,
     icon: ImageVector? = null,
+    url: String? = null,
     iconBackground: Color = MaterialTheme.colorScheme.background,
     onClick: () -> Unit,
 ) {
@@ -100,7 +102,7 @@ fun ListCell(
                         .clip(iconShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (imageUrl != null) {
+                    if (!imageUrl.isNullOrEmpty()) {
                         CoilAsyncImage(
                             imageUrl = imageUrl,
                             imageShape = iconShape,
@@ -115,6 +117,8 @@ fun ListCell(
                                 .size(ICON_LARGE),
                             tint = MaterialTheme.colorScheme.primary
                         )
+                    } else if (!url.isNullOrEmpty()) {
+                        LetterImagePlaceholder(url = url, shape = iconShape)
                     }
                 }
             }

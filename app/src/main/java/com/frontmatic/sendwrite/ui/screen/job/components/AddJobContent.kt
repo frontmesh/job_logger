@@ -68,7 +68,8 @@ fun AddJobContent(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.padding(8.dp),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
                     )
                 },
             )
@@ -137,7 +138,8 @@ fun AddJobContent(
                     JobCard(
                         title = job.title ?: "",
                         description = job.description ?: "",
-                        imageUrl = job.image ?: "",
+                        imageUrl = job.image,
+                        url = job.url!!,
                         isWorkshopStarred = false,
                         starPainterResource = Icons.Outlined.Star
                     )

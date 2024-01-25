@@ -63,6 +63,7 @@ fun EventListScreen(
                     key = { event -> event.id!! }
                 ) { event ->
                     val (icon, name) = getIconAndDataForJobEventType(event)
+
                     ListCell(
                         name = name,
                         icon = icon,

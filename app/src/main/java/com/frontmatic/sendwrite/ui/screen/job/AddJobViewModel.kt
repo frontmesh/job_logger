@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aptabase.Aptabase
+import com.frontmatic.sendwrite.ext.convertStringNullsToNull
 import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
@@ -81,7 +82,7 @@ class AddJobViewModel @Inject constructor(
     }
 
     override fun onPostResponse(openGraphResult: OpenGraphResult) {
-        openGraphUrlState = OpenGraphUrlState.Success(openGraphResult)
+        openGraphUrlState = OpenGraphUrlState.Success(openGraphResult.convertStringNullsToNull())
     }
 
 }

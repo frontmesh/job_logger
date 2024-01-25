@@ -19,9 +19,9 @@ import java.util.Date
         JobEvent::class,
     ],
     autoMigrations = [
-        AutoMigration (from = 1, to = 2)
+        AutoMigration (from = 3, to = 4)
     ],
-    version = 2
+    version = 4
 )
 @TypeConverters(
     DateConverter::class,

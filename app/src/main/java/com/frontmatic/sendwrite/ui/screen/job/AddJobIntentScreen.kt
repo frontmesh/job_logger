@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.MainActivity
 import com.frontmatic.sendwrite.R
-import com.frontmatic.sendwrite.local.mapper.toJob
+import com.frontmatic.sendwrite.ext.toJob
 import com.frontmatic.sendwrite.ui.screen.job.components.AddJobContent
 import com.kedia.ogparser.OpenGraphResult
 import com.ramcosta.composedestinations.annotation.Destination

@@ -3,15 +3,22 @@ package com.frontmatic.sendwrite.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import javax.annotation.Nullable
 
 @Entity(tableName = "jobs")
 data class Job(
     @PrimaryKey(autoGenerate = true)
     val id: Long? = null,
+
     val title: String,
-    val description: String,
+
+    @Nullable
+    val description: String?,
+
     val url: String,
-    val imageUrl: String,
+
+    @Nullable
+    val imageUrl: String?,
     val archived: Boolean,
 
     @ColumnInfo(name = "created_at") var createdAt: Long?,

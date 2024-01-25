@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import javax.annotation.Nullable
 
 @Entity(
     tableName = "job_events",
@@ -29,8 +30,14 @@ data class JobEvent(
     val id: Long? = null,
     @ColumnInfo(name = "job_id")
     val jobId: Long,
+
+    @Nullable
     val name: String? = null,
+
+    @Nullable
     val description: String? = null,
+
+    @Nullable
     val date: Date? = null,
     val url : String?,
     val type: JobEventType,
@@ -80,12 +87,13 @@ data class JobEvent(
                 weeks == 1L -> "A week ago"
                 days > 1 -> "$days days ago"
                 days == 1L -> "Yesterday"
-                hours > 1 -> "$hours hours ago"
-                hours == 1L -> "An hour ago"
-                minutes > 1 -> "$minutes minutes ago"
-                minutes == 1L -> "A minute ago"
-                seconds > 1 -> "$seconds seconds ago"
-                seconds == 1L -> "A second ago"
+                hours > 1 -> "Today"
+//                hours > 1 -> "$hours hours ago"
+//                hours == 1L -> "An hour ago"
+//                minutes > 1 -> "$minutes minutes ago"
+//                minutes == 1L -> "A minute ago"
+//                seconds > 1 -> "$seconds seconds ago"
+//                seconds == 1L -> "A second ago"
                 else -> "Just now"
             }
 

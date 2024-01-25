@@ -68,6 +68,7 @@ fun JobListContent(
                         ),
                         name = job.title,
                         imageUrl = job.imageUrl,
+                        url = job.url,
                         onClick = {
                             onItemClick(job)
                         },

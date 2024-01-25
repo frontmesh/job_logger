@@ -12,6 +12,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.data.AppTheme
+import com.frontmatic.sendwrite.ext.convertStringNullsToNull
 import com.frontmatic.sendwrite.ui.screen.job.AddJobIntentScreen
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.kedia.ogparser.OpenGraphCacheProvider
@@ -44,7 +45,7 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onPostResponse(openGraphResult: OpenGraphResult) {
-        initCompose(openGraphResult)
+        initCompose(openGraphResult.convertStringNullsToNull())
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

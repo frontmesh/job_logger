@@ -122,7 +122,6 @@ fun HomeScreen(
     }
 }
 
-
 @Composable
 private fun JobCell(
     modifier: Modifier,
