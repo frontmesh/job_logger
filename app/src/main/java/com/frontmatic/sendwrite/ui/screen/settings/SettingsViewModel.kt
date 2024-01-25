@@ -18,7 +18,7 @@ class SettingsViewModel @Inject() constructor(
     val appTheme = dataStoreSource.appThemeFlow().stateIn(
         scope = viewModelScope,
         started = SharingStarted.Lazily,
-        initialValue = AppTheme.LIGHT_GREEN
+        initialValue = AppTheme.getDefaultTheme()
     )
 
 }

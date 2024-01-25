@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Fingerprint
@@ -210,7 +211,7 @@ fun OptionRow(
                 contentDescription = null,
                 iconColor = MaterialTheme.colorScheme.secondary,
                 circleColor = MaterialTheme.colorScheme.background,
-                outerShape = Shape.medium
+                outerShape = CircleShape
             )
             Text(
                 text = option.name,

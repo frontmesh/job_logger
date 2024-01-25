@@ -12,6 +12,9 @@ val LightPurpleTertiary = Color(0xFF7D5260)
 val LightPurpleSurface = Color(0xFFF0F0FF)
 val LightPurplePrimaryContainer = Color(0xFFEDE9FF)
 
+val colorWhite = Color.White
+val colorBlack = Color(0xFF000000)
+
 val DarkOrangePrimary = Color(0xFFED7D31)
 val DarkOrangeOnPrimary = Color(0xFF694932)
 val DarkOrangeSecondary = Color(0xFFB1592D)
@@ -29,3 +32,9 @@ val LightOrangeSecondaryContainer = Color(0xFFE0D2C1)
 val LightOrangeTertiary = Color(0xFF6C5F5B)
 //val LightOrangeTertiary = Color(0xFF6C5F5B)
 val LightOrangeTertiaryContainer = Color(0xFFEAD7BB)
+
+
+// Common colors for all themes
+
+val ChipBackground = Color(0xFFFDEDEF)
+val ChipOnBackground = Color(0xFFEF4E60)

@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
             val startRoute = if (isOnboardingCompleted) NavGraphs.root.startRoute else OnboardingScreenDestination
             val hostState = remember { SnackbarHostState() }
 
-            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
+            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.getDefaultTheme())
 
             CompositionLocalProvider(
                 LocalSnackbar provides LocalSnackbarContext(hostState)

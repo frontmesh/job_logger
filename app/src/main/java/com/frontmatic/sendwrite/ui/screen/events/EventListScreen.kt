@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccessTime
 import androidx.compose.material.icons.rounded.DateRange
@@ -65,6 +66,7 @@ fun EventListScreen(
                     ListCell(
                         name = name,
                         icon = icon,
+                        iconShape = CircleShape,
                         trailingContent = {
                           Column(
                               verticalArrangement = Arrangement.spacedBy(4.dp)

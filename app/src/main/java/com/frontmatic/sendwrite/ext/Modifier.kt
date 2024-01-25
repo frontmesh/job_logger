@@ -35,6 +35,3 @@ fun Modifier.fadingEdge(
     }
 
 
-@Composable
-fun Modifier.primaryContainerBackground() = this
-    .background(MaterialTheme.colorScheme.primaryContainer)

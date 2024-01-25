@@ -53,7 +53,7 @@ class ShareActivity : ComponentActivity(), OpenGraphCallback {
             val windowSize = calculateWindowSizeClass(this).widthSizeClass
             // TODO: Look into this when creating a tablet version
 //            val isExpandedScreen = windowSize == WindowWidthSizeClass.Expanded
-            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
+            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.getDefaultTheme())
 
             SendWriteTheme(
                 appTheme = appTheme.value,

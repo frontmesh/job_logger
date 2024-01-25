@@ -3,7 +3,6 @@ package com.frontmatic.sendwrite.ui.screen.archive
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SendAndArchive
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,14 +37,9 @@ fun ArchiveScreen(
 
         JobListContent(
             jobs = jobs,
-            listCellBackground = MaterialTheme.colorScheme.tertiaryContainer.copy(
-                alpha = 0.35f
-            ),
             onItemClick = { item ->
                 navigator.navigate(
-                    JobDetailsScreenDestination(
-                        item.id!!
-                    )
+                    JobDetailsScreenDestination(item.id)
                 )
             },
             emptyContentMessage = emptyContentMessage,

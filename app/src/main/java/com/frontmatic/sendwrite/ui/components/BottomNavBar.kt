@@ -16,7 +16,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavController
 import com.frontmatic.sendwrite.ui.screen.NavGraphs
 import com.frontmatic.sendwrite.ui.screen.appCurrentDestinationAsState
@@ -65,7 +67,7 @@ fun BottomNavBar(
 
     NavigationBar() {
         bottomNavItems.forEach { item ->
-            val currentDestination: Destination? = navController.appCurrentDestinationAsState().value
+            val currentDestination: Destination = navController.appCurrentDestinationAsState().value
                 ?: NavGraphs.root.startAppDestination
 
             val isSelected = currentDestination == item.direction
@@ -75,7 +77,8 @@ fun BottomNavBar(
                 icon = { Icon(icon, contentDescription = item.title) },
                 label = {
                     Text(
-                        text =item.title,
+                        text = item.title,
+                        fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.labelMedium
                     )
                 },
@@ -92,9 +95,9 @@ fun BottomNavBar(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = MaterialTheme.colorScheme.primary,
+                    indicatorColor = MaterialTheme.colorScheme.background,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    selectedIconColor = MaterialTheme.colorScheme.background
+                    selectedIconColor = MaterialTheme.colorScheme.primary
                 )
             )
         }

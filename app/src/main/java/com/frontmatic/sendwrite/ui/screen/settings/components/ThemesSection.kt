@@ -55,7 +55,7 @@ fun ThemesSection(
             modifier = Modifier.padding(top = 16.dp, start = 16.dp),
             text = "Select a theme",
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+//            color = MaterialTheme.colorScheme.primary
         )
         Themes(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
@@ -141,38 +141,49 @@ private fun ThemeButton(
             colors = CardDefaults.cardColors(containerColor = backgroundColor),
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                when (appTheme) {
-                    AppTheme.SYSTEM -> {
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            SendWriteTheme(appTheme = AppTheme.LIGHT_GREEN) {
-                                Row(modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                                    .background(MaterialTheme.colorScheme.surface)) {
-                                }
-                            }
-                            SendWriteTheme(appTheme = AppTheme.DARK_GREEN){
-                                Row(modifier = Modifier
-                                    .fillMaxHeight()
-                                    .weight(1f)
-                                    .background(MaterialTheme.colorScheme.surface)) {
-                                }
-                            }
-                        }
-                    }
-                    else -> {
-                        SendWriteTheme(
-                            appTheme = appTheme,
-                            dynamicColor = AppTheme.SYSTEM == appTheme
-                        ) {
-                            Row(modifier = Modifier
-                                .fillMaxHeight()
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.primary)) {
-                            }
-                        }
+                SendWriteTheme(
+                    appTheme = appTheme,
+//                            dynamicColor = AppTheme.SYSTEM == appTheme
+                ) {
+                    Row(modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.primary)) {
                     }
                 }
+                // TODO This will eventually be enabled for paid users
+//                when (appTheme) {
+//                    AppTheme.SYSTEM -> {
+//                        Row(modifier = Modifier.fillMaxWidth()) {
+//                            SendWriteTheme(appTheme = AppTheme.LIGHT_GREEN) {
+//                                Row(modifier = Modifier
+//                                    .fillMaxHeight()
+//                                    .weight(1f)
+//                                    .background(MaterialTheme.colorScheme.surface)) {
+//                                }
+//                            }
+//                            SendWriteTheme(appTheme = AppTheme.DARK_GREEN){
+//                                Row(modifier = Modifier
+//                                    .fillMaxHeight()
+//                                    .weight(1f)
+//                                    .background(MaterialTheme.colorScheme.surface)) {
+//                                }
+//                            }
+//                        }
+//                    }
+//                    else -> {
+//                        SendWriteTheme(
+//                            appTheme = appTheme,
+////                            dynamicColor = AppTheme.SYSTEM == appTheme
+//                        ) {
+//                            Row(modifier = Modifier
+//                                .fillMaxHeight()
+//                                .fillMaxWidth()
+//                                .background(MaterialTheme.colorScheme.primary)) {
+//                            }
+//                        }
+//                    }
+//                }
                 Column(modifier = Modifier.align(Alignment.Center)) {
                     AnimatedVisibility(
                         visible = isSelected,

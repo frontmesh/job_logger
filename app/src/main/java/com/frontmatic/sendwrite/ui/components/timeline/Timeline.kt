@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.data.AppTheme
-import com.frontmatic.sendwrite.ui.screen.job.TimeChipContent
+import com.frontmatic.sendwrite.ui.screen.job.ChipContent
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.SendWriteTheme
 import com.frontmatic.sendwrite.ui.theme.Shape
@@ -228,7 +228,7 @@ fun TimelineNode(
 @Composable
 fun MessageBubble(
     modifier: Modifier = Modifier,
-    containerColor: Color =  MaterialTheme.colorScheme.primaryContainer,
+    containerColor: Color =  MaterialTheme.colorScheme.surface,
     content : @Composable () -> Unit = {}
 ) {
     Card(
@@ -285,7 +285,7 @@ private fun TimelinePreview() {
                                 .wrapContentSize(),
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            TimeChipContent(text = "14 days ago", selected = true)
+                            ChipContent(text = "14 days ago", selected = true)
                         }
                     }
                 }

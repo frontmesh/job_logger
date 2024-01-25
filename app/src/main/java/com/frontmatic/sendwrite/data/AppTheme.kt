@@ -1,31 +1,35 @@
 package com.frontmatic.sendwrite.data
 
+// TODO PAID_USERS
 enum class AppTheme {
-    SYSTEM,
+//    SYSTEM,
 //    DYNAMIC,
     LIGHT_ORANGE,
-    LIGHT_GREEN,
-    LIGHT_BLUE,
+//    LIGHT_GREEN,
+//    LIGHT_BLUE,
     LIGHT_PURPLE,
-    DARK_ORANGE,
+//    DARK_ORANGE,
     DARK_GREEN,
-    DARK_BLUE,
-    DARK_PURPLE;
+    DARK_BLUE;
+//    DARK_PURPLE;
 
     fun getLocalizedString(): String {
         return when (this) {
-            SYSTEM -> "System"
+//            SYSTEM -> "System"
 //            DYNAMIC -> "Dynamic"
-            LIGHT_GREEN -> "Light Green"
+//            LIGHT_GREEN -> "Light Green"
             LIGHT_ORANGE -> "Light Orange"
-            LIGHT_BLUE -> "Light Blue"
+//            LIGHT_BLUE -> "Light Blue"
             LIGHT_PURPLE -> "Light Purple"
             DARK_GREEN -> "Dark Green"
-            DARK_ORANGE -> "Dark Orange"
+//            DARK_ORANGE -> "Dark Orange"
             DARK_BLUE -> "Dark Blue"
-            DARK_PURPLE -> "Dark Purple"
-
+//            DARK_PURPLE -> "Dark Purple"
         }
+    }
+
+    companion object {
+        fun getDefaultTheme() = LIGHT_ORANGE
     }
 }
 

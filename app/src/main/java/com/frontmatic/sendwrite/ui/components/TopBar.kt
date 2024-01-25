@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -42,7 +41,6 @@ import com.frontmatic.sendwrite.ui.screen.events.EventPeriod
 import com.frontmatic.sendwrite.ui.screen.job.JobDetailsViewModel
 import com.frontmatic.sendwrite.ui.screen.settings.SettingsChildViewModel
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
-import com.frontmatic.sendwrite.ui.theme.fontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +53,7 @@ fun TopBar(
     TopAppBar(
         title = {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = destination.topBarTitle(navBackStackEntry),
@@ -63,19 +61,17 @@ fun TopBar(
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-//                    fontFamily = fontFamily,
-//                    fontSize = 20.sp,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(start = 6.dp, end = 12.dp)
+                    modifier = Modifier.padding(horizontal = if (shouldShowBackButton(destination = destination)) 0.dp else 10.dp)
                 )
             }
         },
 
         navigationIcon = {
-            when (destination) {
-                JobDetailsScreenDestination,
-                EventListScreenDestination,
-                SettingsChildScreenDestination -> {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+               if (shouldShowBackButton(destination = destination)) {
                     IconButton(onClick = {
                         navController.popBackStack()
                     }) {
@@ -85,8 +81,7 @@ fun TopBar(
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                }
-                else -> {}
+               }
             }
         },
 
@@ -184,5 +179,16 @@ fun Destination.TopBarActions(navBackStackEntry: NavBackStackEntry?) {
 
         }
         else ->  {}
+    }
+}
+
+
+@Composable
+fun shouldShowBackButton(destination: Destination): Boolean {
+    return when (destination) {
+        is JobDetailsScreenDestination,
+        is EventListScreenDestination,
+        is SettingsChildScreenDestination -> true
+        else -> false
     }
 }

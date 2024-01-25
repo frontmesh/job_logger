@@ -15,10 +15,10 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-//val fontName = GoogleFont(name = "Nunito") // So far the best
+val fontName = GoogleFont(name = "Nunito") // So far the best
 //val fontName = GoogleFont(name = "Poppins") // Good as well
 
-val fontName = GoogleFont(name = "Work Sans")
+//val fontName = GoogleFont(name = "Work Sans")
 
 val fontFamily = FontFamily(
     Font(googleFont = fontName, fontProvider = provider)

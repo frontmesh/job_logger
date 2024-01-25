@@ -25,7 +25,7 @@ fun SettingsChildScreen(
     viewModel: SettingsChildViewModel = hiltViewModel()
 ) {
     val appTheme: AppTheme by viewModel.appTheme
-        .collectAsState(AppTheme.LIGHT_GREEN)
+        .collectAsState(AppTheme.getDefaultTheme())
 
     val isJobEventNotificationEnabled: Boolean by viewModel.isJobEventNotificationEnabled
         .collectAsState()

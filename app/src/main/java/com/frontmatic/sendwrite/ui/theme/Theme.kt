@@ -39,8 +39,10 @@ val LightOrangeColorScheme = lightColorScheme(
     secondaryContainer = LightOrangeSecondaryContainer,
     tertiary = LightOrangeTertiary,
     tertiaryContainer = LightOrangeTertiaryContainer,
-    surface = LightOrangePrimaryContainer,
+    surface = colorWhite,
     onSurface = Color.DarkGray,
+    background = LightOrangePrimaryContainer,
+    onBackground = Color.DarkGray,
 )
 
 
@@ -61,12 +63,12 @@ val LightPurpleColorScheme = lightColorScheme(
     primaryContainer = LightPurplePrimaryContainer,
     secondary = LightPurpleSecondary,
     tertiary = LightPurpleTertiary,
-    surface = LightPurpleSurface,
-    onSurface = LightPurplePrimary,
+    surface = colorWhite,
+    onSurface = colorBlack,
+    background = LightPurpleSurface,
+    onBackground = LightPurplePrimary,
 
     /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
@@ -89,14 +91,14 @@ fun SendWriteTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
+        //TODO PAID_USERS
         appTheme == AppTheme.LIGHT_ORANGE -> LightOrangeColorScheme
-        appTheme == AppTheme.DARK_ORANGE -> DarkOrangeColorScheme
-        appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
+//        appTheme == AppTheme.DARK_ORANGE -> DarkOrangeColorScheme
+//        appTheme == AppTheme.LIGHT_GREEN -> LightGreenColorScheme
         appTheme == AppTheme.DARK_GREEN  -> DarkGreenColorScheme
         appTheme == AppTheme.LIGHT_PURPLE -> LightPurpleColorScheme
-        appTheme == AppTheme.DARK_PURPLE -> DarkPurpleColorScheme
-        appTheme == AppTheme.LIGHT_BLUE -> LightBlueColorScheme
+//        appTheme == AppTheme.DARK_PURPLE -> DarkPurpleColorScheme
+//        appTheme == AppTheme.LIGHT_BLUE -> LightBlueColorScheme
         appTheme == AppTheme.DARK_BLUE -> DarkBlueColorScheme
         darkTheme -> DarkGreenColorScheme
 

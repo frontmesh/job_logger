@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ext.fadingEdge
@@ -55,6 +56,8 @@ import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.AlphaMedium
+import com.frontmatic.sendwrite.ui.theme.ChipBackground
+import com.frontmatic.sendwrite.ui.theme.ChipOnBackground
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
@@ -197,7 +200,8 @@ fun JobDetailsScreen(
             onClick = {
                 job?.url?.let { uriHandler.openUri(it) }
             },
-            modifier = Modifier.padding(PAGE_PADDING)
+            modifier = Modifier
+                .padding(PAGE_PADDING)
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.05f),
@@ -267,11 +271,9 @@ fun JobDetailsScreen(
                                 modifier = modifier
                                     .border(
                                         width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .35f else .05f),
+                                        color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .5f else .0f),
                                         shape = Shape.medium,
                                     ),
-                                containerColor = MaterialTheme.colorScheme.background
-//                                containerColor =  MaterialTheme.colorScheme.primaryContainer.copy(alpha = if (isLast) 1f else .5f)
                             ) {
                                 Column(
                                     modifier = Modifier
@@ -295,7 +297,7 @@ fun JobDetailsScreen(
                                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
                                         item.formatFullDate?.let {
-                                            TimeChipContent(text = it, selected = isLast)
+                                            ChipContent(text = it, selected = isLast)
                                         }
                                         Text(
                                             text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
@@ -379,37 +381,35 @@ fun JobDetailsCard(
 }
 
 @Composable
-fun TimeChipContent(
+fun ChipContent(
     modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
     icon: Boolean = true,
 ) {
     val primaryTint = when {
-//        selected -> Color(0xFFF2AC3C)
-        // green
-        selected -> Color(0xFF4CAF50)
+        selected -> ChipOnBackground
         else ->  MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaMedium)
     }
 
     Surface(
         color = when {
-            selected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+            selected -> ChipBackground
             else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
         },
         contentColor = when {
-            selected -> MaterialTheme.colorScheme.primary
+            selected -> ChipBackground
             else -> MaterialTheme.colorScheme.onSurface
         },
-        shape = MaterialTheme.shapes.small,
+        shape = CircleShape,
         modifier = modifier
     ) {
         Row (
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(
-                horizontal = 8.dp,
-                vertical = 4.dp
+                horizontal = 10.dp,
+                vertical = 5.dp
             )
         ){
             if (icon) {
@@ -428,4 +428,16 @@ fun TimeChipContent(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun TimeChipContentPreview() {
+    ChipContent(text = "14 days ago", selected = true)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TimeChipContentUnselectedPreview() {
+    ChipContent(text = "26-01-2024", selected = false)
 }

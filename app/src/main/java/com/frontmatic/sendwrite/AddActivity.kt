@@ -20,7 +20,7 @@ class AddActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
         setContent {
-            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.SYSTEM)
+            val appTheme = viewModel.appTheme.collectAsState(initial = AppTheme.getDefaultTheme())
             SendWriteTheme(
                 appTheme = appTheme.value,
             ) {

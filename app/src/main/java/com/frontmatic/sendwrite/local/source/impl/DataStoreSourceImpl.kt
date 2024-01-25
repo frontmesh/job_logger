@@ -45,7 +45,7 @@ class DataStoreSourceImpl(context: Context): DataStoreSource {
             if (savedTheme != null) {
                 AppTheme.valueOf(savedTheme)
             } else {
-                AppTheme.SYSTEM
+                AppTheme.getDefaultTheme()
             }
         }
     }
