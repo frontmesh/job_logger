@@ -55,7 +55,7 @@ fun ListCell(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 5.dp)
 //            .drawBehind {
-//                val offsetVal = MediumRadius.toPx()
+//                val offsetVal = LargeRadius.toPx()
 //
 //                drawLine(
 //                    brush = SolidColor(

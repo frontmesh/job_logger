@@ -7,7 +7,6 @@ import androidx.compose.material.icons.outlined.AddLink
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
-import androidx.compose.material.icons.outlined.EventBusy
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -84,11 +83,6 @@ fun ActionButton(
                         icon = Icons.Outlined.EventAvailable
                     ),
                     MultiFabItem(
-                        id = 2,
-                        icon = Icons.Outlined.EventBusy,
-                        label = "Remove last event"
-                    ),
-                    MultiFabItem(
                         id = 3,
                         icon = Icons.Outlined.Archive,
                         label = "Close job application"
@@ -97,8 +91,7 @@ fun ActionButton(
                 onFabItemClicked = { item ->
                     when(item.id) {
                         1 -> jobDetailsViewModel?.toggleAddNewEventDialog(true)
-                        2 -> jobDetailsViewModel?.toggleRemoveLastEventDialog(true)
-                        3 -> jobDetailsViewModel?.toggleCloseJobApplicationDialog(true)
+                        2 -> jobDetailsViewModel?.toggleCloseJobApplicationDialog(true)
                     }
 
                 }

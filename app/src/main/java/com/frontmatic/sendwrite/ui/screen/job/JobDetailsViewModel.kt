@@ -1,16 +1,13 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
-import androidx.compose.material3.MaterialTheme
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.frontmatic.sendwrite.local.mapper.toJob
-import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
-import com.frontmatic.sendwrite.ui.screen.JobSortType
 import com.frontmatic.sendwrite.ui.screen.navArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -18,7 +15,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.sql.Date
@@ -94,10 +90,9 @@ class JobDetailsViewModel @Inject() constructor(
         }
     }
 
-    fun removeLastEvent() {
+    fun removeEvent() {
         CoroutineScope(Dispatchers.IO).launch {
-            val lastEvent = _job.value?.events?.lastOrNull()
-            val lastEventId = lastEvent?.id
+            val lastEventId = _state.value.eventIdToRemove
 
             // remove last event
             if (lastEventId != null) {
@@ -106,12 +101,12 @@ class JobDetailsViewModel @Inject() constructor(
 
             _state.value = _state.value.copy(
                 snackBarState = SnackBarState(
-                    message = "${lastEvent?.name} event removed",
+                    message = "Event removed",
                     showSnackbar = true,
                 )
             )
 
-            toggleRemoveLastEventDialog(false)
+            toggleRemoveEventDialog(false)
         }
     }
 
@@ -145,7 +140,7 @@ class JobDetailsViewModel @Inject() constructor(
         _state.value = _state.value.copy(showAddNewEventDialog = value)
     }
 
-    fun toggleRemoveLastEventDialog(value: Boolean) {
+    fun toggleRemoveEventDialog(value: Boolean) {
         _state.value = _state.value.copy(showRemoveEventDialog = value)
     }
 
@@ -164,6 +159,11 @@ class JobDetailsViewModel @Inject() constructor(
                 showSnackbar = false,
             )
         )
+    }
+
+    fun handleEventRemoveButton(jobEvent: JobEvent) {
+        _state.value = _state.value.copy(eventIdToRemove = jobEvent.id)
+        toggleRemoveEventDialog(true)
     }
 }
 

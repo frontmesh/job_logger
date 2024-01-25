@@ -1,11 +1,6 @@
 package com.frontmatic.sendwrite.util
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AppRegistration
-import androidx.compose.material.icons.filled.AttachMoney
-import androidx.compose.material.icons.filled.Dashboard
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Task
 import androidx.compose.material.icons.rounded.AppRegistration
 import androidx.compose.material.icons.rounded.Approval
 import androidx.compose.material.icons.rounded.AttachMoney
@@ -55,7 +50,7 @@ object JobEventUtility {
         JobEventType.OTHER -> Icons.Rounded.Dashboard
     }
 
-    fun getTitleForJetLimeItem(jobEvent: JobEvent) : String = when (jobEvent.type) {
+    fun getTitleForJobEventItem(jobEvent: JobEvent) : String = when (jobEvent.type) {
         JobEventType.APPLIED -> "${jobEvent.typeToString} - ${jobEvent.dateToRelativeTime}"
         else -> "${jobEvent.typeToString} - ${jobEvent.name ?: ""}"
 //        JobEventType.INTERVIEW -> jobEvent.name ?: ""

@@ -85,7 +85,7 @@ fun EventListScreen(
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
+                                          color = MaterialTheme.colorScheme.onSurface,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis
                                       )
@@ -100,13 +100,13 @@ fun EventListScreen(
                                       Icon(
                                           imageVector = Icons.Rounded.AccessTime,
                                           contentDescription = "Time",
-                                          tint = MaterialTheme.colorScheme.primary,
+                                          tint = MaterialTheme.colorScheme.surfaceTint,
                                           modifier = Modifier.size(ICON_SMALL)
                                       )
                                       Text(
                                           text = it,
                                           style = MaterialTheme.typography.bodyMedium,
-                                          color = MaterialTheme.colorScheme.primary.copy(alpha = 0.75f),
+                                          color = MaterialTheme.colorScheme.onSurface,
 //                                          fontWeight = FontWeight.Medium,
                                           maxLines = 1,
                                           overflow = TextOverflow.Ellipsis

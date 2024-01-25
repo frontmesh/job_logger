@@ -20,10 +20,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Event
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -43,6 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.ext.fadingEdge
+import com.frontmatic.sendwrite.local.model.JobEvent
+import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
 import com.frontmatic.sendwrite.ui.components.timeline.CircleParametersDefaults
 import com.frontmatic.sendwrite.ui.components.timeline.LineParametersDefaults
@@ -55,6 +59,7 @@ import com.frontmatic.sendwrite.ui.screen.destinations.ArchiveScreenDestination
 import com.frontmatic.sendwrite.ui.screen.job.components.AddEventAlertDialog
 import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
+import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.AlphaMedium
 import com.frontmatic.sendwrite.ui.theme.ChipBackground
 import com.frontmatic.sendwrite.ui.theme.ChipOnBackground
@@ -62,11 +67,12 @@ import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
 import com.frontmatic.sendwrite.util.JobEventUtility.getIconForJobEvent
-import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJetLimeItem
+import com.frontmatic.sendwrite.util.JobEventUtility.getTitleForJobEventItem
 import com.frontmatic.sendwrite.util.LocalSnackbar
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
+import java.util.Date
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination(
@@ -115,11 +121,11 @@ fun JobDetailsScreen(
 
     if (state.showRemoveEventDialog) {
         MessageAlertDialog(
-            message = "Are you sure you want to remove the last event?",
+            message = "Are you sure you want to remove this event?",
             confirmButton = {
                 Button(
                     onClick = {
-                        viewModel.removeLastEvent()
+                        viewModel.removeEvent()
                     },
                 ) {
                     Text(text = "Remove")
@@ -128,14 +134,14 @@ fun JobDetailsScreen(
             dismissButton = {
                 Box {
                     OutlinedButton(
-                        onClick = { viewModel.toggleRemoveLastEventDialog(false) },
+                        onClick = { viewModel.toggleRemoveEventDialog(false) },
                     ) {
                         Text("Cancel")
                     }
                 }
             },
             onDismissRequest = {
-                viewModel.toggleRemoveLastEventDialog(false)
+                viewModel.toggleRemoveEventDialog(false)
             },
         )
     }
@@ -209,7 +215,7 @@ fun JobDetailsScreen(
                 )
         )
 
-        if (job != null && job.events?.isNullOrEmpty() == false) {
+        if (job != null && job.events.isNotEmpty()) {
             Row(
                 modifier = Modifier
                     .padding(all = PAGE_PADDING)
@@ -241,73 +247,31 @@ fun JobDetailsScreen(
                             it.events.size.minus(1) == index || it.events.size == 1
                         val isFirst = index == 0 && it.events.size != 1
 
-                        val circleParameters = CircleParametersDefaults.circleParameters(
-                            backgroundColor = MaterialTheme.colorScheme.primaryContainer,
-                            stroke = StrokeParameters(
-                                color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .7f else .35f),
-                                width = 3.dp
-                            )
-                        )
-                        val lineParameters = LineParametersDefaults.solidColor(
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = .35f)
-                        )
-
                         TimelineNode(
-                            modifier = Modifier,
                             position = when {
                                 isFirst -> TimelineNodePosition.FIRST
                                 isLast -> TimelineNodePosition.LAST
                                 else -> TimelineNodePosition.MIDDLE
                             },
                             icon = getIconForJobEvent(item.type),
-                            iconColor = when {
-                                isLast -> MaterialTheme.colorScheme.primary
-                                else -> MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
-                            },
-                            circleParameters = circleParameters,
-                            lineParameters = lineParameters,
+                            iconColor = MaterialTheme.colorScheme.primary,
+                            circleParameters = CircleParametersDefaults.circleParameters(
+                                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
+                                stroke = StrokeParameters(
+                                    color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) 1f else .35f),
+                                    width = 3.dp
+                                )
+                            ),
+                            lineParameters =  LineParametersDefaults.solidColor(
+                                color = MaterialTheme.colorScheme.primary.copy(alpha = .35f)
+                            ),
                         ) { modifier ->
-                            MessageBubble(
-                                modifier = modifier
-                                    .border(
-                                        width = 1.dp,
-                                        color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .5f else .0f),
-                                        shape = Shape.medium,
-                                    ),
-                            ) {
-                                Column(
-                                    modifier = Modifier
-                                        .padding(vertical = 8.dp, horizontal = 16.dp),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                                ) {
-                                    Text(
-                                        text = getTitleForJetLimeItem(item),
-                                        style = MaterialTheme.typography.titleMedium,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis,
-                                        color = when {
-                                            isLast -> MaterialTheme.colorScheme.primary
-                                            else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                                        },
-                                    )
-                                    Row(
-                                        modifier = Modifier
-                                            .wrapContentSize(),
-                                        verticalAlignment = Alignment.Top,
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                                    ) {
-                                        item.formatFullDate?.let {
-                                            ChipContent(text = it, selected = isLast)
-                                        }
-                                        Text(
-                                            text = if (item.description?.isNotEmpty() == true) "${item.description}" else "",
-                                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (isLast) 1f else 0.6f),
-                                            modifier = Modifier.padding(horizontal = 4.dp),
-                                            overflow = TextOverflow.Ellipsis,
-                                        )
-                                    }
-                                }
-                            }
+                            MessageBubbleContent(
+                                modifier = modifier,
+                                item = item,
+                                isLast = isLast,
+                                onEventRemove = viewModel::handleEventRemoveButton
+                            )
                         }
                     }
                 }
@@ -342,7 +306,7 @@ fun JobDetailsCard(
             .clip(shape)
             .clickable(onClick = onClick),
         shape = shape,
-        color = MaterialTheme.colorScheme.primaryContainer
+        color = MaterialTheme.colorScheme.surface
 
     ) {
         Row(
@@ -376,6 +340,76 @@ fun JobDetailsCard(
                 )
             }
 
+        }
+    }
+}
+
+@Composable
+fun MessageBubbleContent(
+    modifier: Modifier = Modifier,
+    item: JobEvent,
+    isLast: Boolean,
+    onEventRemove : (JobEvent) -> Unit = {},
+) {
+    MessageBubble(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .85f else .0f),
+                shape = Shape.medium,
+            ),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(all=12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = getTitleForJobEventItem(item),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+
+                IconButton(
+                    modifier = Modifier.size(20.dp),
+                    onClick = { onEventRemove(item) }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Event delete icon",
+                        tint = if (isLast) MaterialTheme.colorScheme.secondary
+                            else MaterialTheme.colorScheme.onSurface.copy(AlphaMedium),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
+            }
+            if (item.description?.isNotEmpty() == true) {
+                Row {
+                    Text(
+                        text = item.description,
+                        color = MaterialTheme.colorScheme.onSurface.copy(AlphaHigh),
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+            }
+
+            item.formatFullDate?.let {
+                Row(
+                    modifier = Modifier
+                        .wrapContentSize(),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    ChipContent(text = it, selected = isLast)
+                }
+            }
         }
     }
 }
@@ -440,4 +474,37 @@ fun TimeChipContentPreview() {
 @Composable
 fun TimeChipContentUnselectedPreview() {
     ChipContent(text = "26-01-2024", selected = false)
+}
+
+
+@Preview
+@Composable
+fun MessageBubbleContentPreview() {
+    MessageBubbleContent(
+        isLast = true,
+        item = JobEvent(
+            jobId = 1,
+            name = "Job title",
+            description = "Job description",
+            type = JobEventType.INTERVIEW,
+            date = Date(1650000000000),
+            url = "https://www.some-fake-job-board.com/some-fake-job-id",
+        )
+    )
+}
+
+@Preview
+@Composable
+fun MessageBubbleContentEmptyPreview() {
+    MessageBubbleContent(
+        isLast = false,
+        item = JobEvent(
+            jobId = 1,
+            name = "Job title",
+            description = null,
+            type = JobEventType.OTHER,
+            date = null,
+            url = "https://www.some-fake-job-board.com/some-fake-job-id",
+        )
+    )
 }

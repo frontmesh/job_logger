@@ -95,7 +95,7 @@ fun BottomNavBar(
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
-                    indicatorColor = MaterialTheme.colorScheme.background,
+                    indicatorColor = MaterialTheme.colorScheme.surface,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
                     selectedIconColor = MaterialTheme.colorScheme.primary
                 )

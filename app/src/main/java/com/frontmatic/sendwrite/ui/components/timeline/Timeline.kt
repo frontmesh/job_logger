@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,7 +72,6 @@ data class LineParameters(
 )
 
 object LineParametersDefaults {
-
     private val defaultStrokeWidth = 5.dp
 
     fun linearGradient(
@@ -102,9 +102,7 @@ object LineParametersDefaults {
 
 
 object CircleParametersDefaults {
-
     private val defaultCircleRadius = 16.dp
-    
     private val defaultIconSize = 10.dp
 
     fun circleParameters(
@@ -135,7 +133,7 @@ fun TimelineNode(
     circleParameters: CircleParameters,
     lineParameters: LineParameters? = null,
     contentStartOffset: Dp = 16.dp,
-    spacerBetweenNodes: Dp = 24.dp,
+    spacerBetweenNodes: Dp = 12.dp,
     content: @Composable BoxScope.(modifier: Modifier) -> Unit,
 ) {
     val iconPainter = icon?.let {
@@ -145,7 +143,7 @@ fun TimelineNode(
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-            scale.animateTo(1f, animationSpec = tween(300, easing = FastOutSlowInEasing))
+        scale.animateTo(1f, animationSpec = tween(300, easing = FastOutSlowInEasing))
     }
 
     Box(
@@ -231,13 +229,18 @@ fun MessageBubble(
     containerColor: Color =  MaterialTheme.colorScheme.surface,
     content : @Composable () -> Unit = {}
 ) {
-    Card(
+//    Card(
+//        modifier = modifier
+//            .fillMaxWidth(),
+//        shape = Shape.medium,
+//        colors = CardDefaults.cardColors(
+//            containerColor = containerColor
+//        )
+//    ) {
+    Surface(
         modifier = modifier
             .fillMaxWidth(),
-        shape = Shape.medium,
-        colors = CardDefaults.cardColors(
-            containerColor = containerColor
-        )
+        shape = Shape.medium
     ) {
         content()
     }
