@@ -46,15 +46,14 @@ fun LetterImagePlaceholder(
 private fun getColorForLetter(letter: Char): Color {
     return when (letter) {
         // Amazon orange
-        'A',  -> Color(0xFFFF9800)
-        'B',  -> Color(0xFF2196F3)
-        'C',  -> Color(0xFF9C27B0)
-        'D',  -> Color(0xFFE91E63)
-        'E', 'M'   -> Color(0xFF673AB7)
-        'F',  -> Color(0xFF9E9E9E)
-        'G',  -> Color(0xFF607D8B)
-        'H',  -> Color(0xFF795548)
-        'I',  -> Color(0xFF8BC34A)
+        'A', 'J', 'K' -> Color(0xFFFF9800)
+        'B', 'F', 'L'  -> Color(0xFF2196F3)
+        'C', 'N', 'P' -> Color(0xFF9C27B0)
+        'D', 'O', 'R'  -> Color(0xFFE91E63)
+        'E', 'M', 'S'   -> Color(0xFF673AB7)
+        'G', 'W', 'Y'  -> Color(0xFF607D8B)
+        'H', 'U', 'V'  -> Color(0xFF795548)
+        'I', 'T', 'X', 'Z', 'Q' -> Color(0xFF8BC34A)
         else -> MaterialTheme.colorScheme.primary
     }
 }
