@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.DropdownMenu
@@ -158,22 +159,46 @@ fun Destination.TopBarActions(navBackStackEntry: NavBackStackEntry?) {
                 expanded = dropDowMenuExpanded,
                 onDismissRequest = { dropDowMenuExpanded = false }
             ) {
-                DropdownMenuItem(text = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = "Delete",
-                            color = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.padding(start = 6.dp)
-                        )
+                DropdownMenuItem(
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "Delete",
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 6.dp)
+                            )
+                        }
+                    },
+                    onClick = {
+                        jobDetailsViewModel?.toggleDeleteJobApplicationDialog(true)
                     }
-                }, onClick = {
-                    jobDetailsViewModel?.toggleDeleteJobApplicationDialog(true)
-                })
+                )
+
+                DropdownMenuItem(
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.Archive,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "Archive",
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 6.dp)
+                            )
+
+                        }
+                    },
+                    onClick = {
+                        jobDetailsViewModel?.toggleCloseJobApplicationDialog(true)
+                    }
+                )
 
             }
 

@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddLink
-import androidx.compose.material.icons.outlined.Archive
-import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.EventAvailable
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -14,16 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.AddActivity
-import com.frontmatic.sendwrite.ui.components.multifab.FabIcon
-import com.frontmatic.sendwrite.ui.components.multifab.FabOption
-import com.frontmatic.sendwrite.ui.components.multifab.MultiFabItem
-import com.frontmatic.sendwrite.ui.components.multifab.MultiFloatingActionButton
 import com.frontmatic.sendwrite.ui.screen.destinations.Destination
 import com.frontmatic.sendwrite.ui.screen.destinations.HomeScreenDestination
 import com.frontmatic.sendwrite.ui.screen.destinations.JobDetailsScreenDestination
@@ -65,37 +58,14 @@ fun ActionButton(
                 if (job.archived) return
             }
 
-
-            MultiFloatingActionButton(
-                fabIcon = FabIcon(
-                    imageVector = Icons.Outlined.Event,
-                    iconRotate = 25f,
-                ),
-                fabOption = FabOption(
-                    iconTint = Color.White,
-                    backgroundTint = MaterialTheme.colorScheme.tertiary,
-                    showLabels = true
-                ),
-                items = listOf(
-                    MultiFabItem(
-                        id = 1,
-                        label = "Add an event",
-                        icon = Icons.Outlined.EventAvailable
-                    ),
-                    MultiFabItem(
-                        id = 2,
-                        icon = Icons.Outlined.Archive,
-                        label = "Archive application"
-                    )
-                ),
-                onFabItemClicked = { item ->
-                    when(item.id) {
-                        1 -> jobDetailsViewModel?.toggleAddNewEventDialog(true)
-                        2 -> jobDetailsViewModel?.toggleCloseJobApplicationDialog(true)
-                    }
-
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.secondary,
+                onClick = {
+                    jobDetailsViewModel?.toggleAddNewEventDialog(true)
                 }
-            )
+            ) {
+                Icon(imageVector = Icons.Outlined.EventAvailable, contentDescription = "Add a new job event")
+            }
         }
         else -> {}
     }
