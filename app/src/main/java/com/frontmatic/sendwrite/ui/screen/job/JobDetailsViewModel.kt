@@ -90,6 +90,12 @@ class JobDetailsViewModel @Inject() constructor(
         }
     }
 
+    fun onUpdateEvent(event: JobEvent) {
+        viewModelScope.launch(Dispatchers.IO) {
+            jobEventLocalDataSource.updateJobEvent(event)
+        }
+    }
+
     fun removeEvent() {
         CoroutineScope(Dispatchers.IO).launch {
             val lastEventId = _state.value.eventIdToRemove

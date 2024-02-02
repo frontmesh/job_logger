@@ -12,6 +12,8 @@ interface JobEventLocalDataSource {
 
     suspend fun saveJobEvent(jobEvent: JobEvent): Long
 
+    suspend fun updateJobEvent(jobEvent: JobEvent): Int
+
     fun deleteById(id: Long): Int
 
     fun removeLastEvent(jobId: Long): Int

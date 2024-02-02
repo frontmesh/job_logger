@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.frontmatic.sendwrite.local.model.JobEvent
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -24,6 +25,9 @@ interface JobEventDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(jobEvent: JobEvent): Long
+
+    @Update
+    fun update(jobEvent: JobEvent)
 
     @Query("DELETE FROM job_events WHERE id = :id")
     fun deleteById(id: Long): Int

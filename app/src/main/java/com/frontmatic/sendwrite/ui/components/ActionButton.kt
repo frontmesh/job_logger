@@ -5,6 +5,8 @@ import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddLink
 import androidx.compose.material.icons.outlined.EventAvailable
+import androidx.compose.material.icons.outlined.EventNote
+import androidx.compose.material.icons.outlined.NoteAdd
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,7 +66,7 @@ fun ActionButton(
                     jobDetailsViewModel?.toggleAddNewEventDialog(true)
                 }
             ) {
-                Icon(imageVector = Icons.Outlined.EventAvailable, contentDescription = "Add a new job event")
+                Icon(imageVector = Icons.Outlined.EventNote, contentDescription = "Add a new job event")
             }
         }
         else -> {}

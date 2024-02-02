@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +64,7 @@ import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.AlphaMedium
 import com.frontmatic.sendwrite.ui.theme.ChipBackground
 import com.frontmatic.sendwrite.ui.theme.ChipOnBackground
+import com.frontmatic.sendwrite.ui.theme.LocalCustomTheme
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
 import com.frontmatic.sendwrite.ui.theme.Shape
@@ -350,9 +352,12 @@ fun MessageBubbleContent(
     item: JobEvent,
     isLast: Boolean,
     onEventRemove : (JobEvent) -> Unit = {},
+    onBubbleClick : (JobEvent) -> Unit = {}
 ) {
     MessageBubble(
         modifier = modifier
+            .clip(RoundedCornerShape(size = MediumRadius))
+            .clickable(onClick = { onBubbleClick(item) })
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .85f else .0f),
@@ -421,18 +426,21 @@ fun ChipContent(
     selected: Boolean,
     icon: Boolean = true,
 ) {
+    val iconTint = LocalCustomTheme.current.iconTint
+    val iconSurface = LocalCustomTheme.current.iconSurface
+
     val primaryTint = when {
-        selected -> ChipOnBackground
+        selected -> iconTint
         else ->  MaterialTheme.colorScheme.onSurface.copy(alpha = AlphaMedium)
     }
 
     Surface(
         color = when {
-            selected -> ChipBackground
+            selected -> iconSurface
             else -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
         },
         contentColor = when {
-            selected -> ChipBackground
+            selected -> iconSurface
             else -> MaterialTheme.colorScheme.onSurface
         },
         shape = CircleShape,

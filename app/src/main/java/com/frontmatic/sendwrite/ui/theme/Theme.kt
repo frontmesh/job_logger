@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -116,9 +117,21 @@ fun SendWriteTheme(
         }
     }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+    val customTheme = when {
+        appTheme == AppTheme.DARK_GREEN ||
+        appTheme == AppTheme.DARK_BLUE
+        -> CustomTheme(iconTint = DarkChipOnBackground, iconSurface = DarkChipBackground)
+        else -> CustomTheme(iconTint = ChipOnBackground, iconSurface = ChipBackground)
+    }
+
+
+    CompositionLocalProvider(
+        LocalCustomTheme provides customTheme
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }
 }

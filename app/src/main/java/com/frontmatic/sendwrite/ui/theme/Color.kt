@@ -1,5 +1,7 @@
 package com.frontmatic.sendwrite.ui.theme
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 val DarkPurplePrimary = Color(0xFFD0BCFF)
@@ -37,4 +39,7 @@ val LightOrangeTertiaryContainer = Color(0xFFEAD7BB)
 // Common colors for all themes
 
 val ChipBackground = Color(0xFFFDEDEF)
-val ChipOnBackground = Color(0xFFEF4E60)
+val ChipOnBackground = Color(0xFFFF6536)
+
+val DarkChipBackground = Color(0xFF4D4647)
+val DarkChipOnBackground = Color(0xFFFF8A80)
