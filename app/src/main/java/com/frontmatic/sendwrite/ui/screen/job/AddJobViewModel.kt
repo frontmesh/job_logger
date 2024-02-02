@@ -1,6 +1,5 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.ext.convertStringNullsToNull
 import com.frontmatic.sendwrite.local.model.Job
-import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
@@ -48,7 +46,7 @@ class AddJobViewModel @Inject constructor(
             val jobId = jobDataSource.saveJob(job)
 
             if (date != null) {
-                val jobEvent = JobEvent(
+                val jobEventDetails = JobEventDetails(
                     type = JobEventType.APPLIED,
                     date = Date(date),
                     name = "Job Application",
@@ -57,7 +55,7 @@ class AddJobViewModel @Inject constructor(
                     url = null,
                 )
 
-                jobEventLocalDataSource.saveJobEvent(jobEvent)
+                jobEventLocalDataSource.saveJobEvent(jobEventDetails.toJobEvent())
             }
         }
     }

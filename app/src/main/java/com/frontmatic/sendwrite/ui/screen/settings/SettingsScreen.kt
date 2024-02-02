@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.QueryStats
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Window
 import androidx.compose.material3.Divider
@@ -42,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import com.frontmatic.sendwrite.BuildConfig
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.components.FancyIcon
+import com.frontmatic.sendwrite.ui.components.domain.SectionTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.SettingsChildScreenDestination
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
@@ -90,6 +92,19 @@ fun setOptions(
             },
             childPage = ChildPage.NOTIFICATIONS
         ),
+        SettingsOption(
+            name = "Stats",
+            icon = Icons.Filled.QueryStats,
+            clickHandler = {
+                navigator.navigate(
+                    SettingsChildScreenDestination(
+                        ChildPage.STATS
+                    )
+                )
+            },
+            childPage = ChildPage.STATS
+        ),
+
         SettingsOption(
             name = "Website",
             icon = Icons.Filled.Link,
@@ -165,28 +180,39 @@ fun SettingsScreen(
             .fillMaxSize()
             .padding(all = PAGE_PADDING)
     ) {
-        Surface(
-            color = MaterialTheme.colorScheme.surface,
-            shape = Shape.medium,
-            modifier = Modifier
-                .shadow(elevation = 2.dp, clip = true, shape = Shape.medium)
-        ) {
-            LazyColumn {
-                itemsIndexed(options) { index, option ->
-                    OptionRow(
-                        option = option,
-                        onClick = option.clickHandler
+        OptionsSection(title = "Functional", options = options.take(3))
+        OptionsSection(title = "Other", options = options.drop(3))
+        AppVersion()
+    }
+}
+
+@Composable
+fun OptionsSection(
+    title: String,
+    options: List<SettingsOption>
+) {
+    SectionTitle(text = title)
+
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        shape = Shape.medium,
+        modifier = Modifier
+            .shadow(elevation = 2.dp, clip = true, shape = Shape.medium)
+    ) {
+        LazyColumn {
+            itemsIndexed(options) { index, option ->
+                OptionRow(
+                    option = option,
+                    onClick = option.clickHandler
+                )
+                if (index < options.size - 1) {
+                    Divider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = AlphaDisabled)
                     )
-                    if (index < options.size - 1) {
-                        Divider(
-                            thickness = 1.dp,
-                            color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = AlphaDisabled)
-                        )
-                    }
                 }
             }
         }
-        AppVersion()
     }
 }
 

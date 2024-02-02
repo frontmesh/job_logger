@@ -96,10 +96,10 @@ fun TopBar(
 fun Destination.topBarTitle(navBackStackEntry: NavBackStackEntry?): String {
     return when (this) {
         JobDetailsScreenDestination -> {
-            val state = navBackStackEntry?.let {
-                hiltViewModel<JobDetailsViewModel>(navBackStackEntry).state.collectAsState(null).value
+            val job = navBackStackEntry?.let {
+                hiltViewModel<JobDetailsViewModel>(navBackStackEntry).jobDetail.collectAsState()
             }
-            state?.job?.title ?: "Job Details"
+            job?.value?.title ?: "Job Details"
         }
 
         EventListScreenDestination -> {

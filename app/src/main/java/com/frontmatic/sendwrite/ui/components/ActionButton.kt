@@ -53,11 +53,10 @@ fun ActionButton(
                 hiltViewModel<JobDetailsViewModel>(navBackStackEntry)
             }
 
-            val state by jobDetailsViewModel?.state!!.collectAsState(JobDetailState())
-            val job = state.job
+            val job = jobDetailsViewModel?.jobDetail?.collectAsState()
 
             if (job != null) {
-                if (job.archived) return
+                if (job.value?.archived == true) return
             }
 
             FloatingActionButton(

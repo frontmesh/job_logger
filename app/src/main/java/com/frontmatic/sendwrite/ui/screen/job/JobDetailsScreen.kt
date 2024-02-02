@@ -37,7 +37,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
@@ -49,6 +48,7 @@ import com.frontmatic.sendwrite.ext.fadingEdge
 import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.ui.components.EmptyContent
+import com.frontmatic.sendwrite.ui.components.domain.SectionTitle
 import com.frontmatic.sendwrite.ui.components.timeline.CircleParametersDefaults
 import com.frontmatic.sendwrite.ui.components.timeline.LineParametersDefaults
 import com.frontmatic.sendwrite.ui.components.timeline.MessageBubble
@@ -62,8 +62,6 @@ import com.frontmatic.sendwrite.ui.screen.job.components.MessageAlertDialog
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
 import com.frontmatic.sendwrite.ui.theme.AlphaHigh
 import com.frontmatic.sendwrite.ui.theme.AlphaMedium
-import com.frontmatic.sendwrite.ui.theme.ChipBackground
-import com.frontmatic.sendwrite.ui.theme.ChipOnBackground
 import com.frontmatic.sendwrite.ui.theme.LocalCustomTheme
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
 import com.frontmatic.sendwrite.ui.theme.PAGE_PADDING
@@ -86,17 +84,16 @@ fun JobDetailsScreen(
     navigator: DestinationsNavigator,
     viewModel: JobDetailsViewModel = hiltViewModel(),
 ) {
-
-    val state by viewModel.state.collectAsState(JobDetailState())
+    val uiState = viewModel.uiState
     val snack = LocalSnackbar.current
-    val job = state.job
+    val job by viewModel.jobDetail.collectAsState()
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
 
-    LaunchedEffect(state.snackBarState) {
-        if (state.snackBarState.showSnackbar) {
+    LaunchedEffect(uiState.snackBarUiState) {
+        if (uiState.snackBarUiState.showSnackbar) {
             snack.showSnackbar(
-                message = state.snackBarState.message,
+                message = uiState.snackBarUiState.message,
             )
             viewModel.resetSnackBar()
         }
@@ -108,20 +105,24 @@ fun JobDetailsScreen(
         }
     }
 
-    if (state.showAddNewEventDialog) {
+    if (uiState.showAddNewEventDialog) {
         AddEventAlertDialog(
             modifier = Modifier
                 .padding(all = PAGE_PADDING)
                 .fillMaxWidth(),
-            state = state,
-            onEventAction = viewModel::onAddEventAlertAction,
+            uiState = viewModel.jobEventUiState,
+            onEventValueChange = viewModel::updateJobEventUiState,
+            onSave = {
+                viewModel.saveEvent()
+            },
             onDismissed = {
                 viewModel.toggleAddNewEventDialog(false)
-            }
+            },
+
         )
     }
 
-    if (state.showRemoveEventDialog) {
+    if (uiState.showRemoveEventDialog) {
         MessageAlertDialog(
             message = "Are you sure you want to remove this event?",
             confirmButton = {
@@ -148,7 +149,7 @@ fun JobDetailsScreen(
         )
     }
 
-    if (state.showDeleteJobApplicationDialog) {
+    if (uiState.showDeleteJobApplicationDialog) {
         MessageAlertDialog(
             message = "Are you sure you want to delete your job application?",
             confirmButton = { Button(
@@ -171,7 +172,7 @@ fun JobDetailsScreen(
 
     }
 
-    if (state.showCloseJobApplicationDialog) {
+    if (uiState.showCloseJobApplicationDialog) {
         MessageAlertDialog(
             message = "Are you sure you want to close this job application?",
             confirmButton = {
@@ -217,21 +218,10 @@ fun JobDetailsScreen(
                 )
         )
 
-        if (job != null && job.events.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .padding(all = PAGE_PADDING)
-                    .fillMaxWidth(),
-            ) {
-                Text(
-                    text = "Job Timeline",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+        if (job != null && job!!.events.isNotEmpty()) {
+            SectionTitle(text = "Job Timeline")
 
-            state.job?.let {
+            job?.let {
                 LazyColumn(
                     state = lazyListState,
                     modifier = Modifier
@@ -269,7 +259,12 @@ fun JobDetailsScreen(
                             ),
                         ) { modifier ->
                             MessageBubbleContent(
-                                modifier = modifier,
+                                modifier = modifier
+                                    .clip(RoundedCornerShape(size = MediumRadius))
+                                    .clickable(onClick = {
+                                        viewModel.updateJobEventUiState(item.toJobEventDetails())
+                                        viewModel.toggleAddNewEventDialog(true)
+                                    }),
                                 item = item,
                                 isLast = isLast,
                                 onEventRemove = viewModel::handleEventRemoveButton
@@ -278,12 +273,12 @@ fun JobDetailsScreen(
                     }
                 }
             }
-        } else if (state.job?.events?.isEmpty() == true) {
+        } else if (job?.events?.isEmpty() == true) {
             EmptyContent(
                 icon = Icons.Rounded.Event,
                 message = "This job application doesn't have any events logged. \n" +
                         " \n" +
-                        if (state.job?.archived != true) {
+                        if (job?.archived != true) {
                             "Log your job application progress on a button below."
                         } else {
                             "This job application is closed."
@@ -352,12 +347,12 @@ fun MessageBubbleContent(
     item: JobEvent,
     isLast: Boolean,
     onEventRemove : (JobEvent) -> Unit = {},
-    onBubbleClick : (JobEvent) -> Unit = {}
+//    onBubbleClick : (JobEvent) -> Unit = {}
 ) {
     MessageBubble(
         modifier = modifier
-            .clip(RoundedCornerShape(size = MediumRadius))
-            .clickable(onClick = { onBubbleClick(item) })
+//            .clip(RoundedCornerShape(size = MediumRadius))
+//            .clickable(onClick = { onBubbleClick(item) })
             .border(
                 width = 1.dp,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = if (isLast) .85f else .0f),
@@ -491,6 +486,7 @@ fun MessageBubbleContentPreview() {
     MessageBubbleContent(
         isLast = true,
         item = JobEvent(
+            id = 1,
             jobId = 1,
             name = "Job title",
             description = "Job description",
@@ -507,6 +503,7 @@ fun MessageBubbleContentEmptyPreview() {
     MessageBubbleContent(
         isLast = false,
         item = JobEvent(
+            id = 1,
             jobId = 1,
             name = "Job title",
             description = null,

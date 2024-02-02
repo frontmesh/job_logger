@@ -39,11 +39,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimePickerField(
-    text: String = "Time",
-    onSelect: (TimePickerState?) -> Unit) {
+    initialHour: Int = 0,
+    initialMinute: Int = 0,
+    placeholder: String = "Time",
+    onSelect: (TimePickerState?) -> Unit
+) {
     var openDialog by remember { mutableStateOf(false) }
-    var hasBeenPicked by remember { mutableStateOf(false) }
+    var hasBeenPicked by remember { mutableStateOf(initialHour != 0 || initialMinute != 0) }
     val timePickerState = rememberTimePickerState(
+        initialHour = initialHour,
+        initialMinute = initialMinute,
         is24Hour = true,
     )
 
@@ -56,7 +61,7 @@ fun TimePickerField(
 
             val pattern = if (timePickerState.is24hour) "HH:mm" else "hh:mm a"
             val formatter = SimpleDateFormat(pattern, Locale.getDefault())
-            formatter.format(cal.time) ?: text
+            formatter.format(cal.time) ?: placeholder
         }
     }
 
@@ -67,8 +72,8 @@ fun TimePickerField(
 
         ) {
             Surface(
-                modifier = Modifier.
-                    padding(all = 16.dp)
+                modifier = Modifier
+                    .padding(all = 16.dp)
                     .width(IntrinsicSize.Min)
                     .height(IntrinsicSize.Min)
                     .background(
@@ -118,7 +123,9 @@ fun TimePickerField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(imageVector = Icons.Filled.AccessTime, contentDescription = null)
-        Text(text = if (!hasBeenPicked) text else formattedTime.value)
+        Text(
+            text = if (!hasBeenPicked) placeholder else formattedTime.value
+        )
     }
 }
 

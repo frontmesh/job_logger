@@ -1,7 +1,6 @@
 package com.frontmatic.sendwrite.ui.pickers
 
 import android.os.Build
-import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.text.SimpleDateFormat
-import java.time.Instant
 import java.util.Date
 import java.util.Locale
 
@@ -35,24 +33,16 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerField(
+    initialSelectedDateMillis: Long? = null,
     onSelect: (Long?) -> Unit,
-    text: String,
+    placeholder: String,
     dateValidator: (Long) -> Boolean = { true },
 ) {
-    val datePickerState = rememberDatePickerState()
-//    val interactionSource = remember { MutableInteractionSource() }
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initialSelectedDateMillis,
+        initialDisplayedMonthMillis = initialSelectedDateMillis,
+    )
     var openDialog by remember { mutableStateOf(false) }
-
-//    val pressedState = interactionSource.interactions.collectAsState(
-//        initial = PressInteraction.Cancel(
-//            PressInteraction.Press(Offset.Zero)
-//        )
-//    )
-
-//    if (pressedState.value is PressInteraction.Release) {
-//        openDialog = true
-//        interactionSource.tryEmit(PressInteraction.Cancel(PressInteraction.Press(Offset.Zero)))
-//    }
 
     val formattedDate = remember {
         derivedStateOf {
@@ -61,7 +51,6 @@ fun DatePickerField(
             }
         }
     }
-
 
     if (openDialog) {
         val confirmEnabled = remember { derivedStateOf { datePickerState.selectedDateMillis != null } }
@@ -106,20 +95,8 @@ fun DatePickerField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(imageVector = Icons.Filled.DateRange, contentDescription = null)
-        Text(text = formattedDate.value ?: text, )
+        Text(text = formattedDate.value ?: placeholder, )
     }
-
-
-//    TextField(
-//        value = formattedDate.value,
-//        onValueChange = {},
-//        label = { Text("Date") },
-//        readOnly = true,
-//        leadingIcon = {
-//          Icon(imageVector = Icons.Filled.DateRange, contentDescription = null)
-//        },
-//        interactionSource = interactionSource,
-//    )
 }
 
 fun Date.toFormattedString(): String {

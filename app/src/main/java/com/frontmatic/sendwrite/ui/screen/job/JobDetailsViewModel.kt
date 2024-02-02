@@ -1,5 +1,8 @@
 package com.frontmatic.sendwrite.ui.screen.job
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,10 +20,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.sql.Date
 import javax.inject.Inject
-
-
 
 @HiltViewModel
 class JobDetailsViewModel @Inject() constructor(
@@ -30,63 +30,31 @@ class JobDetailsViewModel @Inject() constructor(
 ): ViewModel() {
 
     private val navArgs: JobDetailsScreenNavArgs = savedStateHandle.navArgs()
-    private val _job = jobLocalDataSource.getByIdWithEvents(navArgs.id).stateIn(viewModelScope,  SharingStarted.Lazily, null)
-    private val _state = MutableStateFlow(JobDetailState())
-    val state = combine(_state, _job,) { state, job ->
-         state.copy(
-            job = job,
+
+    val jobDetail = jobLocalDataSource.getByIdWithEvents(navArgs.id)
+        .stateIn(viewModelScope,  SharingStarted.Lazily, null)
+
+    var uiState by mutableStateOf(JobDetailState())
+
+    var jobEventUiState by mutableStateOf(
+        value = JobEventUiState(
+            jobEventDetails = JobEventDetails(jobId = navArgs.id)
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), JobDetailState())
+    )
 
-    fun onAddEventAlertAction(action: AddEventAlertAction): Unit {
-        when(action) {
-            AddEventAlertAction.CancelEvent -> {
-                _state.value = _state.value.copy(
-                    newEventTitle = null,
-                    newEventDescription = null,
-                    newEventDate = null,
-                    newEventType = null
-                )
-            }
-            is AddEventAlertAction.setNewEventDate -> {
-                _state.value = _state.value.copy(newEventDate = action.date)
-            }
-            is AddEventAlertAction.setNewEventDescription -> {
-                _state.value = _state.value.copy(newEventDescription = action.description)
-            }
-            is AddEventAlertAction.setNewEventTitle -> {
-                _state.value = _state.value.copy(newEventTitle = action.title)
-            }
-            is AddEventAlertAction.setNewEventType -> {
-                _state.value = _state.value.copy(newEventType = action.type)
-            }
-            is AddEventAlertAction.SaveEvent -> {
-                val job = _job.value ?: return
-                val newEvent = JobEvent(
-                    jobId = job.id,
-                    type = _state.value.newEventType ?: JobEventType.APPLIED,
-                    date = _state.value.newEventDate?.let {
-                        Date(it)
-                    },
-                    name = _state.value.newEventTitle ?: "",
-                    description = _state.value.newEventDescription ?: "",
-                    url = null,
-                )
+    fun updateJobEventUiState(jobEventDetails: JobEventDetails) {
+        jobEventUiState = JobEventUiState(
+            jobEventDetails = jobEventDetails,
+            isEntryValid = validateInput(
+                jobEventDetails
+            )
+        )
+    }
 
-                viewModelScope.launch(Dispatchers.IO) {
-                    jobEventLocalDataSource.saveJobEvent(newEvent)
-                    _state.value = _state.value.copy(
-                        snackBarState = SnackBarState(
-                            message = "${newEvent.typeToString} event added",
-                            showSnackbar = true,
-                        ),
-                        newEventTitle = null,
-                        newEventDescription = null,
-                        newEventDate = null,
-                        newEventType = null,
-                    )
-                }
-            }
+    fun validateInput(uiState: JobEventDetails = jobEventUiState.jobEventDetails): Boolean {
+        return with(uiState) {
+            (name.isNotBlank() && type != JobEventType.APPLIED) ||
+                    (date != null && type == JobEventType.APPLIED)
         }
     }
 
@@ -96,88 +64,80 @@ class JobDetailsViewModel @Inject() constructor(
         }
     }
 
+    fun saveEvent() {
+        if (validateInput()) {
+            viewModelScope.launch(Dispatchers.IO) {
+                jobEventLocalDataSource.saveJobEvent(jobEventUiState.jobEventDetails.toJobEvent())
+            }
+        }
+    }
+
     fun removeEvent() {
         CoroutineScope(Dispatchers.IO).launch {
-            val lastEventId = _state.value.eventIdToRemove
+            val lastEventId = uiState.eventIdToRemove
 
             // remove last event
             if (lastEventId != null) {
                 jobEventLocalDataSource.deleteById(lastEventId)
             }
 
-            _state.value = _state.value.copy(
-                snackBarState = SnackBarState(
-                    message = "Event removed",
-                    showSnackbar = true,
-                )
-            )
-
+            showSnackbarMessage("Event removed")
             toggleRemoveEventDialog(false)
         }
     }
 
     fun deleteJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            val jobToDelete = _job.value ?: return@launch
+            val jobToDelete = jobDetail.value ?: return@launch
             jobLocalDataSource.deleteJob(jobToDelete.toJob())
-            _state.value = _state.value.copy(
-                snackBarState = SnackBarState(
-                    message = "${jobToDelete.title} deleted",
-                    showSnackbar = true,
-                )
-            )
+            showSnackbarMessage("${jobToDelete.title} deleted")
         }
     }
 
     fun archiveJob() {
         viewModelScope.launch(Dispatchers.IO) {
-            val jobToArchive = _job.value ?: return@launch
+            val jobToArchive = jobDetail.value ?: return@launch
             jobLocalDataSource.archiveJob(jobToArchive.toJob())
-            _state.value = _state.value.copy(
-                snackBarState = SnackBarState(
-                    message = "${jobToArchive.title} archived",
-                    showSnackbar = true,
-                )
-            )
+            showSnackbarMessage("${jobToArchive.title} archived")
         }
     }
 
     fun toggleAddNewEventDialog(value: Boolean) {
-        _state.value = _state.value.copy(showAddNewEventDialog = value)
+        uiState = uiState.copy(showAddNewEventDialog = value)
     }
 
     fun toggleRemoveEventDialog(value: Boolean) {
-        _state.value = _state.value.copy(showRemoveEventDialog = value)
+        uiState = uiState.copy(showRemoveEventDialog = value)
     }
 
     fun toggleCloseJobApplicationDialog(value: Boolean) {
-        _state.value = _state.value.copy(showCloseJobApplicationDialog = value)
+        uiState = uiState.copy(showCloseJobApplicationDialog = value)
     }
 
     fun toggleDeleteJobApplicationDialog(value: Boolean) {
-        _state.value = _state.value.copy(showDeleteJobApplicationDialog = value)
+        uiState = uiState.copy(showDeleteJobApplicationDialog = value)
     }
 
     fun resetSnackBar() {
-        _state.value = _state.value.copy(
-            snackBarState = SnackBarState(
+        uiState = uiState.copy(
+            snackBarUiState = SnackBarUiState(
                 message = "",
                 showSnackbar = false,
             )
         )
     }
 
+    fun showSnackbarMessage(msg:String) {
+        uiState = uiState.copy(
+            snackBarUiState = SnackBarUiState(
+                message = msg,
+                showSnackbar = true,
+            )
+        )
+    }
+
     fun handleEventRemoveButton(jobEvent: JobEvent) {
-        _state.value = _state.value.copy(eventIdToRemove = jobEvent.id)
+        uiState = uiState.copy(eventIdToRemove = jobEvent.id)
         toggleRemoveEventDialog(true)
     }
-}
-
-sealed class AddEventAlertAction {
-    data class setNewEventDate(val date: Long?): AddEventAlertAction()
-    data class setNewEventTitle(val title: String?): AddEventAlertAction()
-    data class setNewEventDescription(val description: String?): AddEventAlertAction()
-    data class setNewEventType(val type: JobEventType?): AddEventAlertAction()
-    object CancelEvent: AddEventAlertAction()
-    object SaveEvent : AddEventAlertAction()
 }

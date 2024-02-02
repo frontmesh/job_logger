@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.data.AppTheme
 import com.frontmatic.sendwrite.ui.components.WebView
 import com.frontmatic.sendwrite.ui.screen.settings.components.NotificationsSection
+import com.frontmatic.sendwrite.ui.screen.settings.components.StatsSection
 import com.frontmatic.sendwrite.ui.screen.settings.components.ThemesSection
 import com.frontmatic.sendwrite.ui.screen.settings.data.ChildPage
 import com.frontmatic.sendwrite.ui.screen.styles.DefaultTransitions
@@ -46,6 +47,7 @@ fun SettingsChildScreen(
             updateIsJobEventNotificationEnabled = viewModel::updateIsJobEventNotificationEnabled,
             updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled,
         )
+        ChildPage.STATS -> StatsSection()
         ChildPage.WEBSITE -> WebView(url = "https://www.jobops.app/")
         ChildPage.PRIVACY -> WebView(url = "https://www.jobops.app/privacy")
         else -> {}

@@ -6,4 +6,5 @@ enum class ChildPage {
     NOTIFICATIONS,
     WEBSITE,
     PRIVACY,
+    STATS,
 }
