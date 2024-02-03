@@ -5,18 +5,17 @@ import javax.annotation.Nullable
 
 data class JobAndEvents(
     val id : Long,
-
     val title: String,
 
     @Nullable
     val description: String?,
 
-    val url: String,
-
     @Nullable
     val imageUrl: String?,
 
     val archived: Boolean,
+    val priority: Priority?,
+    val url: String,
 
     @Relation(
         parentColumn = "id",

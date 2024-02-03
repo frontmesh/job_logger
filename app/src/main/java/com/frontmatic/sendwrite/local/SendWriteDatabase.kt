@@ -8,6 +8,8 @@ import com.frontmatic.sendwrite.local.converters.DateConverter
 import com.frontmatic.sendwrite.local.converters.EnumConverter
 import com.frontmatic.sendwrite.local.dao.JobDao
 import com.frontmatic.sendwrite.local.dao.JobEventDao
+import com.frontmatic.sendwrite.local.dao.read.JobEventReadDao
+import com.frontmatic.sendwrite.local.dao.read.JobReadDao
 import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobEvent
 
@@ -17,9 +19,9 @@ import com.frontmatic.sendwrite.local.model.JobEvent
         JobEvent::class,
     ],
     autoMigrations = [
-        AutoMigration (from = 3, to = 4)
+        AutoMigration (from = 4, to = 5)
     ],
-    version = 4
+    version = 5
 )
 @TypeConverters(
     DateConverter::class,
@@ -28,6 +30,9 @@ import com.frontmatic.sendwrite.local.model.JobEvent
 abstract class SendWriteDatabase: RoomDatabase() {
     abstract fun jobDao(): JobDao
     abstract fun jobEventDao(): JobEventDao
+
+    abstract fun jobReadDao(): JobReadDao
+    abstract fun jobEventReadDao(): JobEventReadDao
 }
 
 

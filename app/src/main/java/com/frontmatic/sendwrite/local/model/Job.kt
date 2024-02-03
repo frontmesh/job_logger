@@ -21,6 +21,15 @@ data class Job(
     val imageUrl: String?,
     val archived: Boolean,
 
+    val priority: Priority?,
+
     @ColumnInfo(name = "created_at") var createdAt: Long?,
     @ColumnInfo(name = "modified_at") var modifiedAt: Long?
-) 
+)
+
+
+enum class Priority {
+    HIGH,
+    MEDIUM,
+    LOW
+}

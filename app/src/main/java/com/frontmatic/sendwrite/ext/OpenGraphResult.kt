@@ -1,6 +1,7 @@
 package com.frontmatic.sendwrite.ext
 
 import com.frontmatic.sendwrite.local.model.Job
+import com.frontmatic.sendwrite.local.model.Priority
 import com.kedia.ogparser.OpenGraphResult
 
 fun OpenGraphResult.convertStringNullsToNull(): OpenGraphResult {
@@ -26,6 +27,7 @@ fun OpenGraphResult.toJob(
 //        applied = if (applied) Date() else null,
         archived = false,
         createdAt = System.currentTimeMillis(),
-        modifiedAt = System.currentTimeMillis()
+        modifiedAt = System.currentTimeMillis(),
+        priority = Priority.LOW,
     )
 }

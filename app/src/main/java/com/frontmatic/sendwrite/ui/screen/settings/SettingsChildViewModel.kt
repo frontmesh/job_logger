@@ -2,7 +2,6 @@ package com.frontmatic.sendwrite.ui.screen.settings
 
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -17,6 +16,16 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+
+data class StatsDetails (
+    val jobsSavedCurrentMonth: Int,
+    val jobsAppliedCurrentMonth: Int,
+    val meetingsScheduledCurrentMonth: Int,
+    val assignmentsCompletedCurrentMonth: Int,
+    val miscEventsScheduledCurrentMonth: Int,
+)
+
 
 
 @HiltViewModel
@@ -79,5 +88,8 @@ class SettingsChildViewModel @Inject constructor(
 //        Log.d("SettingsChildViewModel", "testDailyTipsNotification: ")
         notificationRepository.showDailyTipNotification()
     }
+
+
+
 
 }

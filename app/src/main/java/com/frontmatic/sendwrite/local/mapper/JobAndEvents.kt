@@ -12,6 +12,7 @@ fun JobAndEvents.toJob(): Job {
         imageUrl = imageUrl,
         archived = archived,
         createdAt = System.currentTimeMillis(),
-        modifiedAt = System.currentTimeMillis()
+        modifiedAt = System.currentTimeMillis(),
+        priority = priority
     )
 }

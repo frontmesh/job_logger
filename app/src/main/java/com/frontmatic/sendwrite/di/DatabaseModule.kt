@@ -6,9 +6,14 @@ import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
 import com.frontmatic.sendwrite.local.source.DataStoreSource
 import com.frontmatic.sendwrite.local.SendWriteDatabase
+import com.frontmatic.sendwrite.local.dao.read.JobEventReadDao
+import com.frontmatic.sendwrite.local.source.JobEventReadDataSource
+import com.frontmatic.sendwrite.local.source.JobReadDataSource
 import com.frontmatic.sendwrite.local.source.impl.JobLocalDataSourceImpl
 import com.frontmatic.sendwrite.local.source.impl.JobEventLocalDataSourceImpl
 import com.frontmatic.sendwrite.local.source.impl.DataStoreSourceImpl
+import com.frontmatic.sendwrite.local.source.impl.JobEventReadDataSourceImpl
+import com.frontmatic.sendwrite.local.source.impl.JobReadDataSourceImpl
 import com.frontmatic.sendwrite.util.DB_NAME
 import dagger.Module
 import dagger.Provides
@@ -44,6 +49,22 @@ object DatabaseModule {
         database: SendWriteDatabase
     ) : JobEventLocalDataSource {
         return JobEventLocalDataSourceImpl(database)
+    }
+
+    @Provides
+    @Singleton
+    fun providesJobReadDataSource(
+        database: SendWriteDatabase
+    ) : JobReadDataSource {
+        return JobReadDataSourceImpl(database)
+    }
+
+    @Provides
+    @Singleton
+    fun providesJobEventReadDataSource(
+        database: SendWriteDatabase
+    ) : JobEventReadDataSource {
+        return JobEventReadDataSourceImpl(database)
     }
 
 }
