@@ -47,7 +47,13 @@ fun SettingsChildScreen(
             updateIsJobEventNotificationEnabled = viewModel::updateIsJobEventNotificationEnabled,
             updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled,
         )
-        ChildPage.STATS -> StatsSection()
+        ChildPage.STATS -> {
+            val statsUiState by viewModel.statsUiState.collectAsState()
+
+            StatsSection(
+                statsUiState = statsUiState,
+            )
+        }
         ChildPage.WEBSITE -> WebView(url = "https://www.jobops.app/")
         ChildPage.PRIVACY -> WebView(url = "https://www.jobops.app/privacy")
         else -> {}
