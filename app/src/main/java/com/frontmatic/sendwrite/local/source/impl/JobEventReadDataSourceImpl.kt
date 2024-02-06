@@ -1,6 +1,8 @@
 package com.frontmatic.sendwrite.local.source.impl
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.local.source.JobEventReadDataSource
@@ -10,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 class JobEventReadDataSourceImpl(database: SendWriteDatabase): JobEventReadDataSource {
 
     private val jobEventReadDao = database.jobEventReadDao()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun getTypeCountForMonthOffset(monthOffset: Int, type: JobEventType): Flow<Int> {
         val (startPeriod, endPeriod) = getStartAndEndPeriodMillis(monthOffset)
 

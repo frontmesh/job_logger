@@ -1,5 +1,7 @@
 package com.frontmatic.sendwrite.ui.screen.settings.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,7 @@ import com.frontmatic.sendwrite.ui.screen.settings.SettingsChildViewModel
 import com.frontmatic.sendwrite.ui.screen.settings.toPairs
 import com.frontmatic.sendwrite.util.getMonthName
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun StatsSection(
     viewModel: SettingsChildViewModel
@@ -51,8 +54,8 @@ fun StatsSection(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             IconButton(
-                onClick = { viewModel.updateSelectedMonth(selectedMonth - 1) },
-                enabled = selectedMonth > -2
+                onClick = { viewModel.updateSelectedMonth(selectedMonth + 1) },
+                enabled = selectedMonth < 3
             ) {
                 Icon(imageVector = Icons.Default.ArrowBackIos, contentDescription = null)
             }
@@ -63,8 +66,8 @@ fun StatsSection(
             )
 
             IconButton(
-                onClick = { viewModel.updateSelectedMonth(selectedMonth + 1) },
-                enabled = selectedMonth < 0
+                onClick = { viewModel.updateSelectedMonth(selectedMonth - 1) },
+                enabled = selectedMonth > 0
             ) {
                 Icon(imageVector = Icons.Default.ArrowForwardIos, contentDescription = null)
             }
