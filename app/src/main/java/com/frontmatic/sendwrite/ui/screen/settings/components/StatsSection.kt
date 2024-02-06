@@ -1,12 +1,15 @@
 package com.frontmatic.sendwrite.ui.screen.settings.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
@@ -32,6 +35,7 @@ fun StatsSection(
 ) {
     val statsUiState by viewModel.statsUiState.collectAsState()
     val selectedMonth by viewModel.selectedMonth.collectAsState()
+    val monthName = getMonthName(selectedMonth)
 
     Column(
         modifier = Modifier
@@ -40,7 +44,9 @@ fun StatsSection(
     ) {
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(start = 16.dp, bottom = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, bottom = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
@@ -51,7 +57,7 @@ fun StatsSection(
                 Icon(imageVector = Icons.Default.ArrowBackIos, contentDescription = null)
             }
              Text(
-                text = getMonthName(selectedMonth),
+                text = monthName,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -73,15 +79,37 @@ fun StatsSection(
         )
 
         with(statsUiState) {
+            val monthNameLower = monthName.lowercase()
             Column(
                 modifier = Modifier
+                    .animateContentSize()
                     .padding(start = 16.dp)
             ) {
-                Text(text = "Jobs saved this month: $jobsSaved")
-                Text(text = "Jobs applied this month: $jobsApplied")
-                Text(text = "Interviews scheduled this month: $interviewsScheduled")
-                Text(text = "Assignments scheduled this month: $assignmentsScheduled")
-                Text(text = "Misc. events scheduled this month: $otherEventsScheduled")
+                Row {
+                    Text(jobsSaved.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "jobs saved in $monthNameLower")
+                }
+                Row {
+                    Text(text = jobsApplied.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "jobs applied in $monthNameLower")
+                }
+                Row {
+                    Text(text = interviewsScheduled.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "interviews scheduled in $monthNameLower")
+                }
+                Row {
+                    Text(text = assignmentsScheduled.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "Assignments scheduled in $monthNameLower")
+                }
+                Row {
+                    Text(text = otherEventsScheduled.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "misc. events scheduled in $monthNameLower")
+                }
             }
         }
     }
