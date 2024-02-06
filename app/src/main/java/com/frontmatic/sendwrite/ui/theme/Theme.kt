@@ -46,7 +46,6 @@ val LightOrangeColorScheme = lightColorScheme(
     onBackground = Color.DarkGray,
 )
 
-
 val DarkOrangeColorScheme = darkColorScheme(
     primary = DarkOrangePrimary,
     onPrimary = DarkOrangeOnPrimary,

@@ -15,10 +15,13 @@ import com.frontmatic.sendwrite.repository.NotificationRepositoryImpl
 import com.frontmatic.sendwrite.ui.screen.navArgs
 import com.frontmatic.sendwrite.worker.DailyTipNotificationWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +33,16 @@ data class StatsUiState (
     val assignmentsScheduled: Int = 0,
     val otherEventsScheduled: Int = 0,
 )
+
+fun StatsUiState.toPairs(): Map<String, Int> {
+    return mapOf(
+        "Jobs Saved" to jobsSaved,
+        "Jobs Applied" to jobsApplied,
+        "Interviews Scheduled" to interviewsScheduled,
+        "Assignments Scheduled" to assignmentsScheduled,
+        "Other Events Scheduled" to otherEventsScheduled
+    )
+}
 
 @HiltViewModel
 class SettingsChildViewModel @Inject constructor(
@@ -49,19 +62,41 @@ class SettingsChildViewModel @Inject constructor(
     private val _selectedMonth = MutableStateFlow(0)
     val selectedMonth: StateFlow<Int> get() = _selectedMonth
 
-    val statsUiState = combine(
-        jobReadDataSource.getJobsSavedCountForMonthOffset(selectedMonth.value),
-        jobEventReadDataSource.getTypeCountForMonthOffset(selectedMonth.value, JobEventType.APPLIED),
-        jobEventReadDataSource.getTypeCountForMonthOffset(selectedMonth.value, JobEventType.INTERVIEW),
-        jobEventReadDataSource.getTypeCountForMonthOffset(selectedMonth.value, JobEventType.ASSIGNMENT),
-        jobEventReadDataSource.getTypeCountForMonthOffset(selectedMonth.value, JobEventType.OTHER),
-    ) {  jobsSaved, jobsApplied, interviewsScheduled, assignmentsScheduled, otherEventsScheduled ->
-            StatsUiState(jobsSaved, jobsApplied, interviewsScheduled, assignmentsScheduled, otherEventsScheduled)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val statsUiState = _selectedMonth.flatMapLatest { month ->
+        flow {
+            val jobsSaved = jobReadDataSource.getJobsSavedCountForMonthOffset(month).first()
+            val jobsApplied =
+                jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.APPLIED)
+                    .first()
+            val interviewsScheduled =
+                jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.INTERVIEW)
+                    .first()
+            val assignmentsScheduled =
+                jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.ASSIGNMENT)
+                    .first()
+            val otherEventsScheduled =
+                jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.OTHER).first()
+
+            emit(
+                StatsUiState(
+                    jobsSaved,
+                    jobsApplied,
+                    interviewsScheduled,
+                    assignmentsScheduled,
+                    otherEventsScheduled
+                )
+            )
+        }
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Lazily,
+        started = SharingStarted.WhileSubscribed(5000),
         initialValue = StatsUiState()
     )
+
+    fun updateSelectedMonth(month: Int) {
+        _selectedMonth.value = month
+    }
 
     fun updateAppTheme(appTheme: AppTheme) {
         viewModelScope.launch {

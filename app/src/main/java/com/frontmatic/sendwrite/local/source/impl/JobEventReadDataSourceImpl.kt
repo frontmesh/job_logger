@@ -1,5 +1,6 @@
 package com.frontmatic.sendwrite.local.source.impl
 
+import android.util.Log
 import com.frontmatic.sendwrite.local.SendWriteDatabase
 import com.frontmatic.sendwrite.local.model.JobEventType
 import com.frontmatic.sendwrite.local.source.JobEventReadDataSource

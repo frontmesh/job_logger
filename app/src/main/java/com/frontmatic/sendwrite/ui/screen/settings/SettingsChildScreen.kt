@@ -48,10 +48,8 @@ fun SettingsChildScreen(
             updateIsDailyTipsNotificationEnabled = viewModel::updateIsDailyTipsNotificationEnabled,
         )
         ChildPage.STATS -> {
-            val statsUiState by viewModel.statsUiState.collectAsState()
-
             StatsSection(
-                statsUiState = statsUiState,
+                viewModel = viewModel,
             )
         }
         ChildPage.WEBSITE -> WebView(url = "https://www.jobops.app/")
