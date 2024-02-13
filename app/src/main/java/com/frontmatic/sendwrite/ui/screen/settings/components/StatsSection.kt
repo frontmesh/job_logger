@@ -109,6 +109,11 @@ fun StatsSection(
                     Text(text = "Assignments scheduled in $monthNameLower")
                 }
                 Row {
+                    Text(text = offersReceived.toString(), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "Assignments scheduled in $monthNameLower")
+                }
+                Row {
                     Text(text = otherEventsScheduled.toString(), fontWeight = FontWeight.Bold)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(text = "misc. events scheduled in $monthNameLower")

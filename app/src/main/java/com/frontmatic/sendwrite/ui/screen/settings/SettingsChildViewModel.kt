@@ -31,6 +31,7 @@ data class StatsUiState (
     val jobsApplied: Int = 0,
     val interviewsScheduled: Int = 0,
     val assignmentsScheduled: Int = 0,
+    val offersReceived: Int = 0,
     val otherEventsScheduled: Int = 0,
 )
 
@@ -40,6 +41,7 @@ fun StatsUiState.toPairs(): Map<String, Int> {
         "Jobs Applied" to jobsApplied,
         "Interviews Scheduled" to interviewsScheduled,
         "Assignments Scheduled" to assignmentsScheduled,
+        "Offers Received" to offersReceived,
         "Other Events Scheduled" to otherEventsScheduled
     )
 }
@@ -75,6 +77,8 @@ class SettingsChildViewModel @Inject constructor(
             val assignmentsScheduled =
                 jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.ASSIGNMENT)
                     .first()
+
+            val offersReceived = jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.OFFER).first()
             val otherEventsScheduled =
                 jobEventReadDataSource.getTypeCountForMonthOffset(month, JobEventType.OTHER).first()
 
@@ -84,6 +88,7 @@ class SettingsChildViewModel @Inject constructor(
                     jobsApplied,
                     interviewsScheduled,
                     assignmentsScheduled,
+                    offersReceived,
                     otherEventsScheduled
                 )
             )
