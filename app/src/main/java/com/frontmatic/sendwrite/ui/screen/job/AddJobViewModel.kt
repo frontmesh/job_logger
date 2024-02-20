@@ -9,6 +9,7 @@ import com.aptabase.Aptabase
 import com.frontmatic.sendwrite.ext.convertStringNullsToNull
 import com.frontmatic.sendwrite.local.model.Job
 import com.frontmatic.sendwrite.local.model.JobEventType
+import com.frontmatic.sendwrite.local.model.Priority
 import com.frontmatic.sendwrite.local.source.JobEventLocalDataSource
 import com.frontmatic.sendwrite.local.source.JobLocalDataSource
 import com.kedia.ogparser.OpenGraphCacheProvider

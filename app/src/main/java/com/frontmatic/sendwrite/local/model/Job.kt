@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import javax.annotation.Nullable
+import androidx.compose.ui.graphics.Color
 
 @Entity(tableName = "jobs")
 data class Job(
@@ -28,8 +29,8 @@ data class Job(
 )
 
 
-enum class Priority {
-    HIGH,
-    MEDIUM,
-    LOW
+enum class Priority(val color: Color) {
+    HIGH(Color.Red),
+    MEDIUM(Color.Yellow),
+    LOW(Color.Green)
 }

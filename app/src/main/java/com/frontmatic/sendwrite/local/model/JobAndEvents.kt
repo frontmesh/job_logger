@@ -17,6 +17,7 @@ data class JobAndEvents(
     val priority: Priority?,
     val url: String,
 
+
     @Relation(
         parentColumn = "id",
         entityColumn = "job_id"

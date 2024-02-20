@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.MainActivity
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ext.toJob
+import com.frontmatic.sendwrite.local.model.Priority
 import com.frontmatic.sendwrite.ui.screen.job.components.AddJobContent
 import com.kedia.ogparser.OpenGraphResult
 import com.ramcosta.composedestinations.annotation.Destination
@@ -35,6 +37,8 @@ fun AddJobIntentScreen(
         it.isNotBlank() }?.let { stringResource(R.string.add_a_job_var, it)
     } ?: stringResource(R.string.add_a_job)
     val datePickerState = rememberDatePickerState()
+    var prioritySelected: Priority? by remember { mutableStateOf(null) }
+
     val context = LocalContext.current as Activity
 
     val intent = Intent(context, MainActivity::class.java)
@@ -44,7 +48,9 @@ fun AddJobIntentScreen(
         job = job,
         topBarTitle = topBarTitle,
         onJobSave = {
-            viewModel.saveJob(job?.toJob(), datePickerState.selectedDateMillis)
+            viewModel.saveJob(
+                job?.toJob(prioritySelected), datePickerState.selectedDateMillis
+            )
             context.startActivity(
                 intent
             )
@@ -54,6 +60,8 @@ fun AddJobIntentScreen(
             context.startActivity(intent)
             context.finish()
         },
+        onPriorityChange = { prioritySelected = it },
+        priority = prioritySelected,
         datePickerState = datePickerState
     )
 }

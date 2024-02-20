@@ -19,7 +19,7 @@ import com.frontmatic.sendwrite.local.model.JobEvent
         JobEvent::class,
     ],
     autoMigrations = [
-        AutoMigration (from = 4, to = 5)
+        AutoMigration(from = 4, to = 5)
     ],
     version = 5
 )
@@ -27,12 +27,14 @@ import com.frontmatic.sendwrite.local.model.JobEvent
     DateConverter::class,
     EnumConverter::class
 )
-abstract class SendWriteDatabase: RoomDatabase() {
+abstract class SendWriteDatabase : RoomDatabase() {
     abstract fun jobDao(): JobDao
     abstract fun jobEventDao(): JobEventDao
 
     abstract fun jobReadDao(): JobReadDao
     abstract fun jobEventReadDao(): JobEventReadDao
+
+//    abstract fun companyDao(): CompanyDao
 }
 
 

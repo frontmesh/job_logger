@@ -17,7 +17,7 @@ fun OpenGraphResult.convertStringNullsToNull(): OpenGraphResult {
 
 
 fun OpenGraphResult.toJob(
-//    applied: Boolean
+    priority: Priority?
 ): Job {
     return Job(
         title = title!!,
@@ -28,6 +28,6 @@ fun OpenGraphResult.toJob(
         archived = false,
         createdAt = System.currentTimeMillis(),
         modifiedAt = System.currentTimeMillis(),
-        priority = Priority.LOW,
+        priority = priority ?: Priority.LOW,
     )
 }
