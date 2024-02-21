@@ -192,14 +192,12 @@ fun AddJobContent(
 
                     OptionRow(
                         modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
-                        label = "Applied",
+                        label = "Application Submitted",
                         enabled = applied,
                         onToggle = { value -> applied = value }
                     )
 
                 }
-
-
 
                 if (applied) {
                     DatePicker(
@@ -212,8 +210,9 @@ fun AddJobContent(
                         },
                         title = {
                             Text(
-                                text = "Pick a date you have applied to this job",
-                                modifier = Modifier.padding(24.dp),
+                                text = "Choose the date on which you submitted your job application.",
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
                             )
                         },
 //                        headline = {
@@ -258,7 +257,7 @@ fun PriorityBar(
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
-                text = "Set Priority",
+                text = "Select Your Application Priority",
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),

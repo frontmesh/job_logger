@@ -4,7 +4,10 @@ import android.app.Activity
 import android.os.Build
 import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Link
@@ -27,11 +30,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ext.toJob
+import com.frontmatic.sendwrite.ext.useDebounce
 import com.frontmatic.sendwrite.local.model.Priority
 import com.frontmatic.sendwrite.ui.screen.job.components.AddJobContent
 import com.kedia.ogparser.OpenGraphResult
@@ -52,10 +57,18 @@ fun AddJobScreen(
 
     val context = LocalContext.current as Activity
 
-    var url by rememberSaveable { mutableStateOf("") }
+    var urlText by rememberSaveable { mutableStateOf("") }
     var urlHasError by rememberSaveable {
         mutableStateOf(false)
     }
+
+
+    urlText.useDebounce(onDebounce = {
+        urlHasError = URLUtil.isValidUrl(it).not()
+        if (urlHasError.not()) {
+            viewModel.parseUrl(it)
+        }
+    })
 
     AddJobContent(
         job = job,
@@ -78,19 +91,13 @@ fun AddJobScreen(
     ) {
 
         JobEditContent(
-            url = url,
+            url = urlText,
             urlHasError = urlHasError,
             onTextFieldChange = { newUrl ->
-                url = newUrl
                 urlHasError = URLUtil.isValidUrl(newUrl).not()
-
-                if (urlHasError.not()) {
-                    viewModel.parseUrl(newUrl)
-                }
+                urlText = newUrl
             }
         )
-
-
         when (val jobState = viewModel.openGraphUrlState) {
             is OpenGraphUrlState.Loading -> {
                 Text(
@@ -107,9 +114,16 @@ fun AddJobScreen(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                        .background(
+                            color = MaterialTheme.colorScheme.error,
+                            shape = MaterialTheme.shapes.medium
+                        )
+                        .padding(all = 8.dp),
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onError,
                     text = "Error loading job details"
                 )
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             else -> {}
