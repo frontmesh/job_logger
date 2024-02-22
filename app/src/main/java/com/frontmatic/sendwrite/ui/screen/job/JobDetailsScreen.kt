@@ -39,11 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ext.fadingEdge
 import com.frontmatic.sendwrite.local.model.JobEvent
 import com.frontmatic.sendwrite.local.model.JobEventType
@@ -276,10 +278,10 @@ fun JobDetailsScreen(
         } else if (job?.events?.isEmpty() == true) {
             EmptyContent(
                 icon = Icons.Rounded.Event,
-                message = "This job application doesn't have any events logged. \n" +
-                        " \n" +
+                message = stringResource(R.string.no_logged_events) +
+                        "\n\n" +
                         if (job?.archived != true) {
-                            "Log your job application progress on a button below."
+                            "Track your job application progress by clicking the button below."
                         } else {
                             "This job application is closed."
                        },

@@ -7,4 +7,8 @@
     <string name="notifications_disabled_description">Notifications are disabled, because permission was not granted.</string>
     <string name="set_priority">Set Priority</string>
     <string name="date_hint">Choose the date on which you submitted your job application.</string>
+    <string name="empty_content_message">"No active jobs.\nLog your job application on a button below or share a link to this app.\n"</string>
+    <string name="active_jobs">Active Jobs</string>
+    <string name="saved_jobs">You have %1$s saved jobs</string>
+    <string name="no_logged_events">This job application has no logged events.</string>
 </resources>

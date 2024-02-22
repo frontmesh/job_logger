@@ -28,10 +28,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.ui.components.domain.JobListContent
 import com.frontmatic.sendwrite.ui.components.domain.JobListTitle
 import com.frontmatic.sendwrite.ui.screen.destinations.EventListScreenDestination
@@ -102,13 +104,10 @@ fun HomeScreen(
         }
 
         JobListTitle(
-            title = "Active Jobs",
-            description = "You have ${jobs?.size ?: 0} saved jobs",
+            title = stringResource(R.string.active_jobs),
+            description = stringResource(R.string.saved_jobs, jobs?.size ?: 0),
         )
-        val emptyContentMessage = """
-            No active jobs. 
-            Log your job application on a button below or share a link to this app.
-        """.trimIndent()
+        val emptyContentMessage = stringResource(R.string.empty_content_message).trimIndent()
 
         JobListContent(
             lazyListState = lazyListState,
