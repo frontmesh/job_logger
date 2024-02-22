@@ -4,6 +4,7 @@
     <string name="add_a_job_var">Add a %1$s Job</string>
     <string name="go_back">Go Back</string>
     <string name="daily_tip_notification_channel_name">Daily Tip Notification</string>
-    <string name="daily_tip_notification_channel_description">Receive useful tips for your daily job search</string>
     <string name="notifications_disabled_description">Notifications are disabled, because permission was not granted.</string>
+    <string name="set_priority">Set Priority</string>
+    <string name="date_hint">Choose the date on which you submitted your job application.</string>
 </resources>

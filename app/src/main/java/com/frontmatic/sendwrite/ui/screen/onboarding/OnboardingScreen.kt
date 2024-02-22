@@ -61,18 +61,19 @@ import kotlinx.coroutines.launch
 
 
 val titles = listOf(
-    "Add job links with ease",
-    "Get notified about important dates",
-    "Follow a job application timeline"
+    "Effortlessly Add Job Links",
+    "Stay Up-to-Date with Job Notifications",
+    "Track Your Job Application Progress with a Timeline"
 )
 
 val descriptions = listOf(
-    "Share a desired job link from any mobile app or a website by pressing a share button and select JobOps app to handle the rest.",
-    "Allow notifications, add interview and assignment due dates for a desired job that you are tracking to get notified.",
-    "See a timeline view of each job application event you have logged for overall effortless tracking."
+    "Share a desired job link from any mobile app or website. Simply tap the share button and choose JobOps app to take care of the rest.",
+    "Enable notifications and set interview and assignment due dates for the job you're tracking to receive timely updates.",
+    "View a timeline of all events logged for each job application, ensuring effortless tracking of your progress."
 )
 
 val animations = listOf(R.raw.share_animation, R.raw.notifcation_animation, R.raw.timeline_animation)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Destination
 @Composable

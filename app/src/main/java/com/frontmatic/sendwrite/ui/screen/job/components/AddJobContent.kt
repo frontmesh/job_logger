@@ -48,10 +48,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.frontmatic.sendwrite.R
 import com.frontmatic.sendwrite.local.model.Priority
 import com.frontmatic.sendwrite.ui.components.OptionRow
 import com.frontmatic.sendwrite.ui.theme.MediumRadius
@@ -210,7 +212,7 @@ fun AddJobContent(
                         },
                         title = {
                             Text(
-                                text = "Choose the date on which you submitted your job application.",
+                                text = stringResource(R.string.date_hint),
                                 fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 24.dp),
                             )
@@ -257,7 +259,10 @@ fun PriorityBar(
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary,
-                text = "Select Your Application Priority",
+                text = stringResource(R.string.set_priority),
+                modifier = Modifier
+                    .padding(end = 6.dp)
+                    .weight(1f)
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
