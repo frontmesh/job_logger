@@ -73,7 +73,7 @@ class MainActivity : ComponentActivity() {
                         startRoute = startRoute,
                         snackbarHost = {
                             CustomSnackbarHost(
-                                hostState = hostState,
+                                hostState = hostState
                             )
                         },
                         topBar = { destination, navBackStackEntry ->

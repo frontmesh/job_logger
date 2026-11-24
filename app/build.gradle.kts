@@ -1,4 +1,3 @@
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -7,14 +6,47 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val releaseStoreFile = providers.gradleProperty("JOBOPS_RELEASE_STORE_FILE")
+    .orElse(providers.environmentVariable("JOBOPS_RELEASE_STORE_FILE"))
+    .orNull
+val releaseStorePassword = providers.gradleProperty("JOBOPS_RELEASE_STORE_PASSWORD")
+    .orElse(providers.environmentVariable("JOBOPS_RELEASE_STORE_PASSWORD"))
+    .orNull
+val releaseKeyAlias = providers.gradleProperty("JOBOPS_RELEASE_KEY_ALIAS")
+    .orElse(providers.environmentVariable("JOBOPS_RELEASE_KEY_ALIAS"))
+    .orNull
+val releaseKeyPassword = providers.gradleProperty("JOBOPS_RELEASE_KEY_PASSWORD")
+    .orElse(providers.environmentVariable("JOBOPS_RELEASE_KEY_PASSWORD"))
+    .orNull
+val hasReleaseSigning = listOf(
+    releaseStoreFile,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+).all { !it.isNullOrBlank() }
+
 android {
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("release") {
+                storeFile = file(requireNotNull(releaseStoreFile))
+                storePassword = requireNotNull(releaseStorePassword)
+                keyAlias = requireNotNull(releaseKeyAlias)
+                keyPassword = requireNotNull(releaseKeyPassword)
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                enableV4Signing = true
+            }
+        }
+    }
     namespace = "com.frontmatic.sendwrite"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.frontmatic.sendwrite"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 3
         versionName = "1.02"
 
@@ -39,19 +71,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
+            signingConfig = signingConfigs.findByName("release")
         }
     }
 
-
     compileOptions {
-//        sourceCompatibility = JavaVersion.VERSION_1_8
         sourceCompatibility = JavaVersion.VERSION_17
-//        targetCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-//        jvmTarget = "1.8"
         jvmTarget = "17"
     }
     buildFeatures {
@@ -93,8 +121,6 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.size)
     implementation(libs.androidx.compose.foundation)
-
-//    implementation("androidx.compose.material3:material3-window-size-class")
     implementation(libs.androidx.compose.material.iconsCore)
     implementation(libs.androidx.compose.material.iconsExtended)
 
